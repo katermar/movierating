@@ -1,0 +1,154 @@
+nav {
+    display: flex;
+}
+
+h1 {
+    font-size: large;
+}
+
+.menu, .auth {
+    position: relative;
+    margin: -1px auto;
+    max-width: 1100px;
+}
+
+.auth {
+    margin-left: 20px;
+}
+
+.header-basic-light {
+    padding: 20px 40px;
+    box-sizing: border-box;
+    box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.15);
+    height: 80px;
+    background-color: rgba(83, 212, 208, 0.27);
+}
+
+.header-basic-light .header-limiter {
+    max-width: 1200px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+/* Logo */
+
+h1.headername {
+    float: left;
+    font: normal 40px Cookie, Arial, Helvetica, sans-serif;
+    line-height: 40px;
+    margin: 0;
+}
+
+h1.headername span {
+    color: #159a9d;
+}
+
+/* The header links */
+
+.headername a {
+    color: #5c616a;
+    text-decoration: none !important;
+    animation: header-animate 5s linear 2s infinite alternate;
+}
+
+/* The animation code */
+@keyframes header-animate {
+    0% {
+        color: #5c616a;
+    }
+    50% {
+        color: rgb(244, 202, 207);
+    }
+    100% {
+        color: #159a9d;
+    }
+}
+
+.header-basic-light .header-limiter nav {
+    font: 15px Arial, Helvetica, sans-serif;
+    line-height: 40px;
+    float: right;
+}
+
+.header-basic-light .header-limiter nav a {
+    display: inline-block;
+    opacity: 0.9;
+    text-decoration: none;
+    color: #5c616a;
+    line-height: 1;
+    padding: 6px 10px;
+}
+
+span.menu-item :hover {
+    background-color: rgba(30, 153, 167, 0.58);
+    color: #ffffff;
+    border-radius: 3px;
+}
+
+nav.auth span.menu-item :hover {
+    background-color: rgba(244, 67, 54, 0.52);
+}
+
+.psw ::after {
+    content: "Forgot password?";
+}
+
+/* Making the header responsive. */
+
+@media all and (max-width: 1000px) {
+    .header-basic-light {
+        padding: 20px 0;
+        height: 110px;
+    }
+
+    .header-basic-light .header-limiter h1 {
+        float: none;
+        margin: -8px 0 10px;
+        text-align: center;
+        font-size: 30px;
+        line-height: 1;
+    }
+
+    .header-basic-light .header-limiter nav {
+        line-height: 1;
+        float: none;
+    }
+
+    .header-basic-light .header-limiter nav a {
+        font-size: 13px;
+    }
+
+}
+
+@media all and (max-width: 425px) {
+    span.menu-item {
+        width: 100%;
+    }
+
+    nav {
+        display: block;
+    }
+
+    .menu, .auth {
+        display: grid;
+        position: center;
+    }
+
+    .auth {
+        margin-top: 20px;
+        margin-left: 0;
+    }
+
+    .header-basic-light {
+        height: 290px;
+    }
+}
+
+/* For the headers to look good, be sure to reset the margin and padding of the body */
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
