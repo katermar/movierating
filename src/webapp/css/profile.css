@@ -12,7 +12,7 @@ body {
 }
 
 .rating-num {
-    margin-top: 0px;
+    margin-top: 0;
     font-size: 54px;
 }
 
@@ -25,7 +25,7 @@ body {
 }
 
 .rating-desc .col-md-3 {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .sr-only {

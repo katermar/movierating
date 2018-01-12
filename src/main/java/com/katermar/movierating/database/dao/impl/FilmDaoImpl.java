@@ -33,11 +33,12 @@ public class FilmDaoImpl implements GenericDao<Film> {
     public Film constructFromResultSet(ResultSet resultSet) throws SQLException {
         Film film = new Film();
         film.setName(resultSet.getString("name"));
-        film.setReleaseYear(Date.valueOf(resultSet.getString("release_date")));
+        film.setReleaseYear(Date.valueOf(resultSet.getString("release_year")));
         film.setDuration(resultSet.getDouble("duration"));
-        film.setIddirector(resultSet.getInt("iddirector"));
-        film.setIdfilm(resultSet.getInt("idfilm"));
+        film.setIdDirector(resultSet.getInt("iddirector"));
+        film.setIdFilm(resultSet.getInt("idfilm"));
         film.setPoster(resultSet.getString("poster"));
+        film.setDescription(resultSet.getString("description"));
         return film;
     }
 }

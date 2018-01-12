@@ -79,7 +79,7 @@ public class UserLogic {
             HttpSession session = request.getSession();
             session.setAttribute(Attribute.USER, user);
             session.setMaxInactiveInterval(500);
-            commandResult = new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+            commandResult = new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
         }
         return commandResult;
     }

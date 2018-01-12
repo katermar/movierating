@@ -19,14 +19,16 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    line-height: normal
+    line-height: normal;
+    color: rgb(160, 160, 159);
 }
 
 #viewport .item .sb-description .desc {
     margin-top: 10px;
     font-family: inherit;
     font-size: 12px;
-    line-height: 17px
+    line-height: 17px;
+    color: rgb(160, 160, 159);
 }
 
 #viewport {
@@ -52,8 +54,4 @@
     margin: 29px 15px 10px 10px;
     box-shadow: rgba(0, 0, 0, 0.2) 0 1px 3px 0;
     cursor: pointer;
-}
-
-.item img {
-    width: 221px;
 }

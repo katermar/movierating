@@ -13,7 +13,7 @@ public class CommandFactory {
         Command identifiedCommand;
         identifiedCommand = commandType
                 .map(s -> CommandType.valueOf(revertIntoConstantName(s)).getCommand())
-                .orElseGet(CommandType.GO_TO_MAIN_PAGE::getCommand);
+                .orElseGet(CommandType.MAIN_PAGE::getCommand);
         return identifiedCommand;
     }
 

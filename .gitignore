@@ -7,3 +7,4 @@
 *.iml
 .jsbeautifyrc
 /out
+/src/main/resources/project.properties

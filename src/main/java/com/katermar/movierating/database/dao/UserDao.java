@@ -10,13 +10,10 @@ import java.util.List;
  * Created by katermar on 1/8/2018.
  */
 public interface UserDao extends GenericDao<User> {
-    @Override
     boolean create(User user) throws DAOException;
 
-    @Override
     User findById(long id);
 
-    @Override
     User update(User entity);
 
     List<User> findAll() throws DAOException;

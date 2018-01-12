@@ -16,11 +16,11 @@
 
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="/css/profile.css">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
         crossorigin="anonymous"></script>
 
@@ -77,7 +77,8 @@
                                 </div>
                                 <div class="col-xs-8 col-md-9">
                                     <div class="progress progress-striped">
-                                        <div class="progress-bar progress-bar-success" role="progressbar"
+                                        <div class="progress-bar progress-bar-success progress-bar-striped active"
+                                             role="progressbar"
                                              aria-valuenow="20"
                                              aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['5'] / total * 100}%">
                                             <span class="sr-only">${ratings['5']}</span>
@@ -90,7 +91,8 @@
                                 </div>
                                 <div class="col-xs-8 col-md-9">
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-success" role="progressbar"
+                                        <div class="progress-bar progress-bar-success progress-bar-striped active"
+                                             role="progressbar"
                                              aria-valuenow="20"
                                              aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['4'] / total * 100}%">
                                             <span class="sr-only">${ratings['4']}</span>
@@ -103,7 +105,8 @@
                                 </div>
                                 <div class="col-xs-8 col-md-9">
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-info" role="progressbar"
+                                        <div class="progress-bar progress-bar-info progress-bar-striped active"
+                                             role="progressbar"
                                              aria-valuenow="20"
                                              aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['3'] / total * 100}%">
                                             <span class="sr-only">${ratings['3']}</span>
@@ -116,7 +119,8 @@
                                 </div>
                                 <div class="col-xs-8 col-md-9">
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar"
+                                        <div class="progress-bar progress-bar-warning progress-bar-striped active"
+                                             role="progressbar"
                                              aria-valuenow="20"
                                              aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['2'] / total * 100}%">
                                             <span class="sr-only">${ratings['2']}</span>
@@ -129,7 +133,8 @@
                                 </div>
                                 <div class="col-xs-8 col-md-9">
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar"
+                                        <div class="progress-bar progress-bar-danger progress-bar-striped active"
+                                             role="progressbar"
                                              aria-valuenow="80"
                                              aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['1'] / total * 100}%">
                                             <span class="sr-only">${ratings['1']}</span>

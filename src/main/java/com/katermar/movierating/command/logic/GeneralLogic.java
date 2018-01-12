@@ -8,6 +8,7 @@ import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.RegisterService;
 import com.katermar.movierating.service.UserService;
+import com.katermar.movierating.service.impl.FilmService;
 import com.katermar.movierating.service.impl.RegisterServiceImpl;
 import com.katermar.movierating.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -56,7 +57,6 @@ public class GeneralLogic {
     public CommandResult switchLanguage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         String currentLocale = (String) session.getAttribute(Attribute.LOCALE);
-//        String redirectPage = (String) session.getAttribute(Attribute.LAST_PAGE);
         String redirectPage = request.getHeader("Referer");
         if (redirectPage == null) {
             redirectPage = PagePath.MAIN;
@@ -71,6 +71,12 @@ public class GeneralLogic {
     }
 
     public CommandResult showFilmsPage(HttpServletRequest request) {
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.FILMS);
+        FilmService filmService = new FilmService();
+        try {
+            request.setAttribute("films", filmService.getAllFilms());
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage()); //todo
+        }
+        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.FILMS);
     }
 }

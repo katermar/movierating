@@ -27,9 +27,11 @@
         <h1 class="headername"><a>Movie<span>rating</span></a></h1>
         <nav>
             <nav class="menu">
-                <span class="menu-item"><a href="/controller?command=go-to-main-page"><fmt:message key="header.home"/></a></span>
+                <span class="menu-item"><a href="/controller?command=main-page"><fmt:message
+                        key="header.home"/></a></span>
                 <span class="menu-item"><a href="#"><fmt:message key="header.rating"/></a></span>
-                <span class="menu-item"><a href="#"><fmt:message key="header.films"/></a></span>
+                <span class="menu-item"><a href="/controller?command=films-page"><fmt:message
+                        key="header.films"/></a></span>
                 <span class="menu-item"><a href="#"><fmt:message key="header.series"/></a></span>
                 <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                     <span class="menu-item"><a href="#"><fmt:message key="header.users"/></a></span>
@@ -51,7 +53,8 @@
 
                     <c:otherwise>
                         <span class="menu-item">
-                            <a id="profile-ref" href="/controller?command=go-to-profile-page"><fmt:message key="header.profile"/></a>
+                            <a id="profile-ref" href="/controller?command=profile-page"><fmt:message
+                                    key="header.profile"/></a>
                         </span>
                         <span class="menu-item">
                             <a href="controller?command=logout" id="logout-ref"><fmt:message key="header.logout"/></a>
@@ -64,4 +67,7 @@
         </nav>
     </div>
 </header>
+<c:import url="login.jsp"/>
+<c:import url="register.jsp"/>
+<script src="../../js/closemodal.js"></script>
 

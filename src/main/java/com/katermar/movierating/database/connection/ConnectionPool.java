@@ -76,10 +76,12 @@ public class ConnectionPool {
     }
 
     public void closeConnection(Connection connection) {
+        LOGGER.warn("unwrapping"); //todo
         if (connection != null) {
             try {
                 if (connection.isWrapperFor(ConnectionFromPool.class)) {
                     connection = connection.unwrap(ConnectionFromPool.class);
+                    LOGGER.warn("unwrapping"); //todo
                 }
                 connection.close();
             } catch (SQLException e) {
