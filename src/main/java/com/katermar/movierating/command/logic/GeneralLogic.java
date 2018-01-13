@@ -20,6 +20,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
+import static com.katermar.movierating.command.CommandResult.ResponseType.REDIRECT;
+
 /**
  * Created by katermar on 1/4/2018.
  */
@@ -27,7 +30,7 @@ public class GeneralLogic {
     private static final Logger LOGGER = LogManager.getLogger(GeneralLogic.class);
 
     public CommandResult goToMainPage(HttpServletRequest request) {
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(FORWARD, PagePath.MAIN);
     }
 
     public CommandResult register(HttpServletRequest request) {
@@ -51,7 +54,7 @@ public class GeneralLogic {
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(FORWARD, PagePath.MAIN);
     }
 
     public CommandResult switchLanguage(HttpServletRequest request) {
@@ -67,7 +70,7 @@ public class GeneralLogic {
         } else {
             session.setAttribute(Attribute.LOCALE, Parameter.RUSSIAN_LOCALE);
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, redirectPage);
+        return new CommandResult(REDIRECT, redirectPage);
     }
 
     public CommandResult showFilmsPage(HttpServletRequest request) {
@@ -77,6 +80,17 @@ public class GeneralLogic {
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage()); //todo
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.FILMS);
+        return new CommandResult(FORWARD, PagePath.FILMS);
+    }
+
+    public CommandResult showFilmInfoPage(HttpServletRequest request) {
+        FilmService filmService = new FilmService();
+        long filmId = Long.parseLong(request.getParameter("id"));
+        try {
+            request.setAttribute("film", filmService.findFilmById(filmId));
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return new CommandResult(FORWARD, PagePath.FILM_INFO);
     }
 }

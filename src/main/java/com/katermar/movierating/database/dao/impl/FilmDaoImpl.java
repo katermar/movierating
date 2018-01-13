@@ -15,9 +15,14 @@ import java.util.List;
 public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_ALL = "SELECT * FROM film";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
+    private static final String SELECT_WHERE_ID = "SELECT * FROM film WHERE idfilm = ?";
 
     public List<Film> findByUser(long userId) throws DAOException {
         return findByParameter(String.valueOf(userId), SELECT_WHERE_RELEASE_YEAR);
+    }
+
+    public Film findById(long filmId) throws DAOException {
+        return findByParameter(String.valueOf(filmId), SELECT_WHERE_ID).get(0);
     }
 
     public List<Film> findAll() throws DAOException {

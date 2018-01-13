@@ -20,4 +20,12 @@ public class FilmService {
             throw new ServiceException(e); // todo
         }
     }
+
+    public Film findFilmById(long id) throws ServiceException {
+        try {
+            return FILM_DAO.findById(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

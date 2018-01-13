@@ -1,0 +1,215 @@
+@charset "UTF-8";
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700);
+
+.container {
+    padding-top: 20px;
+}
+
+.btn-grey {
+    background-color: #D8D8D8;
+    color: #FFF;
+}
+
+.rating-block {
+    margin: 0 0 0 20px;
+    background-color: #FAFAFA;
+    border: 1px solid #EFEFEF;
+    padding: 15px 15px 20px 15px;
+    border-radius: 3px;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.padding-bottom-7 {
+    padding-bottom: 7px;
+}
+
+.review-block {
+    background-color: #FAFAFA;
+    border: 1px solid #EFEFEF;
+    padding: 15px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+}
+
+.review-block-name {
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+.review-block-date {
+    font-size: 12px;
+}
+
+.review-block-rate {
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.review-block-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.review-block-description {
+    font-size: 13px;
+}
+
+.animated {
+    -webkit-transition: height 0.2s;
+    -moz-transition: height 0.2s;
+    transition: height 0.2s;
+}
+
+.stars {
+    margin: 5px 0;
+    font-size: 30px;
+    color: #d179a1;
+}
+
+@media (max-width: 768px) {
+    .container {
+        overflow: hidden;
+    }
+
+    .container .about-movie {
+        display: inline-block !important;
+    }
+
+    .container .about-movie p {
+        width: 49% !important;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+.movie-card {
+    font: 14px/34px "Lato", Arial, sans-serif;
+    color: #A9A8A3;
+}
+
+.movie-card .container {
+    width: 680px;
+    margin-bottom: 20px;
+    background: #F0F0ED;
+    border-radius: 5px;
+    position: relative;
+}
+
+.movie-card .container a img {
+    border: solid 6px white;
+    max-width: 550px;
+    max-height: 250px;
+}
+
+.movie-card .container .back-cover {
+    height: 342px;
+    margin: 0;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.movie-card .container .back-cover:before {
+    content: " ";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url("http://www.koziel.fr/9215-thickbox_default/turquoise-gold-sarrancolin-marble-panoramic-wallpaper.jpg");
+    z-index: -1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transform: skewY(-3.2deg);
+    transform-origin: 0 0;
+}
+
+.movie-card .container .cover {
+    position: absolute;
+    top: 160px;
+    left: 40px;
+    z-index: 2;
+}
+
+.movie-card .container .cover:hover {
+    opacity: 0.7;
+    cursor: pointer;
+}
+
+.movie-card .container .details {
+    padding: 198px 0 0 268px;
+}
+
+.movie-card .container .details .title1 {
+    color: #eee;
+    font-size: 44px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.movie-card .container .title2 {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.movie-card .container .about-movie {
+    display: inline-flex;
+    bottom: 0px;
+    padding-bottom: 20px;
+    font-size: 16px;
+    line-height: 26px;
+    color: #B1B0AC;
+}
+
+.movie-card .container .about-movie .colum-one {
+    padding-left: 50px;
+    padding-top: 90px;
+    width: 220px;
+    float: left;
+    text-align: left;
+}
+
+.movie-card .container .about-movie .colum-one .colum-catogary {
+    text-align: left;
+    margin-left: -40px;
+}
+
+.movie-card .container .about-movie .colum-one .colum-catogary span {
+    padding: 1px 8px;
+    font-size: 14px;
+    background: white;
+    border-radius: 10px;
+    margin-left: 2px;
+}
+
+.movie-card .container .about-movie .colum-one .colum-catogary span:hover {
+    background: #999;
+    color: white;
+    cursor: pointer;
+}
+
+.movie-card .container .about-movie .colum-second {
+    padding-left: 38px;
+    padding-top: 21px;
+    margin-left: -39px;
+    width: 480px;
+    float: left;
+}
+
+.movie-card .container .about-movie .colum-second p {
+    width: 76%;
+}
+
+.movie-card .container .about-movie .colum-second p a {
+    text-decoration: none;
+    color: #6e6ed8;
+}

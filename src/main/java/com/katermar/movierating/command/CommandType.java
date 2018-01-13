@@ -12,6 +12,7 @@ public enum CommandType {
     REGISTER(new GeneralLogic()::register),
     MAIN_PAGE(new GeneralLogic()::goToMainPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
+    FILM_INFO(new GeneralLogic()::showFilmInfoPage),
     PROFILE_PAGE(new UserLogic()::goToProfilePage),
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),
     UPDATE_PASSWORD(new UserLogic()::updatePassword),

@@ -17,15 +17,14 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ConnectionPool {
     private static final Logger LOGGER = LogManager.getLogger(ConnectionPool.class);
 
-    private static final int POOL_INITIAL_CAPACITY = 7;
+    private static final int MAX_CAPACITY = 17;
     private static final Lock LOCK_INSTANTIATED = new ReentrantLock();
-    private static final int MAX_CAPACITY = 20;
     private static ConnectionPool instance;
     private ArrayBlockingQueue<Connection> connections;
     private DatabaseManager databaseManager;
 
     private ConnectionPool() {
-        connections = new ArrayBlockingQueue<>(POOL_INITIAL_CAPACITY);
+        connections = new ArrayBlockingQueue<>(MAX_CAPACITY);
         databaseManager = DatabaseManager.getInstance();
 //        initializeConnections();
     }
@@ -41,17 +40,6 @@ public class ConnectionPool {
         }
         return instance;
     }
-
-    //todo
-//    private void initializeConnections() {
-//        for (int i = 0; i < POOL_INITIAL_CAPACITY; i++) {
-//            try {
-//                connections.put(databaseManager.getConnection());
-//            } catch (InterruptedException e) {
-//                e.printStackTrace(); //todo
-//            }
-//        }
-//    }
 
     public ConnectionFromPool getConnection() {
         Connection connection = null;
@@ -75,13 +63,11 @@ public class ConnectionPool {
         }
     }
 
-    public void closeConnection(Connection connection) {
-        LOGGER.warn("unwrapping"); //todo
+    private void closeConnection(Connection connection) {
         if (connection != null) {
             try {
-                if (connection.isWrapperFor(ConnectionFromPool.class)) {
-                    connection = connection.unwrap(ConnectionFromPool.class);
-                    LOGGER.warn("unwrapping"); //todo
+                if (connection.isWrapperFor(Connection.class)) {
+                    connection = connection.unwrap(Connection.class);
                 }
                 connection.close();
             } catch (SQLException e) {
@@ -91,7 +77,6 @@ public class ConnectionPool {
     }
 
     public void close() {
-        // todo
         connections.forEach(this::closeConnection);
     }
 
