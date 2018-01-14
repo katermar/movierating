@@ -7,8 +7,6 @@ import com.katermar.movierating.exception.DAOException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
 import com.katermar.movierating.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Created by katermar on 1/1/2018.
@@ -23,6 +21,10 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e); // todo specific message
         }
+    }
+
+    public User findById(long userId) {
+        return userDAO.findById(userId);
     }
 
     @Override

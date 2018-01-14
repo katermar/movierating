@@ -11,6 +11,7 @@ public class Review {
     private int idfilm;
     private String text;
     private Timestamp date;
+    private User user;
 
     public int getIdreview() {
         return idreview;
@@ -50,6 +51,14 @@ public class Review {
 
     public void setDate(Timestamp date) {
         this.date = date;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

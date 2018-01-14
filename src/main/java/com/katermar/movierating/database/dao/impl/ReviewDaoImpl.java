@@ -3,7 +3,6 @@ package com.katermar.movierating.database.dao.impl;
 import com.katermar.movierating.database.connection.ConnectionPool;
 import com.katermar.movierating.database.dao.GenericDao;
 import com.katermar.movierating.entity.Review;
-import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.DAOException;
 
 import java.sql.Connection;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * Created by katermar on 1/9/2018.
  */
-public class ReviewDaoImpl implements GenericDao<Review>{
+public class ReviewDaoImpl implements GenericDao<Review> {
     private static final String SELECT_WHERE_IDUSER = "SELECT * FROM review WHERE iduser = ?";
     private static final String SELECT_WHERE_IDFILM = "SELECT * FROM review WHERE idfilm = ?";
 
@@ -24,7 +23,7 @@ public class ReviewDaoImpl implements GenericDao<Review>{
         return findByParameter(String.valueOf(userId), SELECT_WHERE_IDUSER);
     }
 
-    public List<Review> findByFilm(int filmId) throws DAOException {
+    public List<Review> findByFilm(long filmId) throws DAOException {
         return findByParameter(String.valueOf(filmId), SELECT_WHERE_IDFILM);
     }
 

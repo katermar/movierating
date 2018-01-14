@@ -7,8 +7,6 @@ import com.katermar.movierating.exception.DAOException;
 
 import java.sql.*;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.katermar.movierating.database.dao.UserDao.UserTableFields.BAN_EXPIRATION_DATE;
@@ -129,22 +127,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User findByEmail(String email) throws DAOException {
         return findByParameter(email, USERS_SELECT_EMAIL).get(0);
-    }
-
-    public List<User> findByParameter(String param, String statementString) throws DAOException {
-        User user = null;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(statementString)) {
-            statement.setString(1, param);
-            try (ResultSet selectedUsers = statement.executeQuery()) {
-                while (selectedUsers.next()) {
-                    user = constructFromResultSet(selectedUsers);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
-        }
-        return List.of(user);
     }
 
     private boolean updateParameter(String param, long userId, String statementString) throws DAOException {

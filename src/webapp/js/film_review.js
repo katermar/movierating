@@ -94,7 +94,7 @@ var __slice = [].slice;
             var e, t, n;
             n = [];
             for (e = 1, t = this.options.numStars; 1 <= t ? e <= t : e >= t; 1 <= t ? e++ : e--) {
-                n.push(this.$el.append("<span class='glyphicon .glyphicon-star-empty'></span>"))
+                n.push(this.$el.append("<span class='glyphicon .glyphicon-star-empty'><a href='/controller?command=main-page'></a></span>"))
             }
             return n
         };

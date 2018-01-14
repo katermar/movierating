@@ -33,7 +33,7 @@ public class UserLogic {
         try {
             registerService.confirmEmail(userService.findByLogin(login));
         } catch (ServiceException e) {
-             LOGGER.warn(e.getMessage());// todo
+            LOGGER.warn(e.getMessage());// todo
         }
         return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
     }
@@ -93,7 +93,7 @@ public class UserLogic {
         User currentUser = (User) session.getAttribute(Attribute.USER);
         RatingService ratingService = new RatingService();
         try {
-            Map<String, Long> ratingMap = ratingService.getRatingMap(currentUser.getId());
+            Map<String, Long> ratingMap = ratingService.getRatingMapByUser(currentUser.getId());
 //            throw new NullPointerException(ratingMap.toString());
             request.setAttribute("total", ratingMap.values().stream().reduce(0L, Long::sum));
             request.setAttribute("ratings", ratingMap);

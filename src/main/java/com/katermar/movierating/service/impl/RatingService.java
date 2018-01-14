@@ -23,7 +23,7 @@ public class RatingService {
         }
     }
 
-    public Map<String, Long> getRatingMap(long userId) throws ServiceException {
+    public Map<String, Long> getRatingMapByUser(long userId) throws ServiceException {
         Map<String, Long> ratingMap = new HashMap<>();
         try {
             List<Rating> ratings = ratingDao.findByUser(userId);
@@ -35,5 +35,13 @@ public class RatingService {
             throw new ServiceException(e);
         }
         return ratingMap;
+    }
+
+    public Double getAverageRatingByFilm(long filmId) throws ServiceException {
+        try {
+            return ratingDao.findAverageByFilm(filmId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
     }
 }

@@ -4,13 +4,12 @@ import com.katermar.movierating.command.CommandResult;
 import com.katermar.movierating.config.Attribute;
 import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.config.Parameter;
+import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.RegisterService;
 import com.katermar.movierating.service.UserService;
-import com.katermar.movierating.service.impl.FilmService;
-import com.katermar.movierating.service.impl.RegisterServiceImpl;
-import com.katermar.movierating.service.impl.UserServiceImpl;
+import com.katermar.movierating.service.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -85,9 +84,16 @@ public class GeneralLogic {
 
     public CommandResult showFilmInfoPage(HttpServletRequest request) {
         FilmService filmService = new FilmService();
+        RatingService ratingService = new RatingService();
+        ReviewService reviewService = new ReviewService();
+        GenreService genreService = new GenreService();
         long filmId = Long.parseLong(request.getParameter("id"));
         try {
-            request.setAttribute("film", filmService.findFilmById(filmId));
+            Film film = filmService.findFilmById(filmId);
+            request.setAttribute("film", film);
+            request.setAttribute("genre", genreService.findByFilm(film.getIdFilm()));
+            request.setAttribute("review", reviewService.findByFilm(film.getIdFilm()));
+            request.setAttribute("avgRate", ratingService.getAverageRatingByFilm(film.getIdFilm()));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }

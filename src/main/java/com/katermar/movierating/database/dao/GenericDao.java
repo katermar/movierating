@@ -1,8 +1,6 @@
 package com.katermar.movierating.database.dao;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
-import com.katermar.movierating.entity.Film;
-import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.DAOException;
 
 import java.sql.Connection;
