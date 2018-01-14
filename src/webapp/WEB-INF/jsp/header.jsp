@@ -24,7 +24,8 @@
 
 <header class="header-basic-light">
     <div class="header-limiter">
-        <h1 class="headername"><a>Movie<span>rating</span></a></h1>
+        <h1 class="headername"><a><fmt:message key="header.firstHeader"/><span><fmt:message
+                key="header.secondHeader"/></span></a></h1>
         <nav>
             <nav class="menu">
                 <span class="menu-item"><a href="/controller?command=main-page"><fmt:message

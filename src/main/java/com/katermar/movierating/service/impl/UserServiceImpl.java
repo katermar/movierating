@@ -23,8 +23,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public User findById(long userId) {
-        return userDAO.findById(userId);
+    public User findById(long userId) throws ServiceException {
+        try {
+            return userDAO.findById(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e); //todo
+        }
     }
 
     @Override

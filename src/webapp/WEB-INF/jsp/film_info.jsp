@@ -1,7 +1,7 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--@elvariable id="film" type="com.katermar.movierating.entity.Film"--%>
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>${film.name} | Movierating</title>
@@ -9,6 +9,18 @@
 <c:import url="header.jsp"/>
 <script src="../../js/film_review.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/film_info.css"/>
+
+<!-- internationalization -->
+<c:choose>
+    <c:when test="${not empty sessionScope.locale}">
+        <fmt:setLocale value="${sessionScope.locale}"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:setLocale value="en_US"/>
+    </c:otherwise>
+</c:choose>
+<fmt:setBundle basename="Locale"/>
+
 <body>
 <div class="container">
     <div class="row">
@@ -24,7 +36,7 @@
                     <div class="back-cover">
                         <div class="details">
                             <div class="title1">${film.name}</div>
-                            <div class="title2"> TV Series (${film.releaseYear})</div>
+                            <div class="title2"><fmt:message key="film.info.film"/> (${film.releaseYear})</div>
                         </div>
                         <!-- end details -->
                     </div>
@@ -56,11 +68,13 @@
         </div>
         <div class="col-sm-5 col-md-3 col-xs-6">
             <div class="rating-block">
-                <h4>Average user rating</h4>
+                <h4><fmt:message key="film.info.avgRate"/></h4>
                 <h2 class="bold padding-bottom-7">${avgRate}
                     <small>/ 5</small>
                 </h2>
                 <form action="/controller" method="post">
+                    <input type="hidden" name="command" value="add-rating">
+                    <input type="hidden" name="id" value="${film.idFilm}">
                     <fieldset class="starRating">
                         <!--HTML5 Custom Data Attributes (data-*)-->
                         <c:choose>
@@ -82,7 +96,7 @@
                             </c:when>
                             <c:otherwise>
                                 <input id="rating2" data-length="2" type="radio" name="rating" value="2"
-                                       onchange="this.form.submit()" checked>
+                                       onchange="this.form.submit()">
                             </c:otherwise>
                         </c:choose>
                         <label for="rating2"></label>
@@ -124,37 +138,60 @@
                         <label for="rating5"></label>
                     </fieldset>
                 </form>
+                <c:if test="${sessionScope.user ne null}">
+                    <form action="/controller" method="post">
+                        <input type="hidden" name="command" value="watch">
+                        <input type="hidden" name="id" value="${film.idFilm}">
+                        <button type="submit" class="btn btn-info btn-lg">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </button>
+                    </form>
+                </c:if>
             </div>
         </div>
     </div>
-    <div class="row" style="margin:40px 0 0 5px">
-        <div class="col-md-6">
-            <div class="well well-sm">
-                <div class="text-right">
-                    <a class="btn btn-success btn-green" href="#reviews-anchor" id="open-review-box">Leave a Review</a>
-                </div>
+    <c:choose>
+        <c:when test="${sessionScope.user ne null}">
+            <div class="row" style="margin:40px 0 0 5px">
+                <div class="col-md-6">
+                    <div class="well well-sm">
+                        <div class="text-right">
+                            <a class="btn btn-success btn-green" href="#reviews-anchor" id="open-review-box">Leave a
+                                Review</a>
+                        </div>
 
-                <div class="row" id="post-review-box" style="display:none;">
-                    <div class="col-md-12">
-                        <form accept-charset="UTF-8" action="" method="post">
-                            <input id="ratings-hidden" name="rating" type="hidden">
-                            <textarea class="form-control animated" cols="50" id="new-review" name="comment"
-                                      placeholder="Enter your review here..." rows="5"></textarea>
+                        <div class="row" id="post-review-box" style="display:none;">
+                            <div class="col-md-12">
+                                <form accept-charset="UTF-8" action="${pageContext.request.contextPath}/controller"
+                                      method="post">
+                                    <input type="hidden" name="command" value="leave-review">
+                                    <input type="hidden" name="id" value="${film.idFilm}">
+                                    <textarea class="form-control animated" cols="50" id="new-review" name="review"
+                                              placeholder="Enter your review here..." rows="5"></textarea>
 
-                            <div class="text-right">
-                                <div class="stars starrr" data-rating="0"></div>
-                                <a class="btn btn-danger btn-sm" href="#" id="close-review-box"
-                                   style="display:none; margin-right: 10px;">
-                                    <span class="glyphicon glyphicon-remove"></span>Cancel</a>
-                                <button class="btn btn-success btn-lg" type="submit">Save</button>
+                                    <div class="text-right">
+                                        <a class="btn btn-danger btn-sm" href="#" id="close-review-box"
+                                           style="display:none; margin: 10px 10px 10px 10px;">
+                                            <span class="glyphicon glyphicon-remove"> </span>Cancel</a>
+                                        <button class="btn btn-success btn-lg" type="submit">Save</button>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
+                        </div>
                     </div>
+
                 </div>
             </div>
-
-        </div>
-    </div>
+        </c:when>
+        <c:otherwise>
+            <div class="alert alert-warning">
+                <a onclick="document.getElementById('login').style.display='block'"
+                   class="btn btn-xs btn-danger pull-right"><fmt:message key="header.login"/></a>
+                <strong><fmt:message key="film.info.warningHeader"/></strong><fmt:message
+                    key="film.info.warningMessage"/>
+            </div>
+        </c:otherwise>
+    </c:choose>
 
     <div class="row" style="margin-left:5px ">
         <div class="col-sm-7">

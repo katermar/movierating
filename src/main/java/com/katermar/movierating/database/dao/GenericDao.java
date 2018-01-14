@@ -17,6 +17,8 @@ public interface GenericDao<T> {
 
     T deleteById(long id);
 
+    boolean create(T user) throws DAOException;
+
     default List<T> findAll(String selectAll) throws DAOException {
         List<T> userList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -34,11 +36,15 @@ public interface GenericDao<T> {
     }
 
 
-    default List<T> findByParameter(String param, String statementString) throws DAOException {
+    default List<T> findByParameter(String statementString, String... param) throws DAOException {
         List<T> ratings = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(statementString)) {
-            statement.setString(1, param);
+            int counter = 1;
+            for (String p : param) {
+                statement.setString(counter, p);
+                counter++;
+            }
             try (ResultSet selected = statement.executeQuery()) {
                 while (selected.next()) {
                     ratings.add(constructFromResultSet(selected));

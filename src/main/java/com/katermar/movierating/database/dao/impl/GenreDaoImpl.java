@@ -15,12 +15,17 @@ public class GenreDaoImpl implements GenericDao<Genre> {
     private static final String SELECT_GENRE_BY_FILM_ID = "SELECT * FROM genre WHERE name IN (SELECT genrename FROM film_genre WHERE idfilm = ?)";
 
     public List<Genre> findGenresByFilmId(long id) throws DAOException {
-        return findByParameter(String.valueOf(id), SELECT_GENRE_BY_FILM_ID);
+        return findByParameter(SELECT_GENRE_BY_FILM_ID, String.valueOf(id));
     }
 
     @Override
     public Genre deleteById(long id) {
         return null;
+    }
+
+    @Override
+    public boolean create(Genre user) throws DAOException {
+        return false; //todo
     }
 
     @Override

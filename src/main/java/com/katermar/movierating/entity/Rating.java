@@ -10,10 +10,6 @@ public class Rating {
     private boolean isSeen;
     private int ratingAmount;
 
-    public Rating() {
-
-    }
-
     public int getIdrating() {
         return idrating;
     }

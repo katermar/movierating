@@ -17,8 +17,18 @@ public class ReviewService {
     public List<Review> findByFilm(long filmId) throws ServiceException {
         try {
             List<Review> reviewList = reviewDao.findByFilm(filmId);
-            reviewList.forEach(review -> review.setUser(userService.findById(review.getIduser())));
+            for (Review review : reviewList) {
+                review.setUser(userService.findById(review.getIduser()));
+            }
             return reviewList;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public boolean addReview(Review review) throws ServiceException {
+        try {
+            return reviewDao.create(review);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

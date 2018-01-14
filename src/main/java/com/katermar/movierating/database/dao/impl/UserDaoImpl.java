@@ -20,6 +20,7 @@ public class UserDaoImpl implements UserDao {
     private static final String USERS_SELECT_LOGIN_PASSWORD = "SELECT * FROM user WHERE login = ? AND password = ?";
     private static final String USERS_SELECT_ALL = "SELECT * FROM user";
     private static final String USERS_SELECT_LOGIN = "SELECT * FROM user WHERE login = ?";
+    private static final String USERS_SELECT_ID = "SELECT * FROM user WHERE iduser = ?";
     private static final String USERS_SELECT_EMAIL = "SELECT * FROM user WHERE email = ?";
     private static final String USERS_INSERT_REGISTER = "INSERT INTO user (login, password, email, real_name, date_of_birth) VALUES (?, ?, ?, ?, ?)";
     private static final String USERS_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE iduser = ?";
@@ -45,8 +46,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(long id) {
-        return null;
+    public User findById(long id) throws DAOException {
+        return findByParameter(USERS_SELECT_ID, String.valueOf(id)).get(0);
     }
 
     @Override
@@ -121,12 +122,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findByLogin(String login) throws DAOException {
-        return findByParameter(login, USERS_SELECT_LOGIN).get(0);
+        return findByParameter(USERS_SELECT_LOGIN, login).get(0);
     }
 
     @Override
     public User findByEmail(String email) throws DAOException {
-        return findByParameter(email, USERS_SELECT_EMAIL).get(0);
+        return findByParameter(USERS_SELECT_EMAIL, email).get(0);
     }
 
     private boolean updateParameter(String param, long userId, String statementString) throws DAOException {

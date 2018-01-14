@@ -16,12 +16,19 @@ import java.util.List;
  */
 public class RatingDaoImpl implements GenericDao<Rating> {
     private static final String SELECT_FROM_RATING_WHERE_IDUSER = "SELECT * FROM rating WHERE iduser = ?";
+    private static final String SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM = "SELECT * FROM rating WHERE iduser = ? AND idfilm = ?";
     private static final String SELECT_FROM_RATING_WHERE_IDFILM = "SELECT * FROM rating WHERE idfilm = ?";
-    private static final String SELECT_AVG_RATING_AMOUNT_WHERE_IDFILM = "SELECT AVG(rating_amount) FROM rating WHERE idfilm = ?";
+    private static final String SELECT_AVG_RATING_AMOUNT_WHERE_IDFILM = "SELECT AVG(rating_amount) FROM rating WHERE idfilm = ? AND is_seen = '1'";
     private static final String SELECT_FROM_RATING_WHERE_IS_SEEN_0 = "SELECT * FROM rating WHERE is_seen = 0";
+    private static final String INSERT_IDUSER_IDFILM_IS_SEEN_RATING_AMOUNT_VALUES = "INSERT INTO rating (iduser, idfilm, is_seen, rating_amount) " +
+            "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating_amount=VALUES(rating_amount)";
 
     public List<Rating> findByUser(long userId) throws DAOException {
-        return findByParameter(String.valueOf(userId), SELECT_FROM_RATING_WHERE_IDFILM);
+        return findByParameter(SELECT_FROM_RATING_WHERE_IDUSER, String.valueOf(userId));
+    }
+
+    public Rating findByUserAndFilm(long userId, long filmId) throws DAOException {
+        return findByParameter(SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM, String.valueOf(userId), String.valueOf(filmId)).get(0);
     }
 
     public Double findAverageByFilm(long filmId) throws DAOException {
@@ -40,6 +47,21 @@ public class RatingDaoImpl implements GenericDao<Rating> {
     @Override
     public Rating deleteById(long id) {
         return null;
+    }
+
+    @Override
+    public boolean create(Rating rating) throws DAOException {
+        try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connectionFromPool.prepareStatement(INSERT_IDUSER_IDFILM_IS_SEEN_RATING_AMOUNT_VALUES)) {
+            statement.setInt(1, rating.getIduser());
+            statement.setInt(2, rating.getIdfilm());
+            statement.setBoolean(3, rating.getIsSeen());
+            statement.setInt(4, rating.getRatingAmount());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return true;
     }
 
     @Override

@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,32 +17,18 @@ import java.util.List;
 public class ReviewDaoImpl implements GenericDao<Review> {
     private static final String SELECT_WHERE_IDUSER = "SELECT * FROM review WHERE iduser = ?";
     private static final String SELECT_WHERE_IDFILM = "SELECT * FROM review WHERE idfilm = ?";
+    private static final String INSERT_IDUSER_IDFILM_TEXT_VALUES = "INSERT INTO review (iduser, idfilm, text) VALUES (?, ?, ?)";
 
     public List<Review> findByUser(int userId) throws DAOException {
-        return findByParameter(String.valueOf(userId), SELECT_WHERE_IDUSER);
+        return findByParameter(SELECT_WHERE_IDUSER, String.valueOf(userId));
     }
 
     public List<Review> findByFilm(long filmId) throws DAOException {
-        return findByParameter(String.valueOf(filmId), SELECT_WHERE_IDFILM);
+        return findByParameter(SELECT_WHERE_IDFILM, String.valueOf(filmId));
     }
 
-    public List<Review> findByParameter(String param, String statementString) throws DAOException {
-        List<Review> reviews = new ArrayList<>();
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(statementString)) {
-            statement.setString(1, param);
-            try (ResultSet selected = statement.executeQuery()) {
-                while (selected.next()) {
-                    reviews.add(constructReviewFromResultSet(selected));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
-        }
-        return reviews;
-    }
-
-    private Review constructReviewFromResultSet(ResultSet selectedReviews) throws SQLException {
+    @Override
+    public Review constructFromResultSet(ResultSet selectedReviews) throws SQLException {
         Review review = new Review();
         review.setDate(selectedReviews.getTimestamp("date"));
         review.setIdfilm(selectedReviews.getInt("idfilm"));
@@ -59,7 +44,16 @@ public class ReviewDaoImpl implements GenericDao<Review> {
     }
 
     @Override
-    public Review constructFromResultSet(ResultSet selectedUsers) throws SQLException {
-        return null;
+    public boolean create(Review review) throws DAOException {
+        try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connectionFromPool.prepareStatement(INSERT_IDUSER_IDFILM_TEXT_VALUES)) {
+            statement.setLong(1, review.getIduser());
+            statement.setLong(2, review.getIdfilm());
+            statement.setString(3, review.getText());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return true;
     }
 }

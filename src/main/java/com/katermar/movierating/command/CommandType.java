@@ -16,7 +16,10 @@ public enum CommandType {
     PROFILE_PAGE(new UserLogic()::goToProfilePage),
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),
     UPDATE_PASSWORD(new UserLogic()::updatePassword),
-    CONFIRM_EMAIL(new UserLogic()::confirmEmail);
+    CONFIRM_EMAIL(new UserLogic()::confirmEmail),
+    ADD_RATING(new UserLogic()::addRating),
+    WATCH(new UserLogic()::updateWatched),
+    LEAVE_REVIEW(new UserLogic()::leaveReview);
 
     private Command command;
 

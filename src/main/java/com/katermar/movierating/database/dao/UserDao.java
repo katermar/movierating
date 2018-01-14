@@ -12,7 +12,7 @@ import java.util.List;
 public interface UserDao extends GenericDao<User> {
     boolean create(User user) throws DAOException;
 
-    User findById(long id);
+    User findById(long id) throws DAOException;
 
     User update(User entity);
 

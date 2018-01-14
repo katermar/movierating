@@ -44,4 +44,20 @@ public class RatingService {
             throw new ServiceException(e);
         }
     }
+
+    public boolean addRating(Rating rating) throws ServiceException {
+        try {
+            return ratingDao.create(rating);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Rating getRatingByUserAndFilm(int userId, int filmId) throws ServiceException {
+        try {
+            return ratingDao.findByUserAndFilm(userId, filmId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }
