@@ -31,8 +31,7 @@ public class DirectorDaoImpl implements GenericDao<Director> {
     @Override
     public Director constructFromResultSet(ResultSet selected) throws SQLException {
         Director director = new Director();
-        director.setFirstname(selected.getString("firstname"));
-        director.setLastname(selected.getString("lastname"));
+        director.setName(selected.getString("name"));
         director.setIddirector(selected.getInt("iddirector"));
         return director;
     }

@@ -13,6 +13,8 @@ public enum CommandType {
     MAIN_PAGE(new GeneralLogic()::goToMainPage),
     ERROR_PAGE(new GeneralLogic()::goToErrorPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
+    FILMS_BY_DIRECTOR(new GeneralLogic()::showFilmsByDirector),
+    FILMS_BY_GENRE(new GeneralLogic()::showFilmsByGenre),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
     PROFILE_PAGE(new UserLogic()::goToProfilePage),
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),

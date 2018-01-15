@@ -32,4 +32,24 @@ public class FilmService {
             throw new ServiceException(e);
         }
     }
+
+    public List<Film> getFilmsByDirector(int directorId) throws ServiceException {
+        try {
+            List<Film> films = FILM_DAO.getFilmsByDirector(directorId);
+            for (Film film : films) {
+                film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
+            }
+            return films;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public List<Film> getFilmsByGenre(String genreName) throws ServiceException {
+        try {
+            return FILM_DAO.getFilmsByGenre(genreName);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

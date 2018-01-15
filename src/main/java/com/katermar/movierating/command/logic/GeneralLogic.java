@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.*;
 
@@ -86,7 +87,7 @@ public class GeneralLogic {
         RatingService ratingService = new RatingService();
         ReviewService reviewService = new ReviewService();
         GenreService genreService = new GenreService();
-        long filmId = Long.parseLong(request.getParameter("id"));
+        int filmId = Integer.parseInt(request.getParameter("id"));
         try {
             Film film = filmService.getFilmById(filmId);
             request.setAttribute("film", film);
@@ -101,5 +102,32 @@ public class GeneralLogic {
 
     public CommandResult goToErrorPage(HttpServletRequest request) {
         return new CommandResult(ERROR, PagePath.ERROR);
+    }
+
+
+    public CommandResult showFilmsByDirector(HttpServletRequest request) {
+        int directorId = Integer.parseInt(request.getParameter("id"));
+        FilmService filmService = new FilmService();
+        try {
+            List<Film> films = filmService.getFilmsByDirector(directorId);
+            request.setAttribute("films", films);
+            request.setAttribute("director", films.get(0).getDirector().getName());
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return new CommandResult(FORWARD, PagePath.FILMS);
+    }
+
+    public CommandResult showFilmsByGenre(HttpServletRequest request) {
+        String genreName = request.getParameter("genre");
+        FilmService filmService = new FilmService();
+        try {
+            List<Film> films = filmService.getFilmsByGenre(genreName);
+            request.setAttribute("films", films);
+            request.setAttribute("genre", genreName);
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage());
+        }
+        return new CommandResult(FORWARD, PagePath.FILMS);
     }
 }

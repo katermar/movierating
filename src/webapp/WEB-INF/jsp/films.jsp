@@ -33,6 +33,16 @@
 <article>
     <div>
         <div id="wrapper">
+            <c:if test="${genre ne null}">
+                <div class="mx-1">
+                    <h3><span class="label label-danger">#${genre}</span></h3>
+                </div>
+            </c:if>
+            <c:if test="${director ne null}">
+                <div class="mx-1">
+                    <h3><span class="label label-warning">#${director}</span></h3>
+                </div>
+            </c:if>
             <div id="viewport" data-mode="preview">
                 <%--@elvariable id="films" type="com.katermar.movierating.entity.Film"--%>
                 <c:forEach items="${films}" var="films">
@@ -40,18 +50,19 @@
                         <div class="col-custom">
                             <div class="content-box text-center">
                                 <a href="/controller?command=film-info&id=${films.idFilm}">
-                                    <img src="${films.poster}"
-                                         alt="About">
+                                    <img src="${films.poster}" alt="About">
                                     <span class="content-link text-uppercase">
-                                    <fmt:message key="films.info"/>
-                </span>
+                                        <fmt:message key="films.info"/>
+                                    </span>
                                 </a>
                             </div>
                         </div>
-                        <div class="sb-description"><h3 class="title"
-                                                        title="${films.name}">
-                                ${films.name}</h3>
-                            <div class="desc">${films.description}
+                        <div class="sb-description">
+                            <h3 class="title" title="${films.name}">
+                                    ${films.name}
+                            </h3>
+                            <div class="desc">
+                                    ${films.description}
                             </div>
                         </div>
                     </div>

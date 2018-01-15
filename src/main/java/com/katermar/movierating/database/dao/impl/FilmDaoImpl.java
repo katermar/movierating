@@ -15,6 +15,8 @@ import java.util.List;
 public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_ALL = "SELECT * FROM film";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
+    private static final String SELECT_FROM_FILM_WHERE_IDDIRECTOR = "SELECT * FROM film WHERE iddirector = ?";
+    private static final String SELECT_FROM_FILM_WHERE_GENRE = "SELECT * FROM film WHERE idfilm IN (SELECT film_genre.idfilm FROM film_genre WHERE genrename = ?)";
     private static final String SELECT_WHERE_ID = "SELECT * FROM film WHERE idfilm = ?";
 
     public List<Film> getByUser(long userId) throws DAOException {
@@ -50,5 +52,13 @@ public class FilmDaoImpl implements GenericDao<Film> {
         film.setPoster(resultSet.getString("poster"));
         film.setDescription(resultSet.getString("description"));
         return film;
+    }
+
+    public List<Film> getFilmsByDirector(int directorId) throws DAOException {
+        return getByParameter(SELECT_FROM_FILM_WHERE_IDDIRECTOR, String.valueOf(directorId));
+    }
+
+    public List<Film> getFilmsByGenre(String genreName) throws DAOException {
+        return getByParameter(SELECT_FROM_FILM_WHERE_GENRE, genreName);
     }
 }

@@ -5,8 +5,7 @@ package com.katermar.movierating.entity;
  */
 public class Director {
     private int iddirector;
-    private String firstname;
-    private String lastname;
+    private String name;
 
     public int getIddirector() {
         return iddirector;
@@ -16,20 +15,12 @@ public class Director {
         this.iddirector = iddirector;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -39,14 +30,14 @@ public class Director {
 
         Director director = (Director) o;
 
-        return iddirector == director.iddirector && (firstname != null ? firstname.equals(director.firstname) : director.firstname == null) && (lastname != null ? lastname.equals(director.lastname) : director.lastname == null);
+        if (iddirector != director.iddirector) return false;
+        return name != null ? name.equals(director.name) : director.name == null;
     }
 
     @Override
     public int hashCode() {
         int result = iddirector;
-        result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
-        result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }
 }
