@@ -15,26 +15,26 @@ public class UserServiceImpl implements UserService {
     private static final UserDao userDAO = new UserDaoImpl();
 
     @Override
-    public User findByLoginAndPassword(String login, String password) throws ServiceException {
+    public User getByLoginAndPassword(String login, String password) throws ServiceException {
         try {
-            return userDAO.findByLoginAndPassword(login, password);
+            return userDAO.getByLoginAndPassword(login, password);
         } catch (DAOException e) {
             throw new ServiceException(e); // todo specific message
         }
     }
 
-    public User findById(long userId) throws ServiceException {
+    public User getById(long userId) throws ServiceException {
         try {
-            return userDAO.findById(userId);
+            return userDAO.getById(userId);
         } catch (DAOException e) {
             throw new ServiceException(e); //todo
         }
     }
 
     @Override
-    public User findByLogin(String login) throws ServiceException {
+    public User getByLogin(String login) throws ServiceException {
         try {
-            return userDAO.findByLogin(login);
+            return userDAO.getByLogin(login);
         } catch (DAOException e) {
             throw new ServiceException(e); // todo specific message
         }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean updatePassword(String password, String login) throws ServiceException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
-        User user = findByLogin(login);
+        User user = getByLogin(login);
         boolean executed = false;
         try {
             executed = userDAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     }
 
     boolean updateStatus(User.UserStatus status, String login) throws ServiceException {
-        User user = findByLogin(login);
+        User user = getByLogin(login);
         boolean executed = false;
         try {
             executed = userDAO.updateStatus(status.toString().toLowerCase(), user.getId());
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 //
 //    boolean updateBan(User.UserStatus status, String login) throws ServiceException {
-//        User user = findByLogin(login);
+//        User user = getByLogin(login);
 //        boolean executed = false;
 //        try {
 //            executed = userDAO.updateBan(status.toString().toLowerCase(), user.getId());

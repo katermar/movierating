@@ -41,7 +41,11 @@ public class Controller extends HttpServlet {
             if (commandResult.getResponseType().equals(CommandResult.ResponseType.FORWARD)) {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
                 requestDispatcher.forward(request, response);
-            } else {
+            }
+//            if (commandResult.getResponseType().equals(CommandResult.ResponseType.ERROR)) {
+//                response.sendError(505);
+//            }
+            else {
                 response.sendRedirect(request.getContextPath() + page);
             }
         } catch (ServletException | IOException e) {

@@ -13,9 +13,9 @@ import java.util.List;
 public class GenreService {
     private static final GenreDaoImpl genreDao = new GenreDaoImpl();
 
-    public List<Genre> findByFilm(long id) throws ServiceException {
+    public List<Genre> getByFilm(long id) throws ServiceException {
         try {
-            return genreDao.findGenresByFilmId(id);
+            return genreDao.getGenresByFilmId(id);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

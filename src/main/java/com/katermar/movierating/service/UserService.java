@@ -7,9 +7,9 @@ import com.katermar.movierating.exception.ServiceException;
  * Created by katermar on 1/8/2018.
  */
 public interface UserService {
-    User findByLoginAndPassword(String login, String password) throws ServiceException;
+    User getByLoginAndPassword(String login, String password) throws ServiceException;
 
-    User findByLogin(String login) throws ServiceException;
+    User getByLogin(String login) throws ServiceException;
 
     boolean addUser(User user) throws ServiceException;
 

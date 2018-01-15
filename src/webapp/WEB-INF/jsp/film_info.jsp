@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>${film.name} | Movierating</title>
+    <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
 <c:import url="header.jsp"/>
 <script src="../../js/film_review.js"></script>
@@ -43,16 +44,15 @@
 
                     <div class="about-movie">
                         <div class="colum-one">
-                            <div class="stars" data-rating="2"></div>
-
+                            <div>
+                                <a class="label label-danger"
+                                   href="#">${film.director.firstname} ${film.director.lastname}</a>
+                            </div>
+                            <br/>
                             <div class="colum-catogary">
                                 <c:forEach items="${genre}" var="genre">
                                     <span class="tag">${genre.name}</span>
                                 </c:forEach>
-                                <div>
-                                    <!--HTML5 Custom Data Attributes (data-*)-->
-                                </div>
-                                <!--end colum-one -->
                             </div>
                         </div>
                         <!--end colum-one -->
@@ -72,73 +72,8 @@
                 <h2 class="bold padding-bottom-7">${avgRate}
                     <small>/ 5</small>
                 </h2>
-                <form action="/controller" method="post">
-                    <input type="hidden" name="command" value="add-rating">
-                    <input type="hidden" name="id" value="${film.idFilm}">
-                    <fieldset class="starRating">
-                        <!--HTML5 Custom Data Attributes (data-*)-->
-                        <c:choose>
-                            <c:when test="${avgRate eq null || avgRate < 1}">
-                                <input id="rating1" type="radio" data-length="1" name="rating" value="1"
-                                       onchange="this.form.submit()">
-                            </c:when>
-                            <c:when test="${avgRate >= 1}">
-                                <input id="rating1" type="radio" data-length="1" name="rating" value="1"
-                                       onchange="this.form.submit()" checked>
-                            </c:when>
-                        </c:choose>
-                        <label for="rating1"></label>
-
-                        <c:choose>
-                            <c:when test="${avgRate >= 2 }">
-                                <input id="rating2" data-length="2" type="radio" name="rating" value="2"
-                                       onchange="this.form.submit()" checked>
-                            </c:when>
-                            <c:otherwise>
-                                <input id="rating2" data-length="2" type="radio" name="rating" value="2"
-                                       onchange="this.form.submit()">
-                            </c:otherwise>
-                        </c:choose>
-                        <label for="rating2"></label>
-
-                        <c:choose>
-                            <c:when test="${avgRate >= 3}">
-                                <input id="rating3" type="radio" data-length="3" name="rating" value="3"
-                                       onchange="this.form.submit()" checked>
-                            </c:when>
-                            <c:otherwise>
-                                <input id="rating3" type="radio" data-length="3" name="rating" value="3"
-                                       onchange="this.form.submit()">
-                            </c:otherwise>
-                        </c:choose>
-                        <label for="rating3"></label>
-
-                        <c:choose>
-                            <c:when test="${avgRate >= 4}">
-                                <input id="rating4" data-length="4" type="radio" name="rating" value="4"
-                                       onchange="this.form.submit()" checked>
-                            </c:when>
-                            <c:otherwise>
-                                <input id="rating4" data-length="4" type="radio" name="rating" value="4"
-                                       onchange="this.form.submit()">
-                            </c:otherwise>
-                        </c:choose>
-                        <label for="rating4"></label>
-
-                        <c:choose>
-                            <c:when test="${avgRate eq 5}">
-                                <input id="rating5" data-length="5" type="radio" name="rating" value="5"
-                                       onchange="this.form.submit()" checked>
-                            </c:when>
-                            <c:otherwise>
-                                <input id="rating5" data-length="5" type="radio" name="rating" value="5"
-                                       onchange="this.form.submit()">
-                            </c:otherwise>
-                        </c:choose>
-                        <label for="rating5"></label>
-                    </fieldset>
-                </form>
                 <c:if test="${sessionScope.user ne null}">
+                    <c:import url="stars_form.jsp"/>
                     <form action="/controller" method="post">
                         <input type="hidden" name="command" value="watch">
                         <input type="hidden" name="id" value="${film.idFilm}">
@@ -146,6 +81,9 @@
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button>
                     </form>
+                </c:if>
+                <c:if test="${sessionScope.user eq null}">
+                    <div class="stars starrr" data-rating="${avgRate}"></div>
                 </c:if>
             </div>
         </div>
@@ -156,8 +94,9 @@
                 <div class="col-md-6">
                     <div class="well well-sm">
                         <div class="text-right">
-                            <a class="btn btn-success btn-green" href="#reviews-anchor" id="open-review-box">Leave a
-                                Review</a>
+                            <a class="btn btn-success btn-green" href="#reviews-anchor" id="open-review-box">
+                                <fmt:message key="film.info.leaveReview"/>
+                            </a>
                         </div>
 
                         <div class="row" id="post-review-box" style="display:none;">
@@ -172,8 +111,10 @@
                                     <div class="text-right">
                                         <a class="btn btn-danger btn-sm" href="#" id="close-review-box"
                                            style="display:none; margin: 10px 10px 10px 10px;">
-                                            <span class="glyphicon glyphicon-remove"> </span>Cancel</a>
-                                        <button class="btn btn-success btn-lg" type="submit">Save</button>
+                                            <span class="glyphicon glyphicon-remove"> </span><fmt:message
+                                                key="film.info.cancel"/></a>
+                                        <button class="btn btn-success btn-lg" type="submit"><fmt:message
+                                                key="film.info.save"/></button>
                                     </div>
                                 </form>
                             </div>
@@ -200,14 +141,25 @@
                 <c:forEach items="${review}" var="review">
                     <div class="row">
                         <div class="col-sm-3 col-md-3 col-xs-3">
-                            <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
-                            <div class="review-block-name">${review.user.login}</div>
-                            <div class="review-block-date">${review.date}<br/>1 day ago</div>
+                            <img src="https://image.flaticon.com/icons/svg/145/145850.svg" class="img-rounded"
+                                 width="90">
+                            <div class="director-name">
+                                <c:if test="${sessionScope.user.login eq review.user.login}">
+                                    <a class="label label-info"
+                                       href="/controller?command=profile-page">${review.user.login}</a><br/>
+                                </c:if>
+                                <c:if test="${sessionScope.user.login ne review.user.login}">
+                                    <span class="label label-info">${review.user.login}</span><br/>
+                                </c:if>
+                            </div>
+                            <div class="review-block-date">${review.date}</div>
                         </div>
                         <div class="col-sm-9">
-                            <div class="review-block-rate">
-                                <div class="stars starrr" data-rating="0"></div>
-                            </div>
+                            <c:if test="${review.rating.ratingAmount ne 0.}">
+                                <div class="review-block-rate">
+                                    <div class="stars starrr" data-rating="${review.rating.ratingAmount}"></div>
+                                </div>
+                            </c:if>
                             <div class="review-block-title">${review.user.realName}</div>
                             <div class="review-block-description">${review.text}</div>
                         </div>

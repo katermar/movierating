@@ -19,7 +19,7 @@ public interface GenericDao<T> {
 
     boolean create(T user) throws DAOException;
 
-    default List<T> findAll(String selectAll) throws DAOException {
+    default List<T> getAll(String selectAll) throws DAOException {
         List<T> userList = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement selectUsersStatement = connection.prepareStatement(selectAll)) {
@@ -36,7 +36,7 @@ public interface GenericDao<T> {
     }
 
 
-    default List<T> findByParameter(String statementString, String... param) throws DAOException {
+    default List<T> getByParameter(String statementString, String... param) throws DAOException {
         List<T> ratings = new ArrayList<>();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(statementString)) {

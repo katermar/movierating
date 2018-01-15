@@ -14,8 +14,8 @@ import java.util.List;
 public class GenreDaoImpl implements GenericDao<Genre> {
     private static final String SELECT_GENRE_BY_FILM_ID = "SELECT * FROM genre WHERE name IN (SELECT genrename FROM film_genre WHERE idfilm = ?)";
 
-    public List<Genre> findGenresByFilmId(long id) throws DAOException {
-        return findByParameter(SELECT_GENRE_BY_FILM_ID, String.valueOf(id));
+    public List<Genre> getGenresByFilmId(long id) throws DAOException {
+        return getByParameter(SELECT_GENRE_BY_FILM_ID, String.valueOf(id));
     }
 
     @Override

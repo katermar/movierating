@@ -85,7 +85,11 @@ span.menu-item :hover {
     border-radius: 3px;
 }
 
-nav.auth span.menu-item :hover {
+nav nav.auth span.menu-item :hover {
+    background-color: rgba(244, 67, 54, 0.52);
+}
+
+nav.auth span.menu-item a :hover {
     background-color: rgba(244, 67, 54, 0.52);
 }
 

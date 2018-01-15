@@ -1,5 +1,6 @@
 package com.katermar.movierating.service.impl;
 
+import com.katermar.movierating.database.dao.impl.DirectorDaoImpl;
 import com.katermar.movierating.database.dao.impl.FilmDaoImpl;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.exception.DAOException;
@@ -12,18 +13,21 @@ import java.util.List;
  */
 public class FilmService {
     private static final FilmDaoImpl FILM_DAO = new FilmDaoImpl();
+    private static final DirectorDaoImpl DIRECTOR_DAO = new DirectorDaoImpl();
 
     public List<Film> getAllFilms() throws ServiceException {
         try {
-            return FILM_DAO.findAll();
+            return FILM_DAO.getAll();
         } catch (DAOException e) {
             throw new ServiceException(e); // todo
         }
     }
 
-    public Film findFilmById(long id) throws ServiceException {
+    public Film getFilmById(long id) throws ServiceException {
         try {
-            return FILM_DAO.findById(id);
+            Film film = FILM_DAO.getById(id);
+            film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
+            return film;
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

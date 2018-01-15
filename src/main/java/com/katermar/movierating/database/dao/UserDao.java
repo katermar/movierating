@@ -12,11 +12,11 @@ import java.util.List;
 public interface UserDao extends GenericDao<User> {
     boolean create(User user) throws DAOException;
 
-    User findById(long id) throws DAOException;
+    User getById(long id) throws DAOException;
 
     User update(User entity);
 
-    List<User> findAll() throws DAOException;
+    List<User> getAll() throws DAOException;
 
     boolean updatePassword(String password, long userId) throws DAOException;
 
@@ -31,11 +31,11 @@ public interface UserDao extends GenericDao<User> {
     @Override
     User deleteById(long id);
 
-    User findByLoginAndPassword(String login, String password) throws DAOException;
+    User getByLoginAndPassword(String login, String password) throws DAOException;
 
-    User findByLogin(String login) throws DAOException;
+    User getByLogin(String login) throws DAOException;
 
-    User findByEmail(String email) throws DAOException;
+    User getByEmail(String email) throws DAOException;
 
     /**
      * Created by katermar on 1/4/2018.

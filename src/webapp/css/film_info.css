@@ -12,7 +12,7 @@
 }
 
 .rating-block {
-    margin: 0 0 0 20px;
+    margin: 0 0 20px 20px;
     background-color: #FAFAFA;
     border: 1px solid #EFEFEF;
     padding: 15px 15px 20px 15px;
@@ -270,7 +270,7 @@ some  animtion   do  when  load window
     position: absolute;
     content: "★";
     color: #F9BF3B;
-    text-shadow: 0 0 20px #F9BF3B;
+    /*text-shadow: 0 0 20px #F9BF3B;*/
     top: 0;
     left: 0;
     width: 100%;
@@ -307,5 +307,10 @@ show
 .starRating input:checked ~ label:after {
     content: "☆";
     color: #444;
-    text-shadow: none;
+    /*text-shadow: none;*/
+}
+
+.director-name {
+    margin-top: 17px;
+    margin-bottom: 17px;
 }

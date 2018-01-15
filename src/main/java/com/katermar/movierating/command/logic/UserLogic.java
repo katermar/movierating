@@ -30,7 +30,7 @@ public class UserLogic {
         RegisterService registerService = new RegisterServiceImpl();
         UserService userService = new UserServiceImpl();
         try {
-            registerService.confirmEmail(userService.findByLogin(login));
+            registerService.confirmEmail(userService.getByLogin(login));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());// todo
         }
@@ -132,6 +132,7 @@ public class UserLogic {
         Rating rating = new Rating();
         rating.setIdfilm(Integer.parseInt(request.getParameter("id")));
         rating.setIduser(currentUser.getId());
+        rating.setIsSeen(true);
         rating.setRatingAmount(Integer.parseInt(request.getParameter("rating")));
         RatingService ratingService = new RatingService();
         try {

@@ -17,16 +17,16 @@ public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
     private static final String SELECT_WHERE_ID = "SELECT * FROM film WHERE idfilm = ?";
 
-    public List<Film> findByUser(long userId) throws DAOException {
-        return findByParameter(SELECT_WHERE_RELEASE_YEAR, String.valueOf(userId));
+    public List<Film> getByUser(long userId) throws DAOException {
+        return getByParameter(SELECT_WHERE_RELEASE_YEAR, String.valueOf(userId));
     }
 
-    public Film findById(long filmId) throws DAOException {
-        return findByParameter(SELECT_WHERE_ID, String.valueOf(filmId)).get(0);
+    public Film getById(long filmId) throws DAOException {
+        return getByParameter(SELECT_WHERE_ID, String.valueOf(filmId)).get(0);
     }
 
-    public List<Film> findAll() throws DAOException {
-        return findAll(SELECT_ALL);
+    public List<Film> getAll() throws DAOException {
+        return getAll(SELECT_ALL);
     }
 
     @Override

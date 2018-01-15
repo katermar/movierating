@@ -17,7 +17,7 @@ public class RatingService {
 
     public List<Rating> getRatingListByUser(long userId) throws ServiceException {
         try {
-            return ratingDao.findByUser(userId);
+            return ratingDao.getByUser(userId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -26,7 +26,7 @@ public class RatingService {
     public Map<String, Long> getRatingMapByUser(long userId) throws ServiceException {
         Map<String, Long> ratingMap = new HashMap<>();
         try {
-            List<Rating> ratings = ratingDao.findByUser(userId);
+            List<Rating> ratings = ratingDao.getByUser(userId);
             ratings.forEach(rating -> {
                 String ratingAmount = String.valueOf(rating.getRatingAmount());
                 ratingMap.put(ratingAmount, ratingMap.getOrDefault(ratingAmount, 0L) + 1);
@@ -39,7 +39,7 @@ public class RatingService {
 
     public Double getAverageRatingByFilm(long filmId) throws ServiceException {
         try {
-            return ratingDao.findAverageByFilm(filmId);
+            return ratingDao.getAverageByFilm(filmId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -55,7 +55,7 @@ public class RatingService {
 
     public Rating getRatingByUserAndFilm(int userId, int filmId) throws ServiceException {
         try {
-            return ratingDao.findByUserAndFilm(userId, filmId);
+            return ratingDao.getByUserAndFilm(userId, filmId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

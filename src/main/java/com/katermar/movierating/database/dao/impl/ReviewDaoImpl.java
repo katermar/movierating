@@ -19,12 +19,12 @@ public class ReviewDaoImpl implements GenericDao<Review> {
     private static final String SELECT_WHERE_IDFILM = "SELECT * FROM review WHERE idfilm = ?";
     private static final String INSERT_IDUSER_IDFILM_TEXT_VALUES = "INSERT INTO review (iduser, idfilm, text) VALUES (?, ?, ?)";
 
-    public List<Review> findByUser(int userId) throws DAOException {
-        return findByParameter(SELECT_WHERE_IDUSER, String.valueOf(userId));
+    public List<Review> getByUser(int userId) throws DAOException {
+        return getByParameter(SELECT_WHERE_IDUSER, String.valueOf(userId));
     }
 
-    public List<Review> findByFilm(long filmId) throws DAOException {
-        return findByParameter(SELECT_WHERE_IDFILM, String.valueOf(filmId));
+    public List<Review> getByFilm(long filmId) throws DAOException {
+        return getByParameter(SELECT_WHERE_IDFILM, String.valueOf(filmId));
     }
 
     @Override

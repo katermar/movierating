@@ -17,7 +17,7 @@ public class AdminService {
     public boolean updateBan(String date, String login) throws ServiceException {
         UserService userService = new UserServiceImpl();
         try {
-            User user = userService.findByLogin(login);
+            User user = userService.getByLogin(login);
             UserDao userDao = new UserDaoImpl();
             Date parsedDate = Date.valueOf(LocalDate.parse(date));
             userDao.updateBan(parsedDate, user.getId());

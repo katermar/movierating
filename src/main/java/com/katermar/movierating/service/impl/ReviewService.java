@@ -13,12 +13,14 @@ import java.util.List;
 public class ReviewService {
     private static final ReviewDaoImpl reviewDao = new ReviewDaoImpl();
     private static final UserServiceImpl userService = new UserServiceImpl();
+    private static final RatingService ratingService = new RatingService();
 
-    public List<Review> findByFilm(long filmId) throws ServiceException {
+    public List<Review> getByFilm(long filmId) throws ServiceException {
         try {
-            List<Review> reviewList = reviewDao.findByFilm(filmId);
+            List<Review> reviewList = reviewDao.getByFilm(filmId);
             for (Review review : reviewList) {
-                review.setUser(userService.findById(review.getIduser()));
+                review.setUser(userService.getById(review.getIduser()));
+                review.setRating(ratingService.getRatingByUserAndFilm(review.getIduser(), review.getIdfilm()));
             }
             return reviewList;
         } catch (DAOException e) {

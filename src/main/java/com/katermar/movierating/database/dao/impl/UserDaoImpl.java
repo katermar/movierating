@@ -46,8 +46,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findById(long id) throws DAOException {
-        return findByParameter(USERS_SELECT_ID, String.valueOf(id)).get(0);
+    public User getById(long id) throws DAOException {
+        return getByParameter(USERS_SELECT_ID, String.valueOf(id)).get(0);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() throws DAOException {
-        return findAll(USERS_SELECT_ALL);
+    public List<User> getAll() throws DAOException {
+        return getAll(USERS_SELECT_ALL);
     }
 
     @Override
@@ -102,7 +102,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findByLoginAndPassword(String login, String password) throws DAOException {
+    public User getByLoginAndPassword(String login, String password) throws DAOException {
         User user = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement selectUsersStatement = connection.prepareStatement(USERS_SELECT_LOGIN_PASSWORD)) {
@@ -121,13 +121,13 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User findByLogin(String login) throws DAOException {
-        return findByParameter(USERS_SELECT_LOGIN, login).get(0);
+    public User getByLogin(String login) throws DAOException {
+        return getByParameter(USERS_SELECT_LOGIN, login).get(0);
     }
 
     @Override
-    public User findByEmail(String email) throws DAOException {
-        return findByParameter(USERS_SELECT_EMAIL, email).get(0);
+    public User getByEmail(String email) throws DAOException {
+        return getByParameter(USERS_SELECT_EMAIL, email).get(0);
     }
 
     private boolean updateParameter(String param, long userId, String statementString) throws DAOException {

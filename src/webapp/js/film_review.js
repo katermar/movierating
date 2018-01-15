@@ -74,16 +74,6 @@ var __slice = [].slice;
             }
             this.createStars();
             this.syncRating();
-            this.$el.on("mouseover.starrr", "span", function (e) {
-                return o.syncRating(o.$el.find("span").index(e.currentTarget) + 1)
-            });
-            this.$el.on("mouseout.starrr", function () {
-                return o.syncRating()
-            });
-            this.$el.on("click.starrr", "span", function (e) {
-                return o.setRating(o.$el.find("span").index(e.currentTarget) + 1)
-            });
-            this.$el.on("starrr:change", this.options.change)
         }
 
         t.prototype.defaults = {
@@ -94,7 +84,7 @@ var __slice = [].slice;
             var e, t, n;
             n = [];
             for (e = 1, t = this.options.numStars; 1 <= t ? e <= t : e >= t; 1 <= t ? e++ : e--) {
-                n.push(this.$el.append("<span class='glyphicon .glyphicon-star-empty'><a href='/controller?command=main-page'></a></span>"))
+                n.push(this.$el.append("<span class='glyphicon .glyphicon-star-empty'></span>"))
             }
             return n
         };
@@ -102,13 +92,13 @@ var __slice = [].slice;
             if (this.options.rating === e) {
                 e = void 0
             }
-            this.options.rating = e;
+            this.options.rating = Math.floor(e);
             this.syncRating();
             return this.$el.trigger("starrr:change", e)
         };
         t.prototype.syncRating = function (e) {
             var t, n, r, i;
-            e || (e = this.options.rating);
+            e || (e = Math.floor(this.options.rating));
             if (e) {
                 for (t = n = 0, i = e - 1; 0 <= i ? n <= i : n >= i; t = 0 <= i ? ++n : --n) {
                     this.$el.find("span").eq(t).removeClass("glyphicon-star-empty").addClass("glyphicon-star")
@@ -131,7 +121,7 @@ var __slice = [].slice;
             r = arguments[0], t = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
             return this.each(function () {
                 var i;
-                i = e(this).data("star-rating");
+                i = Math.floor(e(this).data("star-rating"));
                 if (!i) {
                     e(this).data("star-rating", i = new n(e(this), r))
                 }
@@ -176,6 +166,6 @@ $(function () {
     });
 
     $('.starrr').on('starrr:change', function (e, value) {
-        ratingsField.val(value);
+        ratingsField.val(Math.floor(value));
     });
 });

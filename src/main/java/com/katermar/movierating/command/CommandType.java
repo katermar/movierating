@@ -11,6 +11,7 @@ public enum CommandType {
     LOGOUT(new UserLogic()::logout),
     REGISTER(new GeneralLogic()::register),
     MAIN_PAGE(new GeneralLogic()::goToMainPage),
+    ERROR_PAGE(new GeneralLogic()::goToErrorPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
     PROFILE_PAGE(new UserLogic()::goToProfilePage),

@@ -8,7 +8,6 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-    <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
 
 <!-- internationalization -->
@@ -24,8 +23,7 @@
 
 <header class="header-basic-light">
     <div class="header-limiter">
-        <h1 class="headername"><a><fmt:message key="header.firstHeader"/><span><fmt:message
-                key="header.secondHeader"/></span></a></h1>
+        <h1 class="headername"><a>Movie<span>rating</span></a></h1>
         <nav>
             <nav class="menu">
                 <span class="menu-item"><a href="/controller?command=main-page"><fmt:message

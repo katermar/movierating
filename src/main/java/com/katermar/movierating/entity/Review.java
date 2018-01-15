@@ -12,6 +12,7 @@ public class Review {
     private String text;
     private Timestamp date;
     private User user;
+    private Rating rating;
 
     public int getIdreview() {
         return idreview;
@@ -85,6 +86,14 @@ public class Review {
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
+    }
+
+    public Rating getRating() {
+        return rating;
+    }
+
+    public void setRating(Rating rating) {
+        this.rating = rating;
     }
 
 

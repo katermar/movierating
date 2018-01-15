@@ -13,6 +13,7 @@ public class Film {
     private String poster;
     private String description;
     private int idDirector;
+    private Director director;
 
     public int getIdFilm() {
         return idFilm;
@@ -99,5 +100,13 @@ public class Film {
         result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + idDirector;
         return result;
+    }
+
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
     }
 }

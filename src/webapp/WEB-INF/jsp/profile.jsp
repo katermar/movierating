@@ -26,7 +26,7 @@
 
 <html>
 <head>
-    <title>Profile</title>
+    <title><fmt:message key="header.profile"/> | Movierating</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
 <body>

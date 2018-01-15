@@ -32,6 +32,6 @@ public class CommandResult {
     }
 
     public enum ResponseType {
-        FORWARD, REDIRECT
+        FORWARD, REDIRECT, ERROR
     }
 }

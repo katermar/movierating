@@ -19,8 +19,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
-import static com.katermar.movierating.command.CommandResult.ResponseType.REDIRECT;
+import static com.katermar.movierating.command.CommandResult.ResponseType.*;
 
 /**
  * Created by katermar on 1/4/2018.
@@ -43,7 +42,7 @@ public class GeneralLogic {
         UserService userService = new UserServiceImpl();
         RegisterService registerService = new RegisterServiceImpl();
         try {
-            if (userService.findByLogin(user.getLogin()) == null) {
+            if (userService.getByLogin(user.getLogin()) == null) {
                 registerService.register(user);
                 HttpSession session = request.getSession();
                 session.setAttribute(Attribute.USER, user);
@@ -89,14 +88,18 @@ public class GeneralLogic {
         GenreService genreService = new GenreService();
         long filmId = Long.parseLong(request.getParameter("id"));
         try {
-            Film film = filmService.findFilmById(filmId);
+            Film film = filmService.getFilmById(filmId);
             request.setAttribute("film", film);
-            request.setAttribute("genre", genreService.findByFilm(film.getIdFilm()));
-            request.setAttribute("review", reviewService.findByFilm(film.getIdFilm()));
+            request.setAttribute("genre", genreService.getByFilm(film.getIdFilm()));
+            request.setAttribute("review", reviewService.getByFilm(film.getIdFilm()));
             request.setAttribute("avgRate", ratingService.getAverageRatingByFilm(film.getIdFilm()));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.FILM_INFO);
+    }
+
+    public CommandResult goToErrorPage(HttpServletRequest request) {
+        return new CommandResult(ERROR, PagePath.ERROR);
     }
 }
