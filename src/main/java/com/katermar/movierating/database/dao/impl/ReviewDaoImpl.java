@@ -39,7 +39,7 @@ public class ReviewDaoImpl implements GenericDao<Review> {
     }
 
     @Override
-    public Review deleteById(long id) {
+    public Review deleteById(String id) {
         return null;
     }
 

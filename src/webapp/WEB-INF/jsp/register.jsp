@@ -3,7 +3,8 @@
   <span onclick="document.getElementById('register').style.display='none'"
         class="close-custom" title="Close Modal">&times;</span>
     <!-- Modal Content -->
-    <form class="modal-content-custom animate regform" method="post" action="${pageContext.request.contextPath}/controller" >
+    <form class="modal-content-custom animate regform" method="post"
+          action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="register">
         <span class="logo">
         <h1 class="headername">

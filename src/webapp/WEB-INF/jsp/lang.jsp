@@ -15,7 +15,8 @@
                     <span class="lang-sm lang-lbl" lang="ru"></span><span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl" lang="en"></span></a></li>
+                    <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl"
+                                                                            lang="en"></span></a></li>
                 </ul>
             </div>
         </c:if>
@@ -25,7 +26,8 @@
                     <span class="lang-sm lang-lbl" lang="en"></span><span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl" lang="ru"></span></a></li>
+                    <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl"
+                                                                            lang="ru"></span></a></li>
                 </ul>
             </div>
         </c:if>
@@ -36,7 +38,8 @@
                 <span class="lang-sm lang-lbl" lang="en"></span><span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
-                <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl" lang="ru"></span></a></li>
+                <li><a href="/controller?command=switch-language"><span class="lang-sm lang-lbl" lang="ru"></span></a>
+                </li>
             </ul>
         </div>
     </c:otherwise>

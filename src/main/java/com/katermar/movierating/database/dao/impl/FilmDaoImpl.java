@@ -32,7 +32,7 @@ public class FilmDaoImpl implements GenericDao<Film> {
     }
 
     @Override
-    public Film deleteById(long id) {
+    public Film deleteById(String id) {
         return null;
     }
 

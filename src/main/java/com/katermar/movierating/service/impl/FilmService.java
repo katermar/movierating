@@ -17,7 +17,11 @@ public class FilmService {
 
     public List<Film> getAllFilms() throws ServiceException {
         try {
-            return FILM_DAO.getAll();
+            List<Film> films = FILM_DAO.getAll();
+            for (Film film : films) {
+                film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
+            }
+            return films;
         } catch (DAOException e) {
             throw new ServiceException(e); // todo
         }

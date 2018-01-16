@@ -22,7 +22,8 @@ public enum CommandType {
     CONFIRM_EMAIL(new UserLogic()::confirmEmail),
     ADD_RATING(new UserLogic()::addRating),
     WATCH(new UserLogic()::updateWatched),
-    LEAVE_REVIEW(new UserLogic()::leaveReview);
+    LEAVE_REVIEW(new UserLogic()::leaveReview),
+    SEARCH_FILMS(new GeneralLogic()::searchFilms);
 
     private Command command;
 

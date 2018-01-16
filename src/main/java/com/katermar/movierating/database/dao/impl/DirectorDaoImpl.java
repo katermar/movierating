@@ -6,6 +6,7 @@ import com.katermar.movierating.exception.DAOException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by katermar on 1/15/2018.
@@ -19,7 +20,7 @@ public class DirectorDaoImpl implements GenericDao<Director> {
     }
 
     @Override
-    public Director deleteById(long id) {
+    public Director deleteById(String id) {
         return null;
     }
 
@@ -34,5 +35,9 @@ public class DirectorDaoImpl implements GenericDao<Director> {
         director.setName(selected.getString("name"));
         director.setIddirector(selected.getInt("iddirector"));
         return director;
+    }
+
+    public List<Director> getAll() throws DAOException {
+        return getAll(SELECT_ALL);
     }
 }

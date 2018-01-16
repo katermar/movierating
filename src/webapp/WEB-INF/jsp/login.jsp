@@ -4,7 +4,8 @@
         class="close-custom" title="Close Modal">&times;</span>
 
     <!-- Modal Content -->
-    <form class="modal-content-custom animate loginform" method="post" action="${pageContext.request.contextPath}/controller">
+    <form class="modal-content-custom animate loginform" method="post"
+          action="${pageContext.request.contextPath}/controller">
         <input type="hidden" name="command" value="login">
         <span class="logo">
         <h1 class="headername">

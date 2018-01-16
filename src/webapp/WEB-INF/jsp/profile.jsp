@@ -80,7 +80,8 @@
                                         <div class="progress-bar progress-bar-success progress-bar-striped active"
                                              role="progressbar"
                                              aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['5'] / total * 100}%">
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: ${ratings['5'] / total * 100}%">
                                             <span class="sr-only">${ratings['5']}</span>
                                         </div>
                                     </div>
@@ -94,7 +95,8 @@
                                         <div class="progress-bar progress-bar-success progress-bar-striped active"
                                              role="progressbar"
                                              aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['4'] / total * 100}%">
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: ${ratings['4'] / total * 100}%">
                                             <span class="sr-only">${ratings['4']}</span>
                                         </div>
                                     </div>
@@ -108,7 +110,8 @@
                                         <div class="progress-bar progress-bar-info progress-bar-striped active"
                                              role="progressbar"
                                              aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['3'] / total * 100}%">
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: ${ratings['3'] / total * 100}%">
                                             <span class="sr-only">${ratings['3']}</span>
                                         </div>
                                     </div>
@@ -122,7 +125,8 @@
                                         <div class="progress-bar progress-bar-warning progress-bar-striped active"
                                              role="progressbar"
                                              aria-valuenow="20"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['2'] / total * 100}%">
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: ${ratings['2'] / total * 100}%">
                                             <span class="sr-only">${ratings['2']}</span>
                                         </div>
                                     </div>
@@ -136,7 +140,8 @@
                                         <div class="progress-bar progress-bar-danger progress-bar-striped active"
                                              role="progressbar"
                                              aria-valuenow="80"
-                                             aria-valuemin="0" aria-valuemax="100" style="width: ${ratings['1'] / total * 100}%">
+                                             aria-valuemin="0" aria-valuemax="100"
+                                             style="width: ${ratings['1'] / total * 100}%">
                                             <span class="sr-only">${ratings['1']}</span>
                                         </div>
                                     </div>

@@ -33,16 +33,35 @@
 <article>
     <div>
         <div id="wrapper">
-            <c:if test="${genre ne null}">
-                <div class="mx-1">
-                    <h3><span class="label label-danger">#${genre}</span></h3>
-                </div>
-            </c:if>
-            <c:if test="${director ne null}">
-                <div class="mx-1">
-                    <h3><span class="label label-warning">#${director}</span></h3>
-                </div>
-            </c:if>
+            <div style="display:flex;">
+                <c:if test="${genre ne null}">
+                    <div class="mx-1">
+                        <h3><span class="label label-danger">#${genre}</span></h3>
+                    </div>
+                </c:if>
+                <c:if test="${genres ne null}">
+                    <c:forEach items="${genres}" var="genres">
+                        <div class="mx-1">
+                            <h3><span class="label label-danger">#${genres}</span></h3>
+                        </div>
+                    </c:forEach>
+                </c:if>
+            </div>
+            <div style="display:flex;">
+                <c:if test="${director ne null}">
+                    <div class="mx-1">
+                        <h3><span class="label label-warning">#${director}</span></h3>
+                    </div>
+                </c:if>
+                <c:if test="${directors ne null}">
+                    <c:forEach items="${directors}" var="directors">
+                        <div class="mx-1">
+                            <h3><span class="label label-warning">#${directors}</span></h3>
+                        </div>
+                    </c:forEach>
+                </c:if>
+            </div>
+
             <div id="viewport" data-mode="preview">
                 <%--@elvariable id="films" type="com.katermar.movierating.entity.Film"--%>
                 <c:forEach items="${films}" var="films">

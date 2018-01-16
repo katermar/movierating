@@ -39,7 +39,7 @@
 
             <nav class="auth">
                 <%-- Change upper right context menu depending on if the user is logged in or not: --%>
-                <c:set var="user" scope = "session" value="${sessionScope.user}"/>
+                <c:set var="user" scope="session" value="${sessionScope.user}"/>
                 <c:choose>
                     <c:when test="${sessionScope.user == null}">
                         <span class="menu-item" onclick="document.getElementById('login').style.display='block'">

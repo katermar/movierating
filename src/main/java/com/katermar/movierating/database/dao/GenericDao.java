@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface GenericDao<T> {
 
-    T deleteById(long id);
+    T deleteById(String id);
 
     boolean create(T user) throws DAOException;
 

@@ -97,7 +97,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User deleteById(long id) {
+    public User deleteById(String id) {
         return null;
     }
 

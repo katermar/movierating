@@ -38,6 +38,7 @@
                         <div class="details">
                             <div class="title1">${film.name}</div>
                             <div class="title2"><fmt:message key="film.info.film"/> (${film.releaseYear})</div>
+                            <div class="title2"><fmt:message key="film.info.duration"/> : (${film.duration})</div>
                         </div>
                         <!-- end details -->
                     </div>

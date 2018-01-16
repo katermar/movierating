@@ -31,5 +31,6 @@
 
 <c:set var="sessionScope.lastPageURI" value="/controller?command=main-page"/>
 <c:import url="header.jsp"/>
+<c:import url="search.jsp"/>
 </body>
 </html>

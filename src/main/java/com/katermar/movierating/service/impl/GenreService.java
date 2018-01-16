@@ -20,4 +20,20 @@ public class GenreService {
             throw new ServiceException(e);
         }
     }
+
+    public List<Genre> getAll() throws ServiceException {
+        try {
+            return genreDao.getAll();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Genre getByName(String genreName) throws ServiceException {
+        try {
+            return genreDao.getByName(genreName);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

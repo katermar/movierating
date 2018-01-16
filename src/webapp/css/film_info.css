@@ -144,7 +144,7 @@
 }
 
 .movie-card .container .details {
-    padding: 198px 0 0 240px;
+    padding: 160px 0 0 240px;
 }
 
 .movie-card .container .details .title1 {
@@ -156,9 +156,10 @@
 
 .movie-card .container .title2 {
     color: white;
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 15px;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: right;
+    margin-right: 20px;
 }
 
 .movie-card .container .about-movie {

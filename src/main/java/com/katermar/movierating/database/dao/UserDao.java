@@ -29,7 +29,7 @@ public interface UserDao extends GenericDao<User> {
     boolean updateRole(String role, long userId) throws DAOException;
 
     @Override
-    User deleteById(long id);
+    User deleteById(String id);
 
     User getByLoginAndPassword(String login, String password) throws DAOException;
 
