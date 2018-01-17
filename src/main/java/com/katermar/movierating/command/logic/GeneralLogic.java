@@ -8,6 +8,7 @@ import com.katermar.movierating.entity.Director;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.Genre;
 import com.katermar.movierating.entity.User;
+import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.RegisterService;
 import com.katermar.movierating.service.UserService;
@@ -52,7 +53,8 @@ public class GeneralLogic {
         user.setPassword(request.getParameter(Attribute.PASSWORD));
         user.setEmail(request.getParameter(Attribute.EMAIL));
         user.setRealName(request.getParameter(Attribute.REALNAME));
-        user.setDateOfBirth(Date.valueOf(LocalDate.parse(request.getParameter(Attribute.BIRTHDAY), DateTimeFormatter.ISO_DATE)));
+        user.setDateOfBirth(Date.valueOf(LocalDate.parse(
+                request.getParameter(Attribute.BIRTHDAY), DateTimeFormatter.ISO_DATE)));
 
         UserService userService = new UserServiceImpl();
         RegisterService registerService = new RegisterServiceImpl();
@@ -162,7 +164,7 @@ public class GeneralLogic {
             films = filmService.getAllFilms()
                     .stream()
                     .filter(film ->
-                            film.getReleaseYear().toLocalDate().getYear() <= maxYear && film.getReleaseYear().toLocalDate().getYear() >= minYear
+                            film.getReleaseYear() <= maxYear && film.getReleaseYear() >= minYear
                                     && film.getDuration() <= maxDuration && film.getDuration() >= minDuration
                                     && searchDirectors.isEmpty() || searchDirectors.contains(film.getDirector().getName()))
                     .collect(Collectors.toList());
@@ -183,5 +185,17 @@ public class GeneralLogic {
         request.setAttribute("genres", searchGenres);
         request.setAttribute("directors", searchDirectors);
         return new CommandResult(FORWARD, PagePath.FILMS);
+    }
+
+    public CommandResult goToRatingPage(HttpServletRequest request) throws CommandException {
+        FilmService filmService = new FilmService();
+        try {
+//            LOGGER.warn(filmService.getFilmRatingMapInDescOrder());
+            request.setAttribute("filmsMap", filmService.getFilmRatingMapInDescOrder());
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage());
+            throw new CommandException(e);
+        }
+        return new CommandResult(FORWARD, PagePath.RATING);
     }
 }

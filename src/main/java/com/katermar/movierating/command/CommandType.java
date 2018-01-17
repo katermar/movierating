@@ -12,6 +12,7 @@ public enum CommandType {
     REGISTER(new GeneralLogic()::register),
     MAIN_PAGE(new GeneralLogic()::goToMainPage),
     ERROR_PAGE(new GeneralLogic()::goToErrorPage),
+    RATING_PAGE(new GeneralLogic()::goToRatingPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
     FILMS_BY_DIRECTOR(new GeneralLogic()::showFilmsByDirector),
     FILMS_BY_GENRE(new GeneralLogic()::showFilmsByGenre),

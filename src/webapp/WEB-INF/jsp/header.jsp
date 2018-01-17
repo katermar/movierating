@@ -28,10 +28,9 @@
             <nav class="menu">
                 <span class="menu-item"><a href="/controller?command=main-page"><fmt:message
                         key="header.home"/></a></span>
-                <span class="menu-item"><a href="#"><fmt:message key="header.rating"/></a></span>
+                <span class="menu-item"><a href="/controller?command=rating-page"><fmt:message key="header.rating"/></a></span>
                 <span class="menu-item"><a href="/controller?command=films-page"><fmt:message
                         key="header.films"/></a></span>
-                <span class="menu-item"><a href="#"><fmt:message key="header.series"/></a></span>
                 <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                     <span class="menu-item"><a href="#"><fmt:message key="header.users"/></a></span>
                 </c:if>

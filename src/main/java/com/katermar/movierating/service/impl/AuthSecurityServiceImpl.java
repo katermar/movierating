@@ -15,7 +15,6 @@ public class AuthSecurityServiceImpl implements AuthSecurityService {
     @Override
     public User checkUserCredentials(String login, String password) throws ServiceException {
         User user = userService.getByLogin(login);
-//        if (user == null) throw new NullPointerException("no user");
         if (user != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         }

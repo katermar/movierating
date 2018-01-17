@@ -30,6 +30,10 @@
     transition: all 0.6s;
 }
 
+h3 {
+    margin: 2px !important;
+}
+
 .content-link i {
     display: block;
     font-size: 25px;

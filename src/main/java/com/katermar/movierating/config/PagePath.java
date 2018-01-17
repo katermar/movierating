@@ -10,4 +10,5 @@ public class PagePath {
     public static final String FILM_INFO = "WEB-INF/jsp/film_info.jsp";
     public static final String REDIRECT_MAIN = "/controller?main_page";
     public static final String ERROR = "WEB-INF/jsp/error.jsp";
+    public static final String RATING = "WEB-INF/jsp/rating.jsp";
 }

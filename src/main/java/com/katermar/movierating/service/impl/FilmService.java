@@ -6,7 +6,9 @@ import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.exception.DAOException;
 import com.katermar.movierating.exception.ServiceException;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by katermar on 1/12/2018.
@@ -14,6 +16,20 @@ import java.util.List;
 public class FilmService {
     private static final FilmDaoImpl FILM_DAO = new FilmDaoImpl();
     private static final DirectorDaoImpl DIRECTOR_DAO = new DirectorDaoImpl();
+    private static final RatingService RATING_SERVICE = new RatingService();
+
+
+    public Map<Film, Double> getFilmRatingMapInDescOrder() throws ServiceException {
+        try {
+            Map<Film, Double> filmRatingMap = new LinkedHashMap<>();
+            for (Film film : FILM_DAO.getAll()) {
+                filmRatingMap.put(film, RATING_SERVICE.getAverageRatingByFilm(film.getIdFilm()));
+            }
+            return filmRatingMap;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
     public List<Film> getAllFilms() throws ServiceException {
         try {

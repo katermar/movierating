@@ -39,8 +39,8 @@ public class Film {
         this.duration = duration;
     }
 
-    public Date getReleaseYear() {
-        return releaseYear;
+    public int getReleaseYear() {
+        return releaseYear.toLocalDate().getYear();
     }
 
     public void setReleaseYear(Date releaseYear) {
@@ -108,5 +108,19 @@ public class Film {
 
     public void setDirector(Director director) {
         this.director = director;
+    }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "idFilm=" + idFilm +
+                ", name='" + name + '\'' +
+                ", duration=" + duration +
+                ", releaseYear=" + releaseYear +
+                ", poster='" + poster + '\'' +
+                ", description='" + description + '\'' +
+                ", idDirector=" + idDirector +
+                ", director=" + director +
+                '}';
     }
 }

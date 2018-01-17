@@ -7,6 +7,7 @@ import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.Review;
 import com.katermar.movierating.entity.User;
+import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
 import com.katermar.movierating.service.RegisterService;
@@ -58,7 +59,7 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
     }
 
-    public CommandResult login(HttpServletRequest request) {
+    public CommandResult login(HttpServletRequest request) throws CommandException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
 
         String login = request.getParameter(Attribute.USERNAME);
@@ -70,6 +71,7 @@ public class UserLogic {
             user = authSecurityService.checkUserCredentials(login, password);
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
+            throw new CommandException("Invalid login and password.");
         }
 
         if (user == null || user.isBaned()) {

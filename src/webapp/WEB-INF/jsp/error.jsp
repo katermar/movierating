@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: USER
-  Date: 1/15/2018
-  Time: 3:50 AM
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -25,7 +19,7 @@
 </head>
 <body>
 <c:import url="header.jsp"/>
-<div class="container">
+<div class="container" style="padding-top: 30px">
     <div class="jumbotron">
         <div class="text-center"><i class="fa fa-5x fa-frown-o" style="color:#d9534f;"></i></div>
         <h1 class="text-center">${pageContext.errorData.statusCode} ${pageContext.exception.message}<p></p>

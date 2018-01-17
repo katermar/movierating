@@ -3,6 +3,7 @@ package com.katermar.movierating.controller;
 import com.katermar.movierating.command.Command;
 import com.katermar.movierating.command.CommandResult;
 import com.katermar.movierating.command.factory.CommandFactory;
+import com.katermar.movierating.exception.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+
+import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
+import static com.katermar.movierating.command.CommandResult.ResponseType.REDIRECT;
 
 /**
  * Created by katermar on 12/30/2017.
@@ -32,24 +36,23 @@ public class Controller extends HttpServlet {
         processRequest(request, response);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) {
-        Optional<String> requestCommand = Optional.ofNullable(request.getParameter("command"));
-        Command command = CommandFactory.identifyCommand(requestCommand);
-        CommandResult commandResult = command.executeAction(request);
-        String page = commandResult.getPage();
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
         try {
-            if (commandResult.getResponseType().equals(CommandResult.ResponseType.FORWARD)) {
+            Optional<String> requestCommand = Optional.ofNullable(request.getParameter("command"));
+            Command command = CommandFactory.identifyCommand(requestCommand);
+            CommandResult commandResult = command.executeAction(request);
+            String page = commandResult.getPage();
+            if (commandResult.getResponseType().equals(REDIRECT)) {
+                response.sendRedirect(request.getContextPath() + page);
+            } else if (commandResult.getResponseType().equals(FORWARD)) {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
                 requestDispatcher.forward(request, response);
+            } else {
+                response.sendError(505, "error");
             }
-//            if (commandResult.getResponseType().equals(CommandResult.ResponseType.ERROR)) {
-//                response.sendError(505);
-//            }
-            else {
-                response.sendRedirect(request.getContextPath() + page);
-            }
-        } catch (ServletException | IOException e) {
+        } catch (ServletException | IOException | CommandException e) {
             LOGGER.warn(e.getMessage());
+            throw new ServletException(e);
         }
     }
 }

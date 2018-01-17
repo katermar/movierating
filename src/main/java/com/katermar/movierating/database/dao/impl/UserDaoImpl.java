@@ -122,7 +122,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getByLogin(String login) throws DAOException {
-        return getByParameter(USERS_SELECT_LOGIN, login).get(0);
+        try {
+            return getByParameter(USERS_SELECT_LOGIN, login).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override
