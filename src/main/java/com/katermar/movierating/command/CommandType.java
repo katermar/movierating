@@ -1,5 +1,6 @@
 package com.katermar.movierating.command;
 
+import com.katermar.movierating.command.logic.AdminLogic;
 import com.katermar.movierating.command.logic.GeneralLogic;
 import com.katermar.movierating.command.logic.UserLogic;
 
@@ -14,6 +15,7 @@ public enum CommandType {
     ERROR_PAGE(new GeneralLogic()::goToErrorPage),
     RATING_PAGE(new GeneralLogic()::goToRatingPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
+    USERS_PAGE(new AdminLogic()::showUsersPage),
     FILMS_BY_DIRECTOR(new GeneralLogic()::showFilmsByDirector),
     FILMS_BY_GENRE(new GeneralLogic()::showFilmsByGenre),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
@@ -24,6 +26,7 @@ public enum CommandType {
     ADD_RATING(new UserLogic()::addRating),
     WATCH(new UserLogic()::updateWatched),
     LEAVE_REVIEW(new UserLogic()::leaveReview),
+    BAN_USER(new AdminLogic()::banUser),
     SEARCH_FILMS(new GeneralLogic()::searchFilms);
 
     private Command command;

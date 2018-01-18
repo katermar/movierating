@@ -73,4 +73,15 @@ public class Rating {
         result = 31 * result + ratingAmount;
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "idrating=" + idrating +
+                ", iduser=" + iduser +
+                ", idfilm=" + idfilm +
+                ", isSeen=" + isSeen +
+                ", ratingAmount=" + ratingAmount +
+                '}';
+    }
 }

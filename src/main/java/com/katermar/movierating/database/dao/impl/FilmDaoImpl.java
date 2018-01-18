@@ -35,7 +35,7 @@ public class FilmDaoImpl implements GenericDao<Film> {
         return getAll(SELECT_ALL);
     }
 
-    public List<Film> getOrderedByRating() throws DAOException {
+    public List<Film> getOrderedByRatingDesc() throws DAOException {
         return getAll(SELECT_ALL_DESC);
     }
 

@@ -84,7 +84,7 @@
                         <input type="hidden" name="command" value="watch">
                         <input type="hidden" name="id" value="${film.idFilm}">
                         <button type="submit" class="btn btn-info btn-lg">
-                            <span class="glyphicon glyphicon-eye-open"></span>
+                            <span class="glyphicon glyphicon-eye-close"></span>
                         </button>
                     </form>
                 </c:if>
@@ -147,7 +147,7 @@
                 <c:forEach items="${review}" var="review">
                     <div class="row">
                         <div class="col-sm-3 col-md-3 col-xs-3">
-                            <img src="https://image.flaticon.com/icons/svg/145/145850.svg" class="img-rounded"
+                            <img src="${review.user.avatar}" class="img-rounded"
                                  width="90">
                             <div class="director-name">
                                 <c:if test="${sessionScope.user.login eq review.user.login}">

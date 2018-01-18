@@ -16,12 +16,14 @@ import java.util.List;
  */
 public class RatingDaoImpl implements GenericDao<Rating> {
     private static final String SELECT_FROM_RATING_WHERE_IDUSER = "SELECT * FROM rating WHERE iduser = ? AND is_seen = '1'";
-    private static final String SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM = "SELECT * FROM rating WHERE (iduser = ? AND idfilm = ?) AND is_seen = '1'";
+    private static final String SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM = "SELECT * FROM rating WHERE (iduser = ? AND idfilm = ?)";
     private static final String SELECT_FROM_RATING_WHERE_IDFILM = "SELECT * FROM rating WHERE idfilm = ?";
     private static final String SELECT_AVG_RATING_AMOUNT_WHERE_IDFILM = "SELECT AVG(rating_amount) FROM rating WHERE idfilm = ? AND is_seen = '1'";
     private static final String SELECT_FROM_RATING_WHERE_IS_SEEN_0 = "SELECT * FROM rating WHERE is_seen = 0";
-    private static final String INSERT_IDUSER_IDFILM_IS_SEEN_RATING_AMOUNT_VALUES = "INSERT INTO rating (iduser, idfilm, is_seen, rating_amount) " +
-            "VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating_amount=VALUES(rating_amount), is_seen=VALUES(is_seen)";
+    private static final String INSERT_IDUSER_IDFILM_IS_SEEN_RATING_AMOUNT_VALUES = "INSERT INTO rating (iduser, idfilm, is_seen, rating_amount) \n" +
+            "VALUES (?, ?, ?, ?)\n" +
+            " ON DUPLICATE KEY UPDATE \n" +
+            " rating_amount=VALUES(rating_amount), is_seen=VALUES(is_seen)";
 
     public List<Rating> getByUser(long userId) throws DAOException {
         return getByParameter(SELECT_FROM_RATING_WHERE_IDUSER, String.valueOf(userId));

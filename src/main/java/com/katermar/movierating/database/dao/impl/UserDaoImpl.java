@@ -154,6 +154,7 @@ public class UserDaoImpl implements UserDao {
         user.setPassword(resultSet.getString("password"));
         user.setEmail(resultSet.getString("email"));
         user.setRealName(resultSet.getString("real_name"));
+        user.setAvatar(resultSet.getString("avatar"));
         user.setDateOfRegistration(resultSet.getTimestamp("date_of_registration"));
         user.setDateOfBirth(resultSet.getDate("date_of_birth"));
         UserRole role = UserRole.valueOf(resultSet.getString("role").toUpperCase());

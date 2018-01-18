@@ -32,7 +32,8 @@
                 <span class="menu-item"><a href="/controller?command=films-page"><fmt:message
                         key="header.films"/></a></span>
                 <c:if test="${sessionScope.user.role eq 'ADMIN'}">
-                    <span class="menu-item"><a href="#"><fmt:message key="header.users"/></a></span>
+                    <span class="menu-item"><a href="/controller?command=users-page"><fmt:message
+                            key="header.users"/></a></span>
                 </c:if>
             </nav>
 

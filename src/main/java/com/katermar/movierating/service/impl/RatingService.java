@@ -15,7 +15,19 @@ import java.util.Map;
 public class RatingService {
     private static final RatingDaoImpl ratingDao = new RatingDaoImpl();
 
-    public List<Rating> getRatingListByUser(long userId) throws ServiceException {
+    public Double getAverageRatingByUser(int userId) throws ServiceException {
+        try {
+            return ratingDao.getByUser(userId)
+                    .stream()
+                    .mapToDouble(Rating::getRatingAmount)
+                    .average()
+                    .orElse(0.);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public List<Rating> getRatingListByUser(int userId) throws ServiceException {
         try {
             return ratingDao.getByUser(userId);
         } catch (DAOException e) {

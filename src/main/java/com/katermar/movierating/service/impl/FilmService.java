@@ -22,7 +22,7 @@ public class FilmService {
     public Map<Film, Double> getFilmRatingMapInDescOrder() throws ServiceException {
         try {
             Map<Film, Double> filmRatingMap = new LinkedHashMap<>();
-            for (Film film : FILM_DAO.getAll()) {
+            for (Film film : FILM_DAO.getOrderedByRatingDesc()) {
                 filmRatingMap.put(film, RATING_SERVICE.getAverageRatingByFilm(film.getIdFilm()));
             }
             return filmRatingMap;

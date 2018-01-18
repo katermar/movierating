@@ -8,11 +8,28 @@ import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
 import com.katermar.movierating.service.UserService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by katermar on 1/1/2018.
  */
 public class UserServiceImpl implements UserService {
     private static final UserDao userDAO = new UserDaoImpl();
+    private static final RatingService RATING_SERVICE = new RatingService();
+
+    @Override
+    public Map<User, Double> getUserRatingMap() throws ServiceException {
+        try {
+            Map<User, Double> userRatingMap = new HashMap<>();
+            for (User user : userDAO.getAll()) {
+                userRatingMap.put(user, RATING_SERVICE.getAverageRatingByUser(user.getId()));
+            }
+            return userRatingMap;
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 
     @Override
     public User getByLoginAndPassword(String login, String password) throws ServiceException {

@@ -13,6 +13,7 @@ public class User implements Serializable {
     private String password;
     private String email;
     private String realName;
+    private String avatar;
     private Timestamp dateOfRegistration;
     private Date dateOfBirth;
     private Date banExpirationDate;
@@ -133,6 +134,14 @@ public class User implements Serializable {
 
     public boolean isBaned() {
         return status.equals(UserStatus.BANED);
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     /**
