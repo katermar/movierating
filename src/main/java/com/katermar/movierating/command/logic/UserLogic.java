@@ -16,8 +16,12 @@ import com.katermar.movierating.service.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -44,7 +48,7 @@ public class UserLogic {
             session.removeAttribute(Attribute.USER);
             session.invalidate();
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.CONTROLLER_COMMAND_MAIN_PAGE);
     }
 
     public CommandResult updatePassword(HttpServletRequest request) {
@@ -160,6 +164,28 @@ public class UserLogic {
             ratingService.addRating(rating);
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult setAvatar(HttpServletRequest request) throws CommandException {
+        try {
+            String imageURL = request.getParameter("file");
+            LOGGER.warn(imageURL);
+            if (!imageURL.endsWith("svg")) {
+                ImageIO.setUseCache(false);
+                BufferedImage image = ImageIO.read(new URL(imageURL));
+                if (image.getHeight() > 300 || image.getWidth() > 300) {
+                    throw new CommandException("Invalid image size! Try again please!");
+                }
+            }
+            UserService userService = new UserServiceImpl();
+            User currentUser = (User) request.getSession(false).getAttribute("user");
+            currentUser.setAvatar(imageURL);
+            userService.addUser(currentUser);
+        } catch (IOException | ServiceException e) {
+            LOGGER.warn(e.getMessage());
+            throw new CommandException(e);
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }

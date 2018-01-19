@@ -35,10 +35,10 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-6">
-                <div class="well well-sm">
+                <div class="well">
                     <div class="row">
                         <div class="col-sm-6 col-md-4">
-                            <img src="http://placehold.it/380x500" alt="" class="img-rounded img-responsive"/>
+                            <img src="${sessionScope.user.avatar}" alt="" class="img-rounded img-responsive"/>
                         </div>
                         <div class="col-sm-6 col-md-8">
                             <h4>${sessionScope.user.realName}</h4>
@@ -50,12 +50,27 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6 col-xs-12">
+                <form action="/controller" method="post">
+                    <div class="col-md-12 col-xs-12 well">
+                        <input type="hidden" name="command" value="set-avatar">
+                        <div class="input-group col-md-7 col-xs-7" style="float: inherit">
+                            <div class="input-group-addon"><i
+                                    class="glyphicon glyphicon-link center-block"></i></div>
+                            <input class="form-control" type="url" name="file" placeholder="max. 300x300"
+                                   pattern="^(https|http).+(jpg|svg|gif|png)$" required>
+                        </div>
+                        <button class="col-md-4 col-xs-4 btn btn-success pull-right" type="submit">
+                            <i class="glyphicon glyphicon-user"></i>
+                            <fmt:message key="profile.setAvatar"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
-    <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-6">
-                <div class="well well-sm">
+                <div class="well">
                     <div class="row">
                         <div class="col-xs-12 col-md-6 text-center">
                             <h1 class="rating-num">

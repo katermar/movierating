@@ -18,10 +18,12 @@ public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_FROM_FILM_WHERE_IDDIRECTOR = "SELECT * FROM film WHERE iddirector = ?";
     private static final String SELECT_FROM_FILM_WHERE_GENRE = "SELECT * FROM film WHERE idfilm IN (SELECT film_genre.idfilm FROM film_genre WHERE genrename = ?)";
     private static final String SELECT_WHERE_ID = "SELECT * FROM film WHERE idfilm = ?";
-    private static final String SELECT_ALL_DESC = "SELECT AVG(rating_amount) as a, film.* FROM rating\n" +
-            "join film on rating.idfilm = film.idfilm\n" +
-            "where is_seen = '1' \n" +
-            "group by idfilm order by a desc";
+    private static final String SELECT_ALL_DESC = "select * from (SELECT film.* FROM rating\n" +
+            "join film on rating.idfilm = film.idfilm and is_seen = '1' \n" +
+            "group by idfilm order by AVG(rating_amount) desc) as w\n" +
+            "union all select * from film where idfilm not in (SELECT film.idfilm FROM rating\n" +
+            "join film on rating.idfilm = film.idfilm and is_seen = '1' \n" +
+            "group by idfilm)";
 
     public List<Film> getByUser(long userId) throws DAOException {
         return getByParameter(SELECT_WHERE_RELEASE_YEAR, String.valueOf(userId));

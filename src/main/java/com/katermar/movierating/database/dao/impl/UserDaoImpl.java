@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
     private static final String USERS_SELECT_LOGIN = "SELECT * FROM user WHERE login = ?";
     private static final String USERS_SELECT_ID = "SELECT * FROM user WHERE iduser = ?";
     private static final String USERS_SELECT_EMAIL = "SELECT * FROM user WHERE email = ?";
-    private static final String USERS_INSERT_REGISTER = "INSERT INTO user (login, password, email, real_name, date_of_birth) VALUES (?, ?, ?, ?, ?)";
+    private static final String USERS_INSERT_REGISTER = "INSERT INTO user (login, password, email, real_name, date_of_birth, avatar) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password=VALUES(password), email=VALUES(email), avatar=VALUES(avatar)";
     private static final String USERS_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_STATUS = "UPDATE user SET status = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_EMAIL = "UPDATE user SET ban_expiration_date = ? WHERE iduser = ?";
@@ -38,6 +38,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(3, user.getEmail());
             statement.setString(4, user.getRealName());
             statement.setDate(5, user.getDateOfBirth());
+            statement.setString(6, user.getAvatar());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new DAOException(e);
