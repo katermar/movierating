@@ -48,7 +48,8 @@
                         </div>
                         <div class="col-md-3 text-center">
                             <form action="/controller" method="post">
-                                <input type="hidden" name="command" value="">
+                                <input type="hidden" name="command" value="ban-user">
+                                <input type="hidden" name="login" value="${user.key.login}">
                                 <c:choose>
                                     <c:when test="${user.key.status eq 'UNBANED'}">
                                         <button type="submit" class="btn btn-danger btn-lg btn-block"><fmt:message

@@ -12,6 +12,5 @@ window.onclick = function (event) {
         document.getElementsByClassName('regform')[0].reset();
         document.getElementById('validate-status').innerHTML = "";
     }
-}
-
+};
 

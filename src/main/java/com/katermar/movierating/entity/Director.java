@@ -7,6 +7,10 @@ public class Director {
     private int iddirector;
     private String name;
 
+    public Director(String name) {
+        this.name = name;
+    }
+
     public int getIddirector() {
         return iddirector;
     }

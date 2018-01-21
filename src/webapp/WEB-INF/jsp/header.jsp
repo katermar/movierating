@@ -23,8 +23,8 @@
 
 <header class="header-basic-light">
     <div class="header-limiter">
-        <h1 class="headername"><a>Movie<span>rating</span></a></h1>
-        <nav>
+        <h1 class="headername"><a href="/controller?command=main-page">Movie<span>rating</span></a></h1>
+        <nav class="nav-custom">
             <nav class="menu">
                 <span class="menu-item"><a href="/controller?command=main-page"><fmt:message
                         key="header.home"/></a></span>
@@ -34,12 +34,13 @@
                 <c:if test="${sessionScope.user.role eq 'ADMIN'}">
                     <span class="menu-item"><a href="/controller?command=users-page"><fmt:message
                             key="header.users"/></a></span>
+                    <span class="menu-item"><a href="/controller?command=add-page"><fmt:message
+                            key="header.add"/></a></span>
                 </c:if>
             </nav>
 
             <nav class="auth">
                 <%-- Change upper right context menu depending on if the user is logged in or not: --%>
-                <c:set var="user" scope="session" value="${sessionScope.user}"/>
                 <c:choose>
                     <c:when test="${sessionScope.user == null}">
                         <span class="menu-item" onclick="document.getElementById('login').style.display='block'">

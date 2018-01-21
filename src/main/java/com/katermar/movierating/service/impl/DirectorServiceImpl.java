@@ -20,4 +20,20 @@ public class DirectorServiceImpl {
             throw new ServiceException(e);
         }
     }
+
+    public Director getByName(String name) throws ServiceException {
+        try {
+            return DIRECTOR_DAO.getByName(name);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public void addDirector(Director director) throws ServiceException {
+        try {
+            DIRECTOR_DAO.create(director);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

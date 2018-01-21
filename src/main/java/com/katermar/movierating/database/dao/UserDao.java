@@ -3,7 +3,6 @@ package com.katermar.movierating.database.dao;
 import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.DAOException;
 
-import java.sql.Date;
 import java.util.List;
 
 /**
@@ -21,8 +20,6 @@ public interface UserDao extends GenericDao<User> {
     boolean updatePassword(String password, long userId) throws DAOException;
 
     boolean updateEmail(String status, long userId) throws DAOException;
-
-    boolean updateBan(Date date, long userId) throws DAOException;
 
     boolean updateStatus(String status, long userId) throws DAOException;
 

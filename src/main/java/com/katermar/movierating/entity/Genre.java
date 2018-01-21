@@ -6,6 +6,10 @@ package com.katermar.movierating.entity;
 public class Genre {
     private String name;
 
+    public Genre(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
@@ -21,9 +25,7 @@ public class Genre {
 
         Genre genre = (Genre) o;
 
-        if (name != null ? !name.equals(genre.name) : genre.name != null) return false;
-
-        return true;
+        return name != null ? name.equals(genre.name) : genre.name == null;
     }
 
     @Override

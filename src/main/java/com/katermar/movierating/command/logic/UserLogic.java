@@ -149,10 +149,10 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult updateWatched(HttpServletRequest request) {
+    public CommandResult updateWatched(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            // todo error
+            throw new CommandException("Session isn't opened.");
         }
         User currentUser = (User) session.getAttribute(Attribute.USER);
         RatingService ratingService = new RatingService();

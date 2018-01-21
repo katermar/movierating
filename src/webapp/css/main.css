@@ -12,8 +12,13 @@ h1 {
     max-width: 1100px;
 }
 
+.menu {
+    float: left;
+}
+
 .auth {
     margin-left: 20px;
+    float: right;
 }
 
 .header-basic-light {
@@ -67,7 +72,6 @@ h1.headername span {
 .header-basic-light .header-limiter nav {
     font: 15px Arial, Helvetica, sans-serif;
     line-height: 40px;
-    float: right;
 }
 
 .header-basic-light .header-limiter nav a {
@@ -122,6 +126,10 @@ nav.auth span.menu-item a :hover {
         font-size: 13px;
     }
 
+    .nav-custom {
+        float: none;
+    }
+
 }
 
 @media all and (max-width: 425px) {
@@ -155,4 +163,6 @@ body {
     padding: 0;
 }
 
-
+.nav-custom {
+    float: right;
+}

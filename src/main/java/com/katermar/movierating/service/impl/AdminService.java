@@ -7,20 +7,17 @@ import com.katermar.movierating.exception.DAOException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.UserService;
 
-import java.sql.Date;
-import java.time.LocalDate;
-
 /**
  * Created by katermar on 1/10/2018.
  */
 public class AdminService {
-    public boolean updateBan(String date, String login) throws ServiceException {
+    public boolean updateBan(String login) throws ServiceException {
         UserService userService = new UserServiceImpl();
         try {
             User user = userService.getByLogin(login);
+            user.setStatus(User.UserStatus.BANED == user.getStatus() ? User.UserStatus.UNBANED : User.UserStatus.BANED);
             UserDao userDao = new UserDaoImpl();
-            Date parsedDate = Date.valueOf(LocalDate.parse(date));
-            userDao.updateBan(parsedDate, user.getId());
+            userDao.create(user);
         } catch (ServiceException | DAOException e) {
             throw new ServiceException(e);
         }

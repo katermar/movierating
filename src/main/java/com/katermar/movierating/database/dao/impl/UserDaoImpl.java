@@ -5,8 +5,10 @@ import com.katermar.movierating.database.dao.UserDao;
 import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.DAOException;
 
-import java.sql.*;
-import java.time.Instant;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import static com.katermar.movierating.database.dao.UserDao.UserTableFields.BAN_EXPIRATION_DATE;
@@ -22,12 +24,12 @@ public class UserDaoImpl implements UserDao {
     private static final String USERS_SELECT_LOGIN = "SELECT * FROM user WHERE login = ?";
     private static final String USERS_SELECT_ID = "SELECT * FROM user WHERE iduser = ?";
     private static final String USERS_SELECT_EMAIL = "SELECT * FROM user WHERE email = ?";
-    private static final String USERS_INSERT_REGISTER = "INSERT INTO user (login, password, email, real_name, date_of_birth, avatar) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password=VALUES(password), email=VALUES(email), avatar=VALUES(avatar)";
+    private static final String USERS_INSERT_REGISTER = "INSERT INTO user (login, password, email, real_name, date_of_birth, avatar) VALUES (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE password=VALUES(password), email=VALUES(email), avatar=VALUES(avatar), status=VALUES(status)";
     private static final String USERS_UPDATE_PASSWORD = "UPDATE user SET password = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_STATUS = "UPDATE user SET status = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_EMAIL = "UPDATE user SET ban_expiration_date = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_ROLE = "UPDATE user SET role = ? WHERE iduser = ?";
-    private static final String USERS_UPDATE_BAN = "UPDATE user SET email = ? WHERE iduser = ?";
+    private static final String USERS_UPDATE_BAN = "UPDATE user SET status = ? WHERE iduser = ?";
 
     @Override
     public boolean create(User user) throws DAOException {
@@ -69,22 +71,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public boolean updateEmail(String status, long userId) throws DAOException {
         return updateParameter(status, userId, USERS_UPDATE_EMAIL);
-    }
-
-    @Override
-    public boolean updateBan(Date date, long userId) throws DAOException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement selectUsersStatement = connection.prepareStatement(USERS_UPDATE_BAN)) {
-            selectUsersStatement.setDate(1, date);
-            if (date.after(Date.from(Instant.now()))) {
-                updateStatus(UserStatus.BANED.name(), userId);
-            }
-            selectUsersStatement.setLong(2, userId);
-            selectUsersStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
-        }
-        return true;
     }
 
     @Override

@@ -13,49 +13,59 @@
 <fmt:setBundle basename="Locale"/>
 
 <script src="${pageContext.request.contextPath}/js/checkbox.js"></script>
-<form action="/controller" method="post">
-    <input type="hidden" name="command" value="search-films">
-    <div class="container">
+<br/>
+<div class="container well col-md-10 col-md-offset-1">
+    <form action="/controller" method="post">
+        <input type="hidden" name="command" value="search-films">
         <%--@elvariable id="genres" type="java.util.List"--%>
         <%--@elvariable id="director" type="com.katermar.movierating.entity.Genre"--%>
-        <div class="btn-group btn-group-toggle col-md-12 col-sm-12 col-xs-12" data-toggle="buttons"
-             style="display: flex">
-            <c:if test="${genres ne null}">
-                <c:forEach items="${genres}" var="genre">
+        <div class="row text-center">
+            <div class="btn-group btn-group-toggle col-md-12 col-sm-12 col-xs-12" data-toggle="buttons">
+                <c:if test="${genres ne null}">
+                    <c:forEach items="${genres}" var="genre">
                     <span class="button-checkbox" style="margin: 10px 5px 10px 10px">
-                    <button type="button" class="btn" data-color="danger">#${genre.name}</button>
+                    <button type="button" class="btn" data-color="danger"
+                            style="margin-bottom: 10px">#${genre.name}</button>
                     <input type="checkbox" class="hidden" name="genre" value="${genre.name}"/>
                  </span>
-                </c:forEach>
-            </c:if>
-            <hr/>
+                    </c:forEach>
+                </c:if>
+                <hr/>
+            </div>
         </div>
         <%--@elvariable id="directors" type="java.util.List"--%>
         <%--@elvariable id="director" type="com.katermar.movierating.entity.Director"--%>
-        <div class="btn-group btn-group-toggle col-md-12 col-sm-12 col-xs-12" data-toggle="buttons"
-             style="display: flex">
-            <c:if test="${directors ne null}">
-                <c:forEach items="${directors}" var="director">
+        <div class="row text-center">
+            <div class="btn-group btn-group-toggle col-md-12 col-sm-12 col-xs-12" data-toggle="buttons">
+                <c:if test="${directors ne null}">
+                    <c:forEach items="${directors}" var="director">
                     <span class="button-checkbox" style="margin: 10px 5px 10px 10px">
-                    <button type="button" class="btn" data-color="warning">#${director.name}</button>
+                    <button type="button" class="btn" data-color="warning"
+                            style="margin-bottom: 10px">#${director.name}</button>
                     <input type="checkbox" class="hidden" name="director" value="${director.name}"/>
                 </span>
-                </c:forEach>
-            </c:if>
+                    </c:forEach>
+                </c:if>
+                <hr/>
+            </div>
             <hr/>
         </div>
-        <div class="col-md-6 col-sm-6 col-xs-6">
-            <fmt:message key="search.year"/> :
-            <input type="number" min="1900" max="2018" name="min-year" placeholder="from">
-            <input type="number" min="1900" max="2018" name="max-year" placeholder="to">
-        </div>
-        <hr/>
-        <div class="col-md-6 col-sm-6 col-xs-6">
-            <fmt:message key="film.info.duration"/> :
-            <input type="number" min="0" max="500" name="min-duration" placeholder="from">
-            <input type="number" min="0" max="500" name="max-duration" placeholder="to">
+        <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <fmt:message key="search.year"/> :
+                <input class="form-control" type="number" min="1900" max="2018" name="min-year" placeholder="from">
+                <input class="form-control" type="number" min="1900" max="2018" name="max-year" placeholder="to">
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+                <fmt:message key="film.info.duration"/> :
+                <input class="form-control" type="number" min="0" max="500" name="min-duration" placeholder="from">
+                <input class="form-control" type="number" min="0" max="500" name="max-duration" placeholder="to">
+            </div>
         </div>
 
-        <button type="submit" style="width: auto">submit</button>
-    </div>
-</form>
+        <div class="row text-center">
+            <hr/>
+            <button class="btn btn-success" type="submit"><fmt:message key="header.search"/></button>
+        </div>
+    </form>
+</div>

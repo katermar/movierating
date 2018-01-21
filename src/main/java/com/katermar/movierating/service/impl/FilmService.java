@@ -72,4 +72,20 @@ public class FilmService {
             throw new ServiceException(e);
         }
     }
+
+    public void addFilm(Film film) throws ServiceException {
+        try {
+            FILM_DAO.create(film);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public Film getFilmByName(String name) throws ServiceException {
+        try {
+            return FILM_DAO.getByName(name);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

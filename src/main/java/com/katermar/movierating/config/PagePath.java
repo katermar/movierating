@@ -12,4 +12,5 @@ public class PagePath {
     public static final String ERROR = "WEB-INF/jsp/error.jsp";
     public static final String RATING = "WEB-INF/jsp/rating.jsp";
     public static final String USERS = "WEB-INF/jsp/users.jsp";
+    public static final String ADD = "WEB-INF/jsp/admin_add.jsp";
 }

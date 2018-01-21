@@ -1,12 +1,11 @@
 package com.katermar.movierating.database.dao.impl;
 
+import com.katermar.movierating.database.connection.ConnectionPool;
 import com.katermar.movierating.database.dao.GenericDao;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.exception.DAOException;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 
 /**
@@ -14,6 +13,8 @@ import java.util.List;
  */
 public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_ALL = "SELECT * FROM film";
+    private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String SELECT_FROM_FILM_WHERE_NAME = "SELECT * FROM film WHERE name = ?";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
     private static final String SELECT_FROM_FILM_WHERE_IDDIRECTOR = "SELECT * FROM film WHERE iddirector = ?";
     private static final String SELECT_FROM_FILM_WHERE_GENRE = "SELECT * FROM film WHERE idfilm IN (SELECT film_genre.idfilm FROM film_genre WHERE genrename = ?)";
@@ -47,8 +48,21 @@ public class FilmDaoImpl implements GenericDao<Film> {
     }
 
     @Override
-    public boolean create(Film user) throws DAOException {
-        return false; //todo
+    public boolean create(Film film) throws DAOException {
+        try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connectionFromPool
+                     .prepareStatement(INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION)) {
+            statement.setString(1, film.getName());
+            statement.setInt(2, film.getReleaseYear());
+            statement.setDouble(3, film.getDuration());
+            statement.setString(4, film.getPoster());
+            statement.setInt(5, film.getIdDirector());
+            statement.setString(6, film.getDescription());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return true;
     }
 
     @Override
@@ -70,5 +84,9 @@ public class FilmDaoImpl implements GenericDao<Film> {
 
     public List<Film> getFilmsByGenre(String genreName) throws DAOException {
         return getByParameter(SELECT_FROM_FILM_WHERE_GENRE, genreName);
+    }
+
+    public Film getByName(String name) throws DAOException {
+        return getByParameter(SELECT_FROM_FILM_WHERE_NAME, name).get(0);
     }
 }
