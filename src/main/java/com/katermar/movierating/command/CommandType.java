@@ -20,8 +20,6 @@ public enum CommandType {
     ADD_FILM(new AdminLogic()::addFilm),
     ADD_GENRE(new AdminLogic()::addGenre),
     ADD_DIRECTOR(new AdminLogic()::addDirector),
-    FILMS_BY_DIRECTOR(new GeneralLogic()::showFilmsByDirector),
-    FILMS_BY_GENRE(new GeneralLogic()::showFilmsByGenre),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
     PROFILE_PAGE(new UserLogic()::goToProfilePage),
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),

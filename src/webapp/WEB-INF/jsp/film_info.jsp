@@ -47,14 +47,14 @@
                         <div class="colum-one">
                             <div>
                                 <a class="label label-danger"
-                                   href="/controller?command=films-by-director&id=${film.director.iddirector}">
+                                   href="/controller?command=search-films&director=${film.director.name}">
                                     ${film.director.name}
                                 </a>
                             </div>
                             <br/>
                             <div class="colum-catogary">
                                 <c:forEach items="${genre}" var="genre">
-                                    <a href="/controller?command=films-by-genre&genre=${genre.name}"
+                                    <a href="/controller?command=search-films&genre=${genre.name}"
                                        style="text-decoration: none;">
                                         <span class="tag">${genre.name}</span>
                                     </a>

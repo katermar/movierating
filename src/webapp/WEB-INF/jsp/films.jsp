@@ -29,7 +29,7 @@
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery.twbsPagination.js"></script>
-    <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
+    <script src="${pageContext.request.contextPath}/js/pagination.js?new"></script>
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
@@ -70,7 +70,7 @@
             <%--<input type="hidden" name="filmsPerPage" id="filmsPerPage" value="4">--%>
             <div class="row">
                 <form method="get" action="/controller?command=films-page" id="formPerPage">
-                    <input type="hidden" name="command" value="films-page">
+                    <input type="hidden" name="command" id="commandPart" value="${commandPart}">
                     <input type="hidden" name="filmsPerPage" value="4" id="filmsPerPage">
 
                     <select class="col-md-1 pull-right selectpicker show-tick" id="selectPerPage"

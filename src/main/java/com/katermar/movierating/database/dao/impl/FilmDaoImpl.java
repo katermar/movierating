@@ -7,6 +7,7 @@ import com.katermar.movierating.exception.DAOException;
 
 import java.sql.*;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by katermar on 1/9/2018.
@@ -92,5 +93,55 @@ public class FilmDaoImpl implements GenericDao<Film> {
 
     public Film getByName(String name) throws DAOException {
         return getByParameter(SELECT_FROM_FILM_WHERE_NAME, name).get(0);
+    }
+
+    public List<Film> searchFilms(Map<String, String[]> parametersMap, int pageNumber, int filmsPerPage) throws DAOException {
+        return getAll(constructSearchQuery(parametersMap) + " LIMIT " + (pageNumber - 1) * filmsPerPage + ", " + filmsPerPage);
+    }
+
+    public int searchFilmsAmount(Map<String, String[]> parametersMap) throws DAOException {
+        return getAll(constructSearchQuery(parametersMap)).size();
+    }
+
+    private String constructSearchQuery(Map<String, String[]> parameters) {
+        StringBuilder query = new StringBuilder("SELECT * FROM film WHERE "); //todo
+        if (parameters.containsKey("min-duration")) {
+            query.append("duration >= ").append(parameters.get("min-duration")[0]).append(" AND ");
+        } else {
+            query.append("TRUE AND ");
+        }
+        if (parameters.containsKey("max-duration")) {
+            query.append("duration <= ").append(parameters.get("max-duration")[0]).append(" AND ");
+        } else {
+            query.append("TRUE AND ");
+        }
+        if (parameters.containsKey("min-year")) {
+            query.append("release_year >= ").append(parameters.get("min-year")[0]).append(" AND ");
+        } else {
+            query.append("TRUE AND ");
+        }
+        if (parameters.containsKey("max-year")) {
+            query.append("release_year <= ").append(parameters.get("max-year")[0]).append(" AND ");
+        } else {
+            query.append("TRUE AND ");
+        }
+        if (parameters.containsKey("genre")) {
+            for (String genre : parameters.get("genre")) {
+                query
+                        .append("idfilm IN (SELECT idfilm FROM film_genre WHERE genrename = '")
+                        .append(genre).append("') AND ");
+            }
+        } else {
+            query.append("TRUE AND ");
+        }
+        if (parameters.containsKey("director")) {
+            query.append("iddirector IN (SELECT iddirector FROM director WHERE ");
+            for (String director : parameters.get("director")) {
+                query.append("name = '").append(director).append("' OR ");
+            }
+            query.append("FALSE ) AND ");
+        }
+        query.append("TRUE ORDER BY idfilm ");
+        return query.toString();
     }
 }

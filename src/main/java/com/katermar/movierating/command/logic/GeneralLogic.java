@@ -21,10 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.*;
 
@@ -95,6 +92,7 @@ public class GeneralLogic {
         try {
             String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
             String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
+//            request.setAttribute("commandPart", newUri.toString());
             request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
             request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {
@@ -126,69 +124,32 @@ public class GeneralLogic {
     }
 
 
-    public CommandResult showFilmsByDirector(HttpServletRequest request) {
-        int directorId = Integer.parseInt(request.getParameter("id"));
-        FilmService filmService = new FilmService();
-        try {
-            List<Film> films = filmService.getFilmsByDirector(directorId);
-            request.setAttribute("films", films);
-            request.setAttribute("director", films.get(0).getDirector().getName());
-        } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());
-        }
-        return new CommandResult(FORWARD, PagePath.FILMS);
-    }
-
-    public CommandResult showFilmsByGenre(HttpServletRequest request) {
-        String genreName = request.getParameter("genre");
-        FilmService filmService = new FilmService();
-        try {
-            List<Film> films = filmService.getFilmsByGenre(genreName);
-            request.setAttribute("films", films);
-            request.setAttribute("genre", genreName);
-        } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());
-        }
-        return new CommandResult(FORWARD, PagePath.FILMS);
-    }
-
-    public CommandResult searchFilms(HttpServletRequest request) {
-        GenreService genreService = new GenreService();
-        FilmService filmService = new FilmService();
+    public CommandResult searchFilms(HttpServletRequest request) throws CommandException {
+        List<Film> foundFilms = new ArrayList<>();
+        Map<String, String[]> parametersMap = new HashMap<>();
+        parametersMap.putAll(request.getParameterMap());
         String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
         String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
-
-        int minYear = Integer.parseInt(request.getParameter("min-year").isEmpty() ? "0" : request.getParameter("min-year"));
-        int maxYear = Integer.parseInt(request.getParameter("max-year").isEmpty() ? "2018" : request.getParameter("max-year"));
-        int minDuration = Integer.parseInt(request.getParameter("min-duration").isEmpty() ? "0" : request.getParameter("min-duration"));
-        int maxDuration = Integer.parseInt(request.getParameter("max-duration").isEmpty() ? "500" : request.getParameter("max-duration"));
-        List<Film> films;
-        List<Film> foundFilms = new ArrayList<>();
+        try {
+            FilmService filmService = new FilmService();
+            foundFilms = filmService.searchFilms(parametersMap, pageNumber, filmsPerPage);
+            request.setAttribute("filmsCount", filmService.getSearchFilmsAmount(parametersMap));
+        } catch (ServiceException e) {
+            LOGGER.warn(e.getMessage());
+            throw new CommandException(e);
+        }
         List<String> searchDirectors = request.getParameterValues("director") == null ?
                 new ArrayList<>() : List.of(request.getParameterValues("director"));
         List<String> searchGenres = request.getParameterValues("genre") == null ?
                 new ArrayList<>() : List.of(request.getParameterValues("genre"));
-        try {
-            films = filmService.getAllFilms(pageNumber, filmsPerPage)
-                    .stream()
-                    .filter(film ->
-                            film.getReleaseYear() <= maxYear && film.getReleaseYear() >= minYear
-                                    && film.getDuration() <= maxDuration && film.getDuration() >= minDuration
-                                    && searchDirectors.isEmpty() || searchDirectors.contains(film.getDirector().getName()))
-                    .collect(Collectors.toList());
-            for (Film film : films) {
-                if (genreService.getByFilm(film.getIdFilm())
-                        .stream()
-                        .map(Genre::getName)
-                        .collect(Collectors.toList())
-                        .containsAll(searchGenres)) {
-                    foundFilms.add(film);
-                }
+
+        StringBuilder newUri = new StringBuilder("/controller?");
+        request.getParameterMap().entrySet().forEach(stringEntry -> {
+            for (String value : stringEntry.getValue()) {
+                newUri.append(stringEntry.getKey()).append("=").append(value).append("&");
             }
-            request.setAttribute("filmsCount", filmService.getFilmsAmount());
-        } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());
-        }
+        });
+        request.setAttribute("commandPart", newUri.toString());
         request.setAttribute("films", foundFilms);
         request.setAttribute("genres", searchGenres);
         request.setAttribute("directors", searchDirectors);

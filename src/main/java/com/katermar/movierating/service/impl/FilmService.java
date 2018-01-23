@@ -96,4 +96,25 @@ public class FilmService {
             throw new ServiceException(e);
         }
     }
+
+    public List<Film> searchFilms(Map<String, String[]> parametersMap, String pageNumber, String filmsPerPage) throws ServiceException {
+        try {
+            List.of("min-year", "max-year", "min-duration", "max-duration").forEach(param -> {
+                if (parametersMap.containsKey(param) && parametersMap.get(param)[0].isEmpty()) {
+                    parametersMap.remove(param);
+                }
+            });
+            return FILM_DAO.searchFilms(parametersMap, Integer.parseInt(pageNumber), Integer.parseInt(filmsPerPage));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    public int getSearchFilmsAmount(Map<String, String[]> parametersMap) throws ServiceException {
+        try {
+            return FILM_DAO.searchFilmsAmount(parametersMap);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }
