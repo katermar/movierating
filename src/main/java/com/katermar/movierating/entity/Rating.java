@@ -60,8 +60,7 @@ public class Rating {
         if (idrating != rating.idrating) return false;
         if (iduser != rating.iduser) return false;
         if (idfilm != rating.idfilm) return false;
-        if (isSeen != rating.isSeen) return false;
-        return ratingAmount == rating.ratingAmount;
+        return isSeen == rating.isSeen && ratingAmount == rating.ratingAmount;
     }
 
     @Override

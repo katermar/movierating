@@ -28,9 +28,9 @@ public class ReviewService {
         }
     }
 
-    public boolean addReview(Review review) throws ServiceException {
+    public void addReview(Review review) throws ServiceException {
         try {
-            return reviewDao.create(review);
+            reviewDao.create(review);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

@@ -12,7 +12,7 @@ import java.util.List;
  * Created by katermar on 1/9/2018.
  */
 public class FilmDaoImpl implements GenericDao<Film> {
-    private static final String SELECT_ALL = "SELECT * FROM film";
+    private static final String SELECT_ALL = "SELECT * FROM film ORDER BY idfilm";
     private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_FROM_FILM_WHERE_NAME = "SELECT * FROM film WHERE name = ?";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
@@ -34,12 +34,16 @@ public class FilmDaoImpl implements GenericDao<Film> {
         return getByParameter(SELECT_WHERE_ID, String.valueOf(filmId)).get(0);
     }
 
-    public List<Film> getAll() throws DAOException {
-        return getAll(SELECT_ALL);
+    public List<Film> getAll(int pageNumber, int filmsPerPage) throws DAOException {
+        return getAll(SELECT_ALL + " LIMIT " + (pageNumber - 1) * filmsPerPage + ", " + filmsPerPage);
     }
 
     public List<Film> getOrderedByRatingDesc() throws DAOException {
         return getAll(SELECT_ALL_DESC);
+    }
+
+    public int getFilmsAmount() throws DAOException {
+        return getAll(SELECT_ALL).size();
     }
 
     @Override

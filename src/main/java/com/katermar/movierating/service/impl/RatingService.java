@@ -57,9 +57,9 @@ public class RatingService {
         }
     }
 
-    public boolean addRating(Rating rating) throws ServiceException {
+    public void addRating(Rating rating) throws ServiceException {
         try {
-            return ratingDao.create(rating);
+            ratingDao.create(rating);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

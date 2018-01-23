@@ -15,7 +15,7 @@ public interface UserService {
 
     User getByLogin(String login) throws ServiceException;
 
-    boolean addUser(User user) throws ServiceException;
+    void addUser(User user) throws ServiceException;
 
-    boolean updatePassword(String password, String login) throws ServiceException;
+    void updatePassword(String password, String login) throws ServiceException;
 }

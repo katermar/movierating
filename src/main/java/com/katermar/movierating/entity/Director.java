@@ -34,8 +34,7 @@ public class Director {
 
         Director director = (Director) o;
 
-        if (iddirector != director.iddirector) return false;
-        return name != null ? name.equals(director.name) : director.name == null;
+        return iddirector == director.iddirector && (name != null ? name.equals(director.name) : director.name == null);
     }
 
     @Override

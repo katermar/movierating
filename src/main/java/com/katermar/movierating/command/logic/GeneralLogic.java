@@ -23,6 +23,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.*;
@@ -47,7 +48,7 @@ public class GeneralLogic {
         return new CommandResult(FORWARD, PagePath.MAIN);
     }
 
-    public CommandResult register(HttpServletRequest request) {
+    public CommandResult register(HttpServletRequest request) throws CommandException {
         User user = new User();
         user.setLogin(request.getParameter(Attribute.USERNAME));
         user.setPassword(request.getParameter(Attribute.PASSWORD));
@@ -64,7 +65,8 @@ public class GeneralLogic {
                 HttpSession session = request.getSession();
                 session.setAttribute(Attribute.USER, user);
             } else {
-                //todo error message page
+                LOGGER.error("Error occurred while adding user.");
+                throw new CommandException("Error occurred while adding user.");
             }
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
@@ -91,7 +93,10 @@ public class GeneralLogic {
     public CommandResult showFilmsPage(HttpServletRequest request) {
         FilmService filmService = new FilmService();
         try {
-            request.setAttribute("films", filmService.getAllFilms());
+            String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
+            String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
+            request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
+            request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage()); //todo
         }
@@ -150,18 +155,21 @@ public class GeneralLogic {
     public CommandResult searchFilms(HttpServletRequest request) {
         GenreService genreService = new GenreService();
         FilmService filmService = new FilmService();
+        String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
+        String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
+
         int minYear = Integer.parseInt(request.getParameter("min-year").isEmpty() ? "0" : request.getParameter("min-year"));
         int maxYear = Integer.parseInt(request.getParameter("max-year").isEmpty() ? "2018" : request.getParameter("max-year"));
         int minDuration = Integer.parseInt(request.getParameter("min-duration").isEmpty() ? "0" : request.getParameter("min-duration"));
         int maxDuration = Integer.parseInt(request.getParameter("max-duration").isEmpty() ? "500" : request.getParameter("max-duration"));
-        List<Film> films = null;
+        List<Film> films;
         List<Film> foundFilms = new ArrayList<>();
         List<String> searchDirectors = request.getParameterValues("director") == null ?
                 new ArrayList<>() : List.of(request.getParameterValues("director"));
         List<String> searchGenres = request.getParameterValues("genre") == null ?
                 new ArrayList<>() : List.of(request.getParameterValues("genre"));
         try {
-            films = filmService.getAllFilms()
+            films = filmService.getAllFilms(pageNumber, filmsPerPage)
                     .stream()
                     .filter(film ->
                             film.getReleaseYear() <= maxYear && film.getReleaseYear() >= minYear
@@ -171,13 +179,13 @@ public class GeneralLogic {
             for (Film film : films) {
                 if (genreService.getByFilm(film.getIdFilm())
                         .stream()
-                        .map(genre -> genre.getName())
+                        .map(Genre::getName)
                         .collect(Collectors.toList())
                         .containsAll(searchGenres)) {
                     foundFilms.add(film);
                 }
             }
-
+            request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }

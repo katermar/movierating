@@ -72,10 +72,7 @@ public class Review {
         if (idreview != review.idreview) return false;
         if (iduser != review.iduser) return false;
         if (idfilm != review.idfilm) return false;
-        if (text != null ? !text.equals(review.text) : review.text != null) return false;
-        if (date != null ? !date.equals(review.date) : review.date != null) return false;
-
-        return true;
+        return (text != null ? text.equals(review.text) : review.text == null) && (date != null ? date.equals(review.date) : review.date == null);
     }
 
     @Override
@@ -100,7 +97,7 @@ public class Review {
     /**
      * Created by katermar on 1/9/2018.
      */
-    public static enum ReviewFields {
+    public enum ReviewFields {
         IDREVIEW,
         IDUSER,
         ISFILM,

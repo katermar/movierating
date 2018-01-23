@@ -7,7 +7,7 @@ import com.katermar.movierating.exception.ServiceException;
  * Created by katermar on 1/8/2018.
  */
 public interface RegisterService {
-    boolean register(User user) throws ServiceException;
+    void register(User user) throws ServiceException;
 
-    boolean confirmEmail(User user) throws ServiceException;
+    void confirmEmail(User user) throws ServiceException;
 }

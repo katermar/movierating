@@ -34,7 +34,7 @@ public enum CommandType {
     SET_AVATAR(new UserLogic()::setAvatar),
     SEARCH_FILMS(new GeneralLogic()::searchFilms);
 
-    private Command command;
+    private final Command command;
 
     CommandType(Command command) {
         this.command = command;

@@ -11,7 +11,7 @@ import com.katermar.movierating.service.UserService;
  * Created by katermar on 1/10/2018.
  */
 public class AdminService {
-    public boolean updateBan(String login) throws ServiceException {
+    public void updateBan(String login) throws ServiceException {
         UserService userService = new UserServiceImpl();
         try {
             User user = userService.getByLogin(login);
@@ -21,6 +21,5 @@ public class AdminService {
         } catch (ServiceException | DAOException e) {
             throw new ServiceException(e);
         }
-        return true;
     }
 }

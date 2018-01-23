@@ -70,7 +70,7 @@ public class UserLogic {
         String password = request.getParameter(Attribute.PASSWORD);
 
         CommandResult commandResult = null;
-        User user = null;
+        User user;
         try {
             user = authSecurityService.checkUserCredentials(login, password);
         } catch (ServiceException e) {
@@ -157,7 +157,7 @@ public class UserLogic {
         User currentUser = (User) session.getAttribute(Attribute.USER);
         RatingService ratingService = new RatingService();
         int filmId = Integer.parseInt(request.getParameter("id"));
-        Rating rating = null;
+        Rating rating;
         try {
             rating = ratingService.getRatingByUserAndFilm(currentUser.getId(), filmId);
             rating.setIsSeen(!rating.getIsSeen());

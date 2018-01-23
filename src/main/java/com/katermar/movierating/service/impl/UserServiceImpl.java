@@ -58,30 +58,29 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addUser(User user) throws ServiceException {
+    public void addUser(User user) throws ServiceException {
         try {
-            return userDAO.create(user);
+            userDAO.create(user);
         } catch (DAOException e) {
             throw new ServiceException(e); // todo specific message
         }
     }
 
     @Override
-    public boolean updatePassword(String password, String login) throws ServiceException {
+    public void updatePassword(String password, String login) throws ServiceException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
         User user = getByLogin(login);
-        boolean executed = false;
+        boolean executed;
         try {
             executed = userDAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return executed;
     }
 
     boolean updateStatus(User.UserStatus status, String login) throws ServiceException {
         User user = getByLogin(login);
-        boolean executed = false;
+        boolean executed;
         try {
             executed = userDAO.updateStatus(status.toString().toLowerCase(), user.getId());
         } catch (DAOException e) {

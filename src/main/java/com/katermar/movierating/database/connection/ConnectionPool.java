@@ -20,8 +20,8 @@ public class ConnectionPool {
     private static final int MAX_CAPACITY = 17;
     private static final Lock LOCK_INSTANTIATED = new ReentrantLock();
     private static ConnectionPool instance;
-    private ArrayBlockingQueue<Connection> connections;
-    private DatabaseManager databaseManager;
+    private final ArrayBlockingQueue<Connection> connections;
+    private final DatabaseManager databaseManager;
 
     private ConnectionPool() {
         connections = new ArrayBlockingQueue<>(MAX_CAPACITY);
@@ -81,7 +81,7 @@ public class ConnectionPool {
     }
 
     public class ConnectionFromPool implements AutoCloseable, Connection {
-        private Connection connection;
+        private final Connection connection;
 
         private ConnectionFromPool(Connection connection) {
             this.connection = connection;

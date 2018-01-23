@@ -16,14 +16,14 @@ public class RegisterServiceImpl implements RegisterService {
     private static final EmailSenderService emailSenderService = new EmailSenderServiceImpl();
 
     @Override
-    public boolean register(User user) throws ServiceException {
+    public void register(User user) throws ServiceException {
         user.setPassword(authSecurityService.hashPassword(user.getPassword()));
         userService.addUser(user);
-        return emailSenderService.sendConfirmationMail(user.getLogin(), user.getEmail());
+        emailSenderService.sendConfirmationMail(user.getLogin(), user.getEmail());
     }
 
     @Override
-    public boolean confirmEmail(User user) throws ServiceException {
-        return userService.updateStatus(User.UserStatus.UNBANED, user.getLogin());
+    public void confirmEmail(User user) throws ServiceException {
+        userService.updateStatus(User.UserStatus.UNBANED, user.getLogin());
     }
 }

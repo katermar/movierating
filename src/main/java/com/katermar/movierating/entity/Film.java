@@ -83,8 +83,7 @@ public class Film {
         if (idDirector != film.idDirector) return false;
         if (name != null ? !name.equals(film.name) : film.name != null) return false;
         if (releaseYear != null ? !releaseYear.equals(film.releaseYear) : film.releaseYear != null) return false;
-        if (poster != null ? !poster.equals(film.poster) : film.poster != null) return false;
-        return description != null ? description.equals(film.description) : film.description == null;
+        return (poster != null ? poster.equals(film.poster) : film.poster == null) && (description != null ? description.equals(film.description) : film.description == null);
     }
 
     @Override

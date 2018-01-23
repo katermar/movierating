@@ -31,15 +31,23 @@ public class FilmService {
         }
     }
 
-    public List<Film> getAllFilms() throws ServiceException {
+    public List<Film> getAllFilms(String pageNumber, String filmsPerPage) throws ServiceException {
         try {
-            List<Film> films = FILM_DAO.getAll();
+            List<Film> films = FILM_DAO.getAll(Integer.parseInt(pageNumber), Integer.valueOf(filmsPerPage));
             for (Film film : films) {
                 film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
             }
             return films;
         } catch (DAOException e) {
             throw new ServiceException(e); // todo
+        }
+    }
+
+    public int getFilmsAmount() throws ServiceException {
+        try {
+            return FILM_DAO.getFilmsAmount();
+        } catch (DAOException e) {
+            throw new ServiceException(e);
         }
     }
 
