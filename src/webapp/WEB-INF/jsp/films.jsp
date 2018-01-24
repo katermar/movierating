@@ -23,8 +23,8 @@
     <c:import url="header.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/films.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?new"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/films.css?new"/>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
@@ -86,8 +86,8 @@
                 <%--@elvariable id="films" type="com.katermar.movierating.entity.Film"--%>
                 <input type="hidden" id="filmsCount" value="${filmsCount}">
                 <c:forEach items="${films}" var="films">
-                    <div class="item">
-                        <div class="col-custom">
+                    <div class="item container">
+                        <div class="row col-custom">
                             <div class="content-box text-center">
                                 <a href="/controller?command=film-info&id=${films.idFilm}">
                                     <img src="${films.poster}" alt="About">
@@ -97,7 +97,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="sb-description">
+                        <div class="row sb-description">
                             <h3 class="title" title="${films.name}">
                                     ${films.name}
                             </h3>
@@ -105,6 +105,21 @@
                                     ${films.description}
                             </div>
                         </div>
+                        <c:if test="${sessionScope.user ne null && sessionScope.user.role eq 'ADMIN'}">
+                            <div class="row text-center pull-down">
+                                <form action="/controller" method="post" class="edit-form col-md-6 col-sm-6 col-xs-6">
+                                    <input type="hidden" name="command" value="edit-film">
+                                    <input type="hidden" name="id" value="${films.idFilm}">
+                                    <button type="button" class="btn btn-info glyphicon glyphicon-pencil"></button>
+                                </form>
+                                <form action="/controller" class="delete-form col-md-6 col-sm-6 col-xs-6">
+                                    <input type="hidden" name="command" value="delete-film">
+                                    <input type="hidden" name="id" value="${films.idFilm}">
+                                    <button type="button" id="delete${films.idFilm}"
+                                            class="btn btn-danger glyphicon glyphicon-trash"></button>
+                                </form>
+                            </div>
+                        </c:if>
                     </div>
                 </c:forEach>
 

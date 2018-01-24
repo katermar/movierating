@@ -9,16 +9,15 @@
 
 #viewport .item .sb-description {
     background-color: #fff;
-    padding: 20px
+    padding: 20px;
+    height: 188px;
 }
 
 #viewport .item .sb-description h3 {
     font-weight: 400;
     margin: 0;
     font-size: 18px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: unset;
     line-height: normal;
     color: rgb(160, 160, 159);
 }
@@ -30,6 +29,8 @@
     line-height: 17px;
     color: rgb(160, 160, 159);
     hyphens: auto;
+    overflow: hidden;
+    height: 100px;
 }
 
 #viewport {

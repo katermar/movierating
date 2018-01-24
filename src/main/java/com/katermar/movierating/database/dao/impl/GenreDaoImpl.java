@@ -26,8 +26,7 @@ public class GenreDaoImpl implements GenericDao<Genre> {
     }
 
     @Override
-    public Genre deleteById(String id) {
-        return null;
+    public void deleteById(String id) {
     }
 
     @Override

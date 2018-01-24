@@ -25,8 +25,7 @@ public class DirectorDaoImpl implements GenericDao<Director> {
     }
 
     @Override
-    public Director deleteById(String id) {
-        return null;
+    public void deleteById(String id) {
     }
 
     @Override

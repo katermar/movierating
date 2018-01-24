@@ -1,22 +1,22 @@
+function changePage(page, recordsPerPage) {
+    var pnumber = page || 1;
+    var recordsPerPage = $('#filmsPerPage').val();
+
+    var command = $('#commandPart').val() === "" ?
+        'controller?command=films-page' : $('#commandPart').val();
+    $.ajax({
+        type: 'GET',
+        url: command + '&page=' + pnumber + '&filmsPerPage=' + recordsPerPage,
+        success: function (data) {
+            var jqObj = jQuery(data);
+            var films = jqObj.find("#viewport").children();
+            $("#viewport").empty();
+            $("#viewport").append(films);
+        }
+    })
+}
+
 $(document).ready(function () {
-    function changePage(page, recordsPerPage) {
-        var pnumber = page || 1;
-        var recordsPerPage = $('#filmsPerPage').val();
-
-        var command = $('#commandPart').val() === "" ?
-            'controller?command=films-page' : $('#commandPart').val();
-        $.ajax({
-            type: 'GET',
-            url: command + '&page=' + pnumber + '&filmsPerPage=' + recordsPerPage,
-            success: function (data) {
-                var jqObj = jQuery(data);
-                var films = jqObj.find("#viewport").children();
-                $("#viewport").empty();
-                $("#viewport").append(films);
-            }
-        })
-    }
-
     var recordsPerPage = $('#filmsPerPage').val();
     $("#selectPerPage").change(function () {
         $('#filmsPerPage').val($(this).val());
@@ -29,19 +29,56 @@ $(document).ready(function () {
                 totalPages: pages,
                 visiblePages: pages,
                 onPageClick: function (event, page) {
-                    // if (page !== 1) {
-                    //     $('#selectPerPage').prop('disabled', true);
-                    // } else {
-                    //     $('#selectPerPage').prop('disabled', false);
-                    // }
                     $('#viewport').html(changePage(page, recordsPerPage));
                 }
             }
         );
     }).change();
-    // changePage(1, recordsPerPage);
+});
 
-
-//Add this in here
-
+$(document).on('click', '.glyphicon-trash', function () {
+    $.ajax({
+        type: 'POST',
+        data: $(this).closest('form').serialize(),
+        url: '/controller',
+        success: function (data) {
+            var pnumber = $('.active a').html() || 1;
+            var records = $('#filmsCount').val();
+            var recordsPerPage = $('#filmsPerPage').val() === null ? $('#filmsCount').val() : $('#filmsPerPage').val();
+            var pages = Math.ceil(records / recordsPerPage);
+            $('#pagination-films').twbsPagination('destroy');
+            $('#pagination-films').twbsPagination({
+                    totalPages: pages,
+                    visiblePages: pages,
+                    onPageClick: function (event, page) {
+                        $('#viewport').html(changePage(page, recordsPerPage));
+                    }
+                }
+            );
+            changePage(pnumber, recordsPerPage);
+        }
+    })
+});
+$(document).on('click', '.glyphicon-pencil', function () {
+    $.ajax({
+        type: 'POST',
+        data: $(this).closest('form').serialize(),
+        url: '/controller',
+        success: function (data) {
+            var pnumber = $('.active a').html() || 1;
+            var records = $('#filmsCount').val();
+            var recordsPerPage = $('#filmsPerPage').val() === null ? $('#filmsCount').val() : $('#filmsPerPage').val();
+            var pages = Math.ceil(records / recordsPerPage);
+            $('#pagination-films').twbsPagination('destroy');
+            $('#pagination-films').twbsPagination({
+                    totalPages: pages,
+                    visiblePages: pages,
+                    onPageClick: function (event, page) {
+                        $('#viewport').html(changePage(page, recordsPerPage));
+                    }
+                }
+            );
+            changePage(pnumber, recordsPerPage);
+        }
+    })
 });

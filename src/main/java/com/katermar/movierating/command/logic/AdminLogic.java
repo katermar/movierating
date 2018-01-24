@@ -117,4 +117,19 @@ public class AdminLogic {
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
+
+    public CommandResult deleteFilm(HttpServletRequest request) throws CommandException {
+        FilmService filmService = new FilmService();
+        try {
+            filmService.deleteById(request.getParameter("id"));
+        } catch (ServiceException e) {
+            LOGGER.error(e.getMessage());
+            throw new CommandException(e);
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult editFilm(HttpServletRequest request) {
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
 }

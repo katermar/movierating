@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_ALL = "SELECT * FROM film ORDER BY idfilm";
+    private static final String DELETE_FROM_FILM_WHERE_IDFILM = "DELETE FROM film WHERE idfilm = ?";
     private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SELECT_FROM_FILM_WHERE_NAME = "SELECT * FROM film WHERE name = ?";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
@@ -48,8 +49,15 @@ public class FilmDaoImpl implements GenericDao<Film> {
     }
 
     @Override
-    public Film deleteById(String id) {
-        return null;
+    public void deleteById(String id) throws DAOException {
+        try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connectionFromPool
+                     .prepareStatement(DELETE_FROM_FILM_WHERE_IDFILM)) {
+            statement.setString(1, id);
+            statement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
     }
 
     @Override

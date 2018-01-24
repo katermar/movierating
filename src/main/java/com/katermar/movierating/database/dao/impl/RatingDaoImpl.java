@@ -48,8 +48,7 @@ public class RatingDaoImpl implements GenericDao<Rating> {
     }
 
     @Override
-    public Rating deleteById(String id) {
-        return null;
+    public void deleteById(String id) {
     }
 
     @Override

@@ -26,7 +26,7 @@ public interface UserDao extends GenericDao<User> {
     boolean updateRole(String role, long userId) throws DAOException;
 
     @Override
-    User deleteById(String id);
+    void deleteById(String id);
 
     User getByLoginAndPassword(String login, String password) throws DAOException;
 

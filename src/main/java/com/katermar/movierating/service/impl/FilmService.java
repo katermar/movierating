@@ -117,4 +117,12 @@ public class FilmService {
             throw new ServiceException(e);
         }
     }
+
+    public void deleteById(String id) throws ServiceException {
+        try {
+            FILM_DAO.deleteById(id);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

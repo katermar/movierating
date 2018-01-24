@@ -84,8 +84,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User deleteById(String id) {
-        return null;
+    public void deleteById(String id) {
     }
 
     @Override

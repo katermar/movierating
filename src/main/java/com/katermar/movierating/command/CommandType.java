@@ -29,6 +29,8 @@ public enum CommandType {
     WATCH(new UserLogic()::updateWatched),
     LEAVE_REVIEW(new UserLogic()::leaveReview),
     BAN_USER(new AdminLogic()::banUser),
+    DELETE_FILM(new AdminLogic()::deleteFilm),
+    EDIT_FILM(new AdminLogic()::editFilm),
     SET_AVATAR(new UserLogic()::setAvatar),
     SEARCH_FILMS(new GeneralLogic()::searchFilms);
 
