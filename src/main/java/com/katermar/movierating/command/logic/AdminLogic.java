@@ -86,6 +86,9 @@ public class AdminLogic {
             film.setDescription(request.getParameter("desc"));
             film.setPoster(request.getParameter("poster"));
             FilmService filmService = new FilmService();
+            if (request.getParameter("mode") != null) {
+                filmService.deleteById(request.getParameter("id"));
+            }
             filmService.addFilm(film);
             GenreService genreService = new GenreService();
             genreService.addGenresForFilm(genres, filmService.getFilmByName(film.getName()).getIdFilm());

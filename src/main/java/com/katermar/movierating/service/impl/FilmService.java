@@ -17,12 +17,13 @@ public class FilmService {
     private static final FilmDaoImpl FILM_DAO = new FilmDaoImpl();
     private static final DirectorDaoImpl DIRECTOR_DAO = new DirectorDaoImpl();
     private static final RatingService RATING_SERVICE = new RatingService();
+    private static final GenreService GENRE_SERVICE = new GenreService();
 
 
     public Map<Film, Double> getFilmRatingMapInDescOrder() throws ServiceException {
         try {
             Map<Film, Double> filmRatingMap = new LinkedHashMap<>();
-            for (Film film : FILM_DAO.getOrderedByRatingDesc()) {
+            for (Film film : appendDirectorAndGenre(FILM_DAO.getOrderedByRatingDesc())) {
                 filmRatingMap.put(film, RATING_SERVICE.getAverageRatingByFilm(film.getIdFilm()));
             }
             return filmRatingMap;
@@ -33,11 +34,7 @@ public class FilmService {
 
     public List<Film> getAllFilms(String pageNumber, String filmsPerPage) throws ServiceException {
         try {
-            List<Film> films = FILM_DAO.getAll(Integer.parseInt(pageNumber), Integer.valueOf(filmsPerPage));
-            for (Film film : films) {
-                film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
-            }
-            return films;
+            return appendDirectorAndGenre(FILM_DAO.getAll(Integer.parseInt(pageNumber), Integer.valueOf(filmsPerPage)));
         } catch (DAOException e) {
             throw new ServiceException(e); // todo
         }
@@ -63,11 +60,7 @@ public class FilmService {
 
     public List<Film> getFilmsByDirector(int directorId) throws ServiceException {
         try {
-            List<Film> films = FILM_DAO.getFilmsByDirector(directorId);
-            for (Film film : films) {
-                film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
-            }
-            return films;
+            return appendDirectorAndGenre(FILM_DAO.getFilmsByDirector(directorId));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -75,7 +68,7 @@ public class FilmService {
 
     public List<Film> getFilmsByGenre(String genreName) throws ServiceException {
         try {
-            return FILM_DAO.getFilmsByGenre(genreName);
+            return appendDirectorAndGenre(FILM_DAO.getFilmsByGenre(genreName));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -91,7 +84,9 @@ public class FilmService {
 
     public Film getFilmByName(String name) throws ServiceException {
         try {
-            return FILM_DAO.getByName(name);
+            Film film = FILM_DAO.getByName(name);
+            film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
+            return film;
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -104,7 +99,8 @@ public class FilmService {
                     parametersMap.remove(param);
                 }
             });
-            return FILM_DAO.searchFilms(parametersMap, Integer.parseInt(pageNumber), Integer.parseInt(filmsPerPage));
+            return appendDirectorAndGenre(FILM_DAO
+                    .searchFilms(parametersMap, Integer.parseInt(pageNumber), Integer.parseInt(filmsPerPage)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -124,5 +120,13 @@ public class FilmService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    private List<Film> appendDirectorAndGenre(List<Film> films) throws DAOException, ServiceException {
+        for (Film film : films) {
+            film.setDirector(DIRECTOR_DAO.getDirectorByFilm(film.getIdFilm()));
+            film.setGenres(GENRE_SERVICE.getByFilm(film.getIdFilm()));
+        }
+        return films;
     }
 }

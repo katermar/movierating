@@ -29,13 +29,12 @@
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery.twbsPagination.js"></script>
-    <script src="${pageContext.request.contextPath}/js/pagination.js?new"></script>
+    <script src="${pageContext.request.contextPath}/js/pagination.js?neww"></script>
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 </head>
 <body>
-
 <article>
     <div>
         <div id="wrapper" class="container">
@@ -106,19 +105,159 @@
                             </div>
                         </div>
                         <c:if test="${sessionScope.user ne null && sessionScope.user.role eq 'ADMIN'}">
+
                             <div class="row text-center pull-down">
+                                <div class="delete-form col-md-6 col-sm-6 col-xs-6">
+                                    <button type="button" id="delete${films.idFilm}"
+                                            class="btn btn-info glyphicon glyphicon-pencil"
+                                            data-toggle="modal" data-target="#modalFilm${films.idFilm}"></button>
+                                </div>
                                 <form action="/controller" method="post" class="edit-form col-md-6 col-sm-6 col-xs-6">
                                     <input type="hidden" name="command" value="edit-film">
                                     <input type="hidden" name="id" value="${films.idFilm}">
-                                    <button type="button" class="btn btn-info glyphicon glyphicon-pencil"></button>
-                                </form>
-                                <form action="/controller" class="delete-form col-md-6 col-sm-6 col-xs-6">
-                                    <input type="hidden" name="command" value="delete-film">
-                                    <input type="hidden" name="id" value="${films.idFilm}">
-                                    <button type="button" id="delete${films.idFilm}"
-                                            class="btn btn-danger glyphicon glyphicon-trash"></button>
+                                    <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
                                 </form>
                             </div>
+
+                            <%--modal--%>
+                            <div class="modal fade" id="modalFilm${films.idFilm}" tabindex="-1" role="dialog"
+                                 aria-labelledby="exampleModalLongTitle"
+                                 aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form action="/controller" method="post">
+                                        <input type="hidden" name="command" value="add-film">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <button type="button col-md-1 pull-right" class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <h3 class="modal-title col-md-11 text-center modalFilmTitle">
+                                                            <fmt:message
+                                                                    key="header.edit"/> <fmt:message
+                                                                key="add.film"/></h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="container-fluid">
+                                                    <div class="form-group">
+                                                        <label for="filmName${films.idFilm}"><fmt:message
+                                                                key="add.film.name"/></label>
+                                                        <input class="form-control" type="text" placeholder="name"
+                                                               id="filmName${films.idFilm}" name="name"
+                                                               value="${films.name}"
+                                                               required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="year${films.idFilm}"><fmt:message
+                                                                key="add.film.releaseYear"/></label>
+                                                        <input class="form-control" type="number"
+                                                               placeholder="release year" id="year${films.idFilm}"
+                                                               name="year"
+                                                               max="2018" min="1900" value="${films.releaseYear}"
+                                                               required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="duration${films.idFilm}"><fmt:message
+                                                                key="add.film.duration"/></label>
+                                                        <input class="form-control" type="number" placeholder="duration"
+                                                               id="duration${films.idFilm}"
+                                                               name="duration"
+                                                               min="1" value="${films.duration}"
+                                                               required>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="poster${films.idFilm}"><fmt:message
+                                                                key="add.film.poster"/></label>
+                                                        <input class="form-control" type="url" name="poster"
+                                                               id="poster${films.idFilm}"
+                                                               placeholder="poster" value="${films.poster}"
+                                                               pattern="^(https|http).+(jpg|svg|gif|png)$">
+                                                    </div>
+                                                        <%--@elvariable id="genres" type="java.util.List"--%>
+                                                        <%--@elvariable id="genreModal" type="com.katermar.movierating.entity.Genre"--%>
+                                                    <div class="form-group">
+                                                        <label><fmt:message key="add.genre"/></label>
+                                                        <div class="btn-group btn-group-toggle col-md-12 col-sm-12 col-xs-12 text-center"
+                                                             data-toggle="buttons">
+                                                            <c:if test="${genresModal ne null}">
+                                                                <c:forEach items="${genresModal}" var="genreModal">
+                                                                    <span class="button-checkbox"
+                                                                          style="margin: 10px 5px 10px 10px">
+                                                                        <c:if test="${films.genres.contains(genreModal)}">
+                                                                            <button type="button" class="btn"
+                                                                                    data-color="danger"
+                                                                                    style="margin-bottom: 10px">#${genreModal.name}</button>
+                                                                            <input type="checkbox" class="hidden"
+                                                                                   name="genre"
+                                                                                   value="${genreModal.name}" checked/>
+                                                                        </c:if>
+                                                                        <c:if test="${!films.genres.contains(genreModal)}">
+                                                                            <button type="button" class="btn"
+                                                                                    data-color="danger"
+                                                                                    style="margin-bottom: 10px">#${genreModal.name}</button>
+                                                                            <input type="checkbox" class="hidden"
+                                                                                   name="genre"
+                                                                                   value="${genreModal.name}"/>
+                                                                        </c:if>
+                                                                    </span>
+                                                                </c:forEach>
+                                                            </c:if>
+                                                            <hr/>
+                                                        </div>
+                                                    </div>
+                                                        <%--@elvariable id="directors" type="java.util.List"--%>
+                                                        <%--@elvariable id="directorModal" type="com.katermar.movierating.entity.Director"--%>
+                                                    <div class="form-group">
+                                                        <label for="directorsSelect${films.idFilm}"><fmt:message
+                                                                key="add.director"/></label>
+                                                        <c:if test="${directorsModal ne null}">
+                                                            <select class="form-control selectpicker show-tick"
+                                                                    id="directorsSelect${films.idFilm}" name="director"
+                                                                    data-style="btn-info">
+                                                                <c:forEach items="${directorsModal}"
+                                                                           var="directorModal">
+                                                                    <c:if test="${films.director.iddirector eq directorModal.iddirector}">
+                                                                        <option selected>${directorModal.name}</option>
+                                                                    </c:if>
+                                                                    <c:if test="${films.director.iddirector ne directorModal.iddirector}">
+                                                                        <option>${directorModal.name}</option>
+                                                                    </c:if>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </c:if>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label for="desc${films.idFilm}"><fmt:message
+                                                                    key="add.film.desc"/></label>
+                                                            <textarea class="form-control" id="desc${films.idFilm}"
+                                                                      name="desc"
+                                                                      rows="3" required>${films.description}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    <fmt:message key="add.common.close"/>
+                                                </button>
+                                                <input type="hidden" name="mode" value="edit">
+                                                <input type="hidden" name="id" value="${films.idFilm}">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <fmt:message key="header.add"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <%--modal--%>
+
                         </c:if>
                     </div>
                 </c:forEach>
@@ -133,4 +272,5 @@
         </div>
     </div>
 </article>
+
 

@@ -89,10 +89,14 @@ public class GeneralLogic {
 
     public CommandResult showFilmsPage(HttpServletRequest request) {
         FilmService filmService = new FilmService();
+        GenreService genreService = new GenreService();
+        DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
             String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
 //            request.setAttribute("commandPart", newUri.toString());
+            request.setAttribute("genresModal", genreService.getAll());
+            request.setAttribute("directorsModal", directorService.getAll());
             request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
             request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {

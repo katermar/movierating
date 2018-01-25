@@ -1,6 +1,7 @@
 package com.katermar.movierating.entity;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Created by katermar on 1/8/2018.
@@ -14,6 +15,7 @@ public class Film {
     private String description;
     private int idDirector;
     private Director director;
+    private List<Genre> genres;
 
     public int getIdFilm() {
         return idFilm;
@@ -121,5 +123,13 @@ public class Film {
                 ", idDirector=" + idDirector +
                 ", director=" + director +
                 '}';
+    }
+
+    public List<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genre> genres) {
+        this.genres = genres;
     }
 }
