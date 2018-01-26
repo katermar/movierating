@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.getByLogin(login);
         } catch (DAOException e) {
-            throw new ServiceException(e); // todo specific message
+            return new User();
         }
     }
 

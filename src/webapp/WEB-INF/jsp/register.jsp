@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <div id="register" class="modal-custom">
   <span onclick="document.getElementById('register').style.display='none'"
@@ -13,9 +14,13 @@
         </span>
 
         <div class="container-custom">
-            <label><b>username</b></label>
+            <label>
+                <b>username</b>
+                <div id="loginError" class="label label-danger pull-right">${loginError}</div>
+                <div id="loginSuccess" class="label label-success pull-right">${loginSuccess}</div>
+            </label>
             <input type="text" placeholder="enter username" name="uname" required
-                   pattern="^[a-zA-Z]([a-zA-Z0-9_]+){4,}">
+                   id="uname" pattern="^[a-zA-Z]([a-zA-Z0-9_]+){4,}">
 
             <label><b>password</b></label>
             <input type="password" placeholder="enter password" id="psw" name="psw"
@@ -41,7 +46,6 @@
             <input type="date" placeholder="enter date" name="birthday" required>
 
             <button type="submit">login</button>
-            <input type="checkbox" checked="checked"> Remember me
         </div>
 
         <div class="container-custom" style="background-color:#f1f1f1">

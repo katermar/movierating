@@ -7,6 +7,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import java.util.ResourceBundle;
 
@@ -18,6 +19,9 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     @Override
     public boolean sendConfirmationMail(String username, String userEmail) throws ServiceException {
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
+
         Email email = new SimpleEmail();
         email.setHostName(emailBundle.getString(Parameter.EMAIL_SERVER));
         email.setSmtpPort(465);
@@ -29,7 +33,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         try {
             email.setFrom(emailBundle.getString(Parameter.EMAIL_AUTH_FROM));
             email.setSubject(emailBundle.getString(Parameter.EMAIL_AUTH_SUBJECT));
-            email.setMsg(emailBundle.getString(Parameter.EMAIL_AUTH_MESSAGE) + username);
+            email.setMsg(emailBundle.getString(Parameter.EMAIL_AUTH_MESSAGE) + textEncryptor.encrypt(username));
             email.addTo(userEmail);
             email.send();
         } catch (EmailException e) {

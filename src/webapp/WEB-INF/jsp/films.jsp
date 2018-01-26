@@ -27,11 +27,11 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/films.css?new"/>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery.twbsPagination.js"></script>
     <script src="${pageContext.request.contextPath}/js/pagination.js?neww"></script>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 </head>
 <body>
@@ -272,5 +272,7 @@
         </div>
     </div>
 </article>
+
+
 
 

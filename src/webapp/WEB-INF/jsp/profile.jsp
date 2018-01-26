@@ -34,6 +34,17 @@
 <div class="centered">
     <div class="container">
         <div class="row">
+            <c:if test="${sessionScope.user.status eq 'UNCONFIRMED'}">
+                <div class="col-md-12 col-xs-12">
+                    <div class="alert alert-warning">
+                        <button data-toggle="modal" data-target="#modalEmail" class="btn btn-xs btn-danger pull-right">
+                            <fmt:message key="profile.sendEmail"/>
+                        </button>
+                        <strong><fmt:message key="film.info.warningHeader"/></strong>
+                        <fmt:message key="profile.warningEmail"/>
+                    </div>
+                </div>
+            </c:if>
             <div class="col-xs-12 col-md-6">
                 <div class="well">
                     <div class="row">
@@ -169,6 +180,44 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="modalEmailTitle"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form action="/controller" method="post">
+            <input type="hidden" name="command" value="send-email">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <button type="button col-md-1 pull-right" class="close" data-dismiss="modal"
+                                    aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3 class="modal-title col-md-11 text-center" id="modalEmailTitle">
+                                <fmt:message key="profile.sendEmail"/>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="form-group">
+                            <label for="email"><fmt:message key="profile.changeEmail"/></label>
+                            <input class="form-control" type="email" id="email" placeholder="enter e-mail" name="email"
+                                   required value="${sessionScope.user.email}"
+                                   pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><fmt:message
+                            key="add.common.close"/></button>
+                    <button type="submit" class="btn btn-primary"><fmt:message key="header.add"/></button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 </body>

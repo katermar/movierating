@@ -94,7 +94,6 @@ public class GeneralLogic {
         try {
             String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
             String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
-//            request.setAttribute("commandPart", newUri.toString());
             request.setAttribute("genresModal", genreService.getAll());
             request.setAttribute("directorsModal", directorService.getAll());
             request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
@@ -127,9 +126,8 @@ public class GeneralLogic {
         return new CommandResult(ERROR, PagePath.ERROR);
     }
 
-
     public CommandResult searchFilms(HttpServletRequest request) throws CommandException {
-        List<Film> foundFilms = new ArrayList<>();
+        List<Film> foundFilms;
         Map<String, String[]> parametersMap = new HashMap<>();
         parametersMap.putAll(request.getParameterMap());
         String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
@@ -138,6 +136,8 @@ public class GeneralLogic {
             FilmService filmService = new FilmService();
             foundFilms = filmService.searchFilms(parametersMap, pageNumber, filmsPerPage);
             request.setAttribute("filmsCount", filmService.getSearchFilmsAmount(parametersMap));
+            request.setAttribute("genresModal", new GenreService().getAll());
+            request.setAttribute("directorsModal", new DirectorServiceImpl().getAll());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
@@ -170,5 +170,18 @@ public class GeneralLogic {
             throw new CommandException(e);
         }
         return new CommandResult(FORWARD, PagePath.RATING);
+    }
+
+    public CommandResult checkLogin(HttpServletRequest request) throws CommandException {
+        try {
+            if (new UserServiceImpl().getByLogin(request.getParameter(Attribute.USERNAME)).getLogin() != null) {
+                request.setAttribute("loginError", "username is busy");
+            } else {
+                request.setAttribute("loginSuccess", "username is free");
+            }
+        } catch (ServiceException e) {
+            throw new CommandException(e);
+        }
+        return new CommandResult(FORWARD, PagePath.MAIN);
     }
 }

@@ -25,6 +25,7 @@ public enum CommandType {
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),
     UPDATE_PASSWORD(new UserLogic()::updatePassword),
     CONFIRM_EMAIL(new UserLogic()::confirmEmail),
+    SEND_EMAIL(new UserLogic()::sendEmail),
     ADD_RATING(new UserLogic()::addRating),
     WATCH(new UserLogic()::updateWatched),
     LEAVE_REVIEW(new UserLogic()::leaveReview),
@@ -32,6 +33,7 @@ public enum CommandType {
     DELETE_FILM(new AdminLogic()::deleteFilm),
     EDIT_FILM(new AdminLogic()::editFilm),
     SET_AVATAR(new UserLogic()::setAvatar),
+    CHECK_LOGIN(new GeneralLogic()::checkLogin),
     SEARCH_FILMS(new GeneralLogic()::searchFilms);
 
     private final Command command;

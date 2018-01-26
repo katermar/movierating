@@ -14,3 +14,15 @@ window.onclick = function (event) {
     }
 };
 
+$(document).on('change keyup keydown', '#uname', function () {
+    $.ajax({
+        type: 'GET',
+        url: '/controller?command=check-login&uname=' + $(this).val(),
+        success: function (data) {
+            var jqObj = jQuery(data);
+            $('#loginError').html(jqObj.find('#loginError').html());
+            $('#loginSuccess').html(jqObj.find('#loginSuccess').html());
+        }
+    })
+});
+

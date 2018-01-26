@@ -71,7 +71,6 @@ public class AdminLogic {
         return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.ADD);
     }
 
-
     public CommandResult addFilm(HttpServletRequest request) throws CommandException {
         try {
             List<String> genres = request.getParameterValues("genre") == null ?

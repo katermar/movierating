@@ -10,11 +10,13 @@ import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
+import com.katermar.movierating.service.EmailSenderService;
 import com.katermar.movierating.service.RegisterService;
 import com.katermar.movierating.service.UserService;
 import com.katermar.movierating.service.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jasypt.util.text.BasicTextEncryptor;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 /**
  * Created by katermar on 12/31/2017.
@@ -30,16 +33,28 @@ import java.util.Map;
 public class UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogic.class);
 
-    public CommandResult confirmEmail(HttpServletRequest request) {
-        String login = request.getParameter(Attribute.USER);
+    public CommandResult confirmEmail(HttpServletRequest request) throws CommandException {
+        String login = request.getParameter(Attribute.USER).replace(" ", "+");
+        System.out.println(login);
         RegisterService registerService = new RegisterServiceImpl();
+        BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+        textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
         UserService userService = new UserServiceImpl();
         try {
-            registerService.confirmEmail(userService.getByLogin(login));
+            registerService.confirmEmail(userService.getByLogin(textEncryptor.decrypt(login)));
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                User currentUser = (User) session.getAttribute(Attribute.USER);
+                if (currentUser.getLogin().equals(textEncryptor.decrypt(login))) {
+                    currentUser.setStatus(User.UserStatus.UNBANED);
+                }
+                session.removeAttribute(Attribute.USER);
+                session.setAttribute(Attribute.USER, currentUser);
+            }
         } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());// todo
+            throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.PROFILE);
     }
 
     public CommandResult logout(HttpServletRequest request) {
@@ -48,7 +63,7 @@ public class UserLogic {
             session.removeAttribute(Attribute.USER);
             session.invalidate();
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.CONTROLLER_COMMAND_MAIN_PAGE);
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.CONTROLLER_COMMAND_MAIN_PAGE);
     }
 
     public CommandResult updatePassword(HttpServletRequest request) {
@@ -89,12 +104,11 @@ public class UserLogic {
         return commandResult;
     }
 
-    public CommandResult goToProfilePage(HttpServletRequest request) {
+    public CommandResult goToProfilePage(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            // todo error
+            throw new CommandException("Session is over.");
         }
-        UserService userService = new UserServiceImpl();
         User currentUser = (User) session.getAttribute(Attribute.USER);
         RatingService ratingService = new RatingService();
         try {
@@ -102,7 +116,7 @@ public class UserLogic {
             request.setAttribute("total", ratingMap.values().stream().reduce(0L, Long::sum));
             request.setAttribute("ratings", ratingMap);
         } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage()); //todo
+            throw new CommandException(e);
         }
 
         return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.PROFILE);
@@ -185,6 +199,25 @@ public class UserLogic {
             userService.addUser(currentUser);
         } catch (IOException | ServiceException e) {
             LOGGER.warn(e.getMessage());
+            throw new CommandException(e);
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult sendEmail(HttpServletRequest request) throws CommandException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new CommandException("Session is over.");
+        }
+        User currentUser = (User) session.getAttribute(Attribute.USER);
+        currentUser.setEmail(request.getParameter("email"));
+        UserService userService = new UserServiceImpl();
+        try {
+            userService.addUser(currentUser);
+            EmailSenderService emailSenderService = new EmailSenderServiceImpl();
+            emailSenderService.sendConfirmationMail(currentUser.getLogin(), currentUser.getEmail());
+        } catch (ServiceException e) {
+            LOGGER.error(e.getMessage());
             throw new CommandException(e);
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
