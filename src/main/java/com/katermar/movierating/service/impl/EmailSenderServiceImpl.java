@@ -31,13 +31,13 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         );
         email.setSSLOnConnect(true);
         try {
-            email.setFrom(emailBundle.getString(Parameter.EMAIL_AUTH_FROM));
+            email.setFrom("Movierating<" + emailBundle.getString(Parameter.EMAIL_AUTH_FROM) + ">");
             email.setSubject(emailBundle.getString(Parameter.EMAIL_AUTH_SUBJECT));
             email.setMsg(emailBundle.getString(Parameter.EMAIL_AUTH_MESSAGE) + textEncryptor.encrypt(username));
             email.addTo(userEmail);
             email.send();
         } catch (EmailException e) {
-            throw new ServiceException(e); // todo
+            throw new ServiceException(e);
         }
         return true;
     }

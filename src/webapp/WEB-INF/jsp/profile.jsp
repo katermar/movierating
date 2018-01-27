@@ -84,15 +84,23 @@
                 <div class="well">
                     <div class="row">
                         <div class="col-xs-12 col-md-6 text-center">
-                            <h1 class="rating-num">
-                                4</h1>
-                            <div class="rating">
-                                <span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star">
-                            </span><span class="glyphicon glyphicon-star"></span><span class="glyphicon glyphicon-star">
-                            </span><span class="glyphicon glyphicon-star-empty"></span>
+                            <fmt:formatNumber var="avg" value="${userAverageRating}" maxFractionDigits="2"/>
+                            <h1 class="rating-num">${avg}</h1>
+                            <div class="star-rating">
+                                <fmt:formatNumber var="stars" value="${userAverageRating}" maxFractionDigits="0"/>
+                                <c:forEach var="i" begin="1" end="${stars}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </c:forEach>
+                                <c:forEach var="i" begin="${stars+1}" end="5">
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </c:forEach>
                             </div>
                             <div>
                                 <span class="glyphicon glyphicon-user"></span>${total} total
+                            </div>
+                            <div>
+                                <span class="glyphicon glyphicon-signal"></span>${sessionScope.user.levelPoints} points
+                                <b> ${sessionScope.user.level} </b>
                             </div>
                         </div>
                         <c:set var="ratings" value="${ratings}"/>

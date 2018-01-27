@@ -36,7 +36,7 @@ public class FilmService {
         try {
             return appendDirectorAndGenre(FILM_DAO.getAll(Integer.parseInt(pageNumber), Integer.valueOf(filmsPerPage)));
         } catch (DAOException e) {
-            throw new ServiceException(e); // todo
+            throw new ServiceException(e);
         }
     }
 

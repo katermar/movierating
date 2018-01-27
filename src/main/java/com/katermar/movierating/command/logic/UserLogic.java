@@ -115,6 +115,7 @@ public class UserLogic {
             Map<String, Long> ratingMap = ratingService.getRatingMapByUser(currentUser.getId());
             request.setAttribute("total", ratingMap.values().stream().reduce(0L, Long::sum));
             request.setAttribute("ratings", ratingMap);
+            request.setAttribute("userAverageRating", ratingService.getAverageRatingByUser(currentUser.getId()));
         } catch (ServiceException e) {
             throw new CommandException(e);
         }
@@ -122,10 +123,10 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.PROFILE);
     }
 
-    public CommandResult leaveReview(HttpServletRequest request) {
+    public CommandResult leaveReview(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            // todo error
+            throw new CommandException("Session is over.");
         }
         User currentUser = (User) session.getAttribute(Attribute.USER);
         ReviewService reviewService = new ReviewService();
@@ -138,15 +139,15 @@ public class UserLogic {
         try {
             reviewService.addReview(review);
         } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage()); //todo
+            throw new CommandException(e);
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult addRating(HttpServletRequest request) {
+    public CommandResult addRating(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            // todo error
+            throw new CommandException("Session is over.");
         }
         User currentUser = (User) session.getAttribute(Attribute.USER);
         Rating rating = new Rating();
@@ -155,8 +156,10 @@ public class UserLogic {
         rating.setIsSeen(true);
         rating.setRatingAmount(Integer.parseInt(request.getParameter("rating")));
         RatingService ratingService = new RatingService();
+        UserService userService = new UserServiceImpl();
         try {
             ratingService.addRating(rating);
+            userService.updateLevel(currentUser, rating);
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }

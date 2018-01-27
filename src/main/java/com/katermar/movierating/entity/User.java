@@ -19,6 +19,8 @@ public class User implements Serializable {
     private Date banExpirationDate;
     private UserRole role;
     private UserStatus status;
+    private int levelPoints;
+    private UserLevel level;
 
     public User() {
     }
@@ -144,6 +146,38 @@ public class User implements Serializable {
         this.avatar = avatar;
     }
 
+    public int getLevelPoints() {
+        return levelPoints;
+    }
+
+    public void setLevelPoints(int levelPoints) {
+        this.levelPoints = levelPoints;
+    }
+
+    public void incrementLevelPoints() {
+        levelPoints++;
+    }
+
+    public void incrementLevelPoints(int points) {
+        levelPoints += points;
+    }
+
+    public void decrementLevelPoints(int points) {
+        levelPoints -= points;
+    }
+
+    public void decrementLevelPoints() {
+        levelPoints--;
+    }
+
+    public UserLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(UserLevel level) {
+        this.level = level;
+    }
+
     /**
      * Created by katermar on 12/31/2017.
      */
@@ -156,5 +190,24 @@ public class User implements Serializable {
      */
     public enum UserStatus {
         BANED, UNBANED, UNCONFIRMED
+    }
+
+    /**
+     * Created by katermar on 12/31/2017.
+     */
+    public enum UserLevel {
+        BEGINNER, INTERMEDIATE, ADVANCED, EXPERT;
+
+        public static UserLevel getLevel(int points) {
+            if (points < 10) {
+                return BEGINNER;
+            } else if (points < 20) {
+                return INTERMEDIATE;
+            } else if (points < 30) {
+                return ADVANCED;
+            } else {
+                return EXPERT;
+            }
+        }
     }
 }

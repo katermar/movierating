@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import static com.katermar.movierating.database.dao.UserDao.UserTableFields.BAN_EXPIRATION_DATE;
 import static com.katermar.movierating.entity.User.UserRole;
 import static com.katermar.movierating.entity.User.UserStatus;
 
@@ -29,7 +28,7 @@ public class UserDaoImpl implements UserDao {
     private static final String USERS_UPDATE_STATUS = "UPDATE user SET status = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_EMAIL = "UPDATE user SET ban_expiration_date = ? WHERE iduser = ?";
     private static final String USERS_UPDATE_ROLE = "UPDATE user SET role = ? WHERE iduser = ?";
-    private static final String USERS_UPDATE_BAN = "UPDATE user SET status = ? WHERE iduser = ?";
+    private static final String USERS_UPDATE_POINTS = "UPDATE user SET level_points = ? WHERE iduser = ?";
 
     @Override
     public boolean create(User user) throws DAOException {
@@ -51,11 +50,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getById(long id) throws DAOException {
         return getByParameter(USERS_SELECT_ID, String.valueOf(id)).get(0);
-    }
-
-    @Override
-    public User update(User entity) {
-        return null;
     }
 
     @Override
@@ -101,7 +95,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
+            throw new DAOException(e);
         }
         return user;
     }
@@ -120,6 +114,11 @@ public class UserDaoImpl implements UserDao {
         return getByParameter(USERS_SELECT_EMAIL, email).get(0);
     }
 
+    @Override
+    public void updatePoints(User user) throws DAOException {
+        updateParameter(String.valueOf(user.getLevelPoints()), user.getId(), USERS_UPDATE_POINTS);
+    }
+
     private boolean updateParameter(String param, long userId, String statementString) throws DAOException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement selectUsersStatement = connection.prepareStatement(statementString)) {
@@ -127,7 +126,7 @@ public class UserDaoImpl implements UserDao {
             selectUsersStatement.setLong(2, userId);
             selectUsersStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
+            throw new DAOException(e);
         }
         return true;
     }
@@ -147,7 +146,10 @@ public class UserDaoImpl implements UserDao {
         user.setRole(role);
         UserStatus status = UserStatus.valueOf(resultSet.getString("status").toUpperCase());
         user.setStatus(status);
-        user.setBanExpirationDate(resultSet.getDate(BAN_EXPIRATION_DATE.name().toLowerCase()));
+        user.setLevelPoints(resultSet.getInt("level_points"));
+        User.UserLevel level = User.UserLevel.getLevel(user.getLevelPoints());
+        user.setLevel(level);
+        user.setBanExpirationDate(resultSet.getDate("ban_expiration_date"));
         return user;
     }
 }

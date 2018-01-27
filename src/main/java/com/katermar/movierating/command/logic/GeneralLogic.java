@@ -87,7 +87,7 @@ public class GeneralLogic {
         return new CommandResult(REDIRECT, redirectPage);
     }
 
-    public CommandResult showFilmsPage(HttpServletRequest request) {
+    public CommandResult showFilmsPage(HttpServletRequest request) throws CommandException {
         FilmService filmService = new FilmService();
         GenreService genreService = new GenreService();
         DirectorServiceImpl directorService = new DirectorServiceImpl();
@@ -99,7 +99,7 @@ public class GeneralLogic {
             request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
             request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage()); //todo
+            throw new CommandException(e);
         }
         return new CommandResult(FORWARD, PagePath.FILMS);
     }

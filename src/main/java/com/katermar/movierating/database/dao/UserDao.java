@@ -13,8 +13,6 @@ public interface UserDao extends GenericDao<User> {
 
     User getById(long id) throws DAOException;
 
-    User update(User entity);
-
     List<User> getAll() throws DAOException;
 
     boolean updatePassword(String password, long userId) throws DAOException;
@@ -34,19 +32,5 @@ public interface UserDao extends GenericDao<User> {
 
     User getByEmail(String email) throws DAOException;
 
-    /**
-     * Created by katermar on 1/4/2018.
-     */
-    enum UserTableFields {
-        IDUSER,
-        LOGIN,
-        PASSWORD,
-        EMAIL,
-        REAL_NAME,
-        DATE_OF_REGISTRATION,
-        DATE_OF_BIRTH,
-        ROLE,
-        STATUS,
-        BAN_EXPIRATION_DATE
-    }
+    void updatePoints(User user) throws DAOException;
 }

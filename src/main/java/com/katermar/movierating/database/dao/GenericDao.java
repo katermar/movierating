@@ -30,7 +30,7 @@ public interface GenericDao<T> {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
+            throw new DAOException(e);
         }
         return userList;
     }
@@ -51,7 +51,7 @@ public interface GenericDao<T> {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
+            throw new DAOException(e);
         }
         return ratings;
     }

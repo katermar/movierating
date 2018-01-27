@@ -2,6 +2,7 @@ package com.katermar.movierating.service.impl;
 
 import com.katermar.movierating.database.dao.UserDao;
 import com.katermar.movierating.database.dao.impl.UserDaoImpl;
+import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.DAOException;
 import com.katermar.movierating.exception.ServiceException;
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.getByLoginAndPassword(login, password);
         } catch (DAOException e) {
-            throw new ServiceException(e); // todo specific message
+            throw new ServiceException(e);
         }
     }
 
@@ -44,7 +45,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userDAO.getById(userId);
         } catch (DAOException e) {
-            throw new ServiceException(e); //todo
+            throw new ServiceException(e);
         }
     }
 
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.create(user);
         } catch (DAOException e) {
-            throw new ServiceException(e); // todo specific message
+            throw new ServiceException(e);
         }
     }
 
@@ -70,9 +71,8 @@ public class UserServiceImpl implements UserService {
     public void updatePassword(String password, String login) throws ServiceException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
         User user = getByLogin(login);
-        boolean executed;
         try {
-            executed = userDAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
+            userDAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -88,15 +88,25 @@ public class UserServiceImpl implements UserService {
         }
         return executed;
     }
-//
-//    boolean updateBan(User.UserStatus status, String login) throws ServiceException {
-//        User user = getByLogin(login);
-//        boolean executed = false;
-//        try {
-//            executed = userDAO.updateBan(status.toString().toLowerCase(), user.getId());
-//        } catch (DAOException e) {
-//            throw new ServiceException(e);
-//        }
-//        return executed;
-//    }
+
+    @Override
+    public void updateLevel(User user, Rating userRating) throws ServiceException {
+        Double averageRating = RATING_SERVICE.getAverageRatingByFilm(userRating.getIdfilm());
+        Double ratingDifference = Math.abs(averageRating - userRating.getRatingAmount());
+        if (ratingDifference == 0) {
+            user.incrementLevelPoints(2);
+        } else if (ratingDifference < 1) {
+            user.incrementLevelPoints();
+        } else if (ratingDifference < 2) {
+            user.decrementLevelPoints();
+        } else {
+            user.decrementLevelPoints(2);
+        }
+        user.setLevel(User.UserLevel.getLevel(user.getLevelPoints()));
+        try {
+            userDAO.updatePoints(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

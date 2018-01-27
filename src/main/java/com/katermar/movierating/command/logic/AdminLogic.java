@@ -40,7 +40,7 @@ public class AdminLogic {
             try {
                 adminService.updateBan(loginToBan);
             } catch (ServiceException e) {
-                e.printStackTrace(); // todo
+                throw new CommandException(e);
             }
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));

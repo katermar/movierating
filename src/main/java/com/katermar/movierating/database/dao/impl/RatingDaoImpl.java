@@ -43,7 +43,7 @@ public class RatingDaoImpl implements GenericDao<Rating> {
                 return selected.getDouble(1);
             }
         } catch (SQLException e) {
-            throw new DAOException(e); // todo specific message
+            throw new DAOException(e);
         }
     }
 

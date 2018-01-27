@@ -1,5 +1,6 @@
 package com.katermar.movierating.service;
 
+import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.User;
 import com.katermar.movierating.exception.ServiceException;
 
@@ -18,4 +19,6 @@ public interface UserService {
     void addUser(User user) throws ServiceException;
 
     void updatePassword(String password, String login) throws ServiceException;
+
+    void updateLevel(User user, Rating userRating) throws ServiceException;
 }

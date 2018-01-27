@@ -112,7 +112,7 @@ public class FilmDaoImpl implements GenericDao<Film> {
     }
 
     private String constructSearchQuery(Map<String, String[]> parameters) {
-        StringBuilder query = new StringBuilder("SELECT * FROM film WHERE "); //todo
+        StringBuilder query = new StringBuilder("SELECT * FROM film WHERE ");
         if (parameters.containsKey("min-duration")) {
             query.append("duration >= ").append(parameters.get("min-duration")[0]).append(" AND ");
         } else {
