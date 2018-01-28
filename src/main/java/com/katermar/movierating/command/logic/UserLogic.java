@@ -2,7 +2,6 @@ package com.katermar.movierating.command.logic;
 
 import com.katermar.movierating.command.CommandResult;
 import com.katermar.movierating.config.Attribute;
-import com.katermar.movierating.config.Message;
 import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.Review;
@@ -14,6 +13,7 @@ import com.katermar.movierating.service.EmailSenderService;
 import com.katermar.movierating.service.RegisterService;
 import com.katermar.movierating.service.UserService;
 import com.katermar.movierating.service.impl.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jasypt.util.text.BasicTextEncryptor;
@@ -24,6 +24,9 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -84,24 +87,20 @@ public class UserLogic {
         String login = request.getParameter(Attribute.USERNAME);
         String password = request.getParameter(Attribute.PASSWORD);
 
-        CommandResult commandResult = null;
-        User user;
+        User user = null;
         try {
             user = authSecurityService.checkUserCredentials(login, password);
+            if (user == null || user.isBaned()) {
+                request.setAttribute(Attribute.LOGIN_ERROR, "User credentials are invalid. Try again!");
+            } else {
+                HttpSession session = request.getSession();
+                session.setAttribute(Attribute.USER, user);
+                session.setMaxInactiveInterval(500);
+            }
         } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());
-            throw new CommandException("Invalid login and password.");
+            throw new CommandException();
         }
-
-        if (user == null || user.isBaned()) {
-            request.setAttribute(Attribute.LOGIN_ERROR, Message.LOGIN_ERROR);
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute(Attribute.USER, user);
-            session.setMaxInactiveInterval(500);
-            commandResult = new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
-        }
-        return commandResult;
+        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
     }
 
     public CommandResult goToProfilePage(HttpServletRequest request) throws CommandException {
@@ -221,6 +220,52 @@ public class UserLogic {
             emailSenderService.sendConfirmationMail(currentUser.getLogin(), currentUser.getEmail());
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage());
+            throw new CommandException(e);
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult editProfile(HttpServletRequest request) throws CommandException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new CommandException("Session is over.");
+        }
+        User currentUser = (User) session.getAttribute(Attribute.USER);
+
+        try {
+            UserService userService = new UserServiceImpl();
+            String email = request.getParameter("email");
+            if (!email.equals(currentUser.getEmail())) {
+                userService.updateStatus(User.UserStatus.UNCONFIRMED, currentUser.getLogin());
+            }
+            currentUser.setEmail(email);
+            String birthday = request.getParameter("birthday").trim();
+            if (!birthday.isEmpty()) {
+                currentUser.setDateOfBirth(Date.valueOf(LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE)));
+            }
+            currentUser.setRealName(request.getParameter("realname"));
+            userService.addUser(currentUser);
+        } catch (ServiceException e) {
+            throw new CommandException(e);
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult sendNewPassword(HttpServletRequest request) throws CommandException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            throw new CommandException("Session is over.");
+        }
+        User currentUser = (User) session.getAttribute(Attribute.USER);
+        if (currentUser.getStatus().equals(User.UserStatus.UNCONFIRMED)) {
+            throw new CommandException("Users' e-mail is unconfirmed.");
+        }
+        String newPassword = RandomStringUtils.randomAscii(12);
+        UserService userService = new UserServiceImpl();
+        try {
+            new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, currentUser.getEmail());
+            userService.updatePassword(newPassword, currentUser.getLogin());
+        } catch (ServiceException e) {
             throw new CommandException(e);
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));

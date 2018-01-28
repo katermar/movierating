@@ -61,11 +61,12 @@
                 <div class="movie-header">
                     <a href="/controller?command=film-info&id=${item.key.idFilm}"><h1
                             class="movie-title">${item.key.name}</h1></a>
-                    <h4 class="movie-info">(${item.key.releaseYear}) Sci-Fi, Thriller</h4>
+                    <h4 class="movie-info">(${item.key.releaseYear})</h4>
                 </div>
                 <p class="movie-desc">${item.key.description}</p>
-                <a class="btn btn-info" href="#"><fmt:message key="header.rating"/> ${item.value} </a>
-
+                <a class="btn btn-info" href="#"><fmt:message key="header.rating"/>
+                    <fmt:formatNumber value="${item.value}" maxFractionDigits="2"/>
+                </a>
             </div>
         </div>
     </div>

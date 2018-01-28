@@ -74,7 +74,8 @@
                                     </c:forEach>
                                 </c:if>
                             </div>
-                            <p><fmt:message key="film.info.avgRate"/> ${user.value}
+                            <p><fmt:message key="film.info.avgRate"/> <fmt:formatNumber value="${user.value}"
+                                                                                        maxFractionDigits="2"/>
                                 <small> /</small>
                                 5
                             </p>

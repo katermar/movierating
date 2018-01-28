@@ -134,7 +134,7 @@ var __slice = [].slice;
 })(window.jQuery, window);
 $(function () {
     return $(".starrr").starrr()
-})
+});
 
 $(function () {
 
@@ -168,4 +168,18 @@ $(function () {
     $('.starrr').on('starrr:change', function (e, value) {
         ratingsField.val(Math.floor(value));
     });
+});
+
+$(document).on('change', '.star-rate', function () {
+    $.ajax({
+        type: 'POST',
+        data: $(this).parent().parent().serialize(),
+        url: '/controller',
+        success: function (data) {
+            var jqObj = jQuery(data);
+            var stars = jqObj.find(".rating-block").children();
+            $(".rating-block").empty();
+            $(".rating-block").append(stars);
+        }
+    })
 });

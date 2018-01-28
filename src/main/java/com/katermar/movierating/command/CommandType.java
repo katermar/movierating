@@ -33,6 +33,8 @@ public enum CommandType {
     DELETE_FILM(new AdminLogic()::deleteFilm),
     EDIT_FILM(new AdminLogic()::editFilm),
     SET_AVATAR(new UserLogic()::setAvatar),
+    EDIT_PROFILE(new UserLogic()::editProfile),
+    SEND_NEW_PASSWORD(new UserLogic()::sendNewPassword),
     CHECK_LOGIN(new GeneralLogic()::checkLogin),
     SEARCH_FILMS(new GeneralLogic()::searchFilms);
 

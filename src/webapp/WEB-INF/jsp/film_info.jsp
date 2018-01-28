@@ -8,7 +8,7 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
 <c:import url="header.jsp"/>
-<script src="../../js/film_review.js"></script>
+<script src="${pageContext.request.contextPath}/js/film_review.js?new"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/film_info.css"/>
 
 <!-- internationalization -->
@@ -75,7 +75,8 @@
         <div class="col-sm-5 col-md-3 col-xs-6">
             <div class="rating-block">
                 <h4><fmt:message key="film.info.avgRate"/></h4>
-                <h2 class="bold padding-bottom-7">${avgRate}
+                <h2 class="bold padding-bottom-7">
+                    <fmt:formatNumber value="${avgRate}" maxFractionDigits="2"/>
                     <small>/ 5</small>
                 </h2>
                 <c:if test="${sessionScope.user ne null}">

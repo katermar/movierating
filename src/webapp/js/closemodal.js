@@ -26,3 +26,23 @@ $(document).on('change keyup keydown', '#uname', function () {
     })
 });
 
+$(document).on('click', '#login-submit', function () {
+    $.ajax({
+        type: 'GET',
+        data: $(this).parent().parent().serialize(),
+        url: '/controller',
+        success: function (data) {
+            var jqObj = jQuery(data);
+            var s = jqObj.find('#profile-ref');
+            if (jqObj.find('#profile-ref').length != 0) {
+                $('.auth').html(jqObj.find('.auth').children());
+                login.style.display = "none";
+            } else {
+                $('#error-msg').html(jqObj.find('#error-msg').html());
+            }
+        }
+    })
+});
+
+
+

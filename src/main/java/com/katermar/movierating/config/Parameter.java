@@ -13,4 +13,6 @@ public class Parameter {
     public static final String EMAIL_AUTH_FROM = "email.auth.from";
     public static final String EMAIL_AUTH_SUBJECT = "email.auth.subject";
     public static final String EMAIL_AUTH_MESSAGE = "email.auth.message";
+    public static final String EMAIL_PASSWORD_MESSAGE = "email.password.message";
+    public static final String EMAIL_PASSWORD_SUBJECT = "email.password.message";
 }

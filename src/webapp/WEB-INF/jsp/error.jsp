@@ -22,7 +22,8 @@
 <div class="container" style="padding-top: 30px">
     <div class="jumbotron">
         <div class="text-center"><i class="fa fa-5x fa-frown-o" style="color:#d9534f;"></i></div>
-        <h1 class="text-center">${pageContext.errorData.statusCode} ${pageContext.exception.message}<p></p>
+        <h1 class="text-center error-mes-page">${pageContext.errorData.statusCode} ${pageContext.exception.message}
+            <p></p>
             <p>
                 <small class="text-center"><fmt:message key="error.broke"/></small>
             </p>

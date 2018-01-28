@@ -7,4 +7,6 @@ import com.katermar.movierating.exception.ServiceException;
  */
 public interface EmailSenderService {
     boolean sendConfirmationMail(String username, String userEmail) throws ServiceException;
+
+    boolean sendNewPasswordMail(String username, String userEmail) throws ServiceException;
 }

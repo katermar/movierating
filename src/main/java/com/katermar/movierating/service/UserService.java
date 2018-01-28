@@ -20,5 +20,7 @@ public interface UserService {
 
     void updatePassword(String password, String login) throws ServiceException;
 
+    boolean updateStatus(User.UserStatus status, String login) throws ServiceException;
+
     void updateLevel(User user, Rating userRating) throws ServiceException;
 }

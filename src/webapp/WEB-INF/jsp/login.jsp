@@ -4,8 +4,7 @@
         class="close-custom" title="Close Modal">&times;</span>
 
     <!-- Modal Content -->
-    <form class="modal-content-custom animate loginform" method="post"
-          action="${pageContext.request.contextPath}/controller">
+    <form class="modal-content-custom animate loginform">
         <input type="hidden" name="command" value="login">
         <span class="logo">
         <h1 class="headername">
@@ -23,10 +22,9 @@
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="psw" required>
 
-            <h5 class="error-msg">${errorLogin}</h5>
+            <h5 id="error-msg" class="label label-danger">${errorLogin}</h5>
 
-            <button type="submit">Login</button>
-            <input type="checkbox" checked="checked"> Remember me
+            <button type="button" id="login-submit">Login</button>
         </div>
 
         <div class="container-custom" style="background-color:#f1f1f1">

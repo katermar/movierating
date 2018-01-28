@@ -78,7 +78,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    boolean updateStatus(User.UserStatus status, String login) throws ServiceException {
+    @Override
+    public boolean updateStatus(User.UserStatus status, String login) throws ServiceException {
         User user = getByLogin(login);
         boolean executed;
         try {

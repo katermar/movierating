@@ -282,13 +282,19 @@ some  animtion   do  when  load window
     animation: 1s pulse ease;
 }
 
-input[id^=rating]:checked + label:after {
+input[id^=rating].checked + label:after {
     content: "★" !important;
     color: #F9BF3B !important;
-    text-shadow: 0 0 20px #F9BF3B !important;
+    text-shadow: 0 0 20px #F9BF3B;
 }
 
-.starRating label:hover:after {
+input[id^=rating].checked:hover + label:after {
+    content: "★" !important;
+    color: #F9BF3B !important;
+    text-shadow: 0 0 15px #5e5e5e;
+}
+
+.starRating label:hover {
     color: #5e5e5e;
     text-shadow: 0 0 15px #5e5e5e;
 }
@@ -305,7 +311,7 @@ show
  http://jsfiddle.net/7c05m7tv/70/
 
 */
-.starRating input:checked ~ label:after {
+.starRating input.checked ~ label:after {
     content: "☆";
     color: #444;
     /*text-shadow: none;*/
