@@ -68,7 +68,7 @@ public class GeneralLogic {
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }
-        return new CommandResult(FORWARD, PagePath.MAIN);
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult switchLanguage(HttpServletRequest request) {
@@ -157,13 +157,12 @@ public class GeneralLogic {
         request.setAttribute("films", foundFilms);
         request.setAttribute("genres", searchGenres);
         request.setAttribute("directors", searchDirectors);
-        return new CommandResult(FORWARD, PagePath.FILMS);
+        return new CommandResult(REDIRECT, PagePath.REDIRECT_FILMS);
     }
 
     public CommandResult goToRatingPage(HttpServletRequest request) throws CommandException {
         FilmService filmService = new FilmService();
         try {
-//            LOGGER.warn(filmService.getFilmRatingMapInDescOrder());
             request.setAttribute("filmsMap", filmService.getFilmRatingMapInDescOrder());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());

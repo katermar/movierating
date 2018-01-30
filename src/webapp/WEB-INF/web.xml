@@ -12,9 +12,14 @@
         <servlet-name>Controller</servlet-name>
         <url-pattern>/controller</url-pattern>
     </servlet-mapping>
+
     <listener>
         <listener-class>com.katermar.movierating.listener.ContextListener</listener-class>
     </listener>
+    <listener>
+        <listener-class>com.katermar.movierating.listener.RequestListener</listener-class>
+    </listener>
+
     <error-page>
         <error-code>400</error-code>
         <location>/controller?command=error-page</location>

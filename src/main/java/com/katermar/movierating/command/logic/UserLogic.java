@@ -66,19 +66,7 @@ public class UserLogic {
             session.removeAttribute(Attribute.USER);
             session.invalidate();
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.CONTROLLER_COMMAND_MAIN_PAGE);
-    }
-
-    public CommandResult updatePassword(HttpServletRequest request) {
-        UserService userService = new UserServiceImpl();
-        try {
-            String login = request.getParameter(Attribute.USERNAME);
-            String password = request.getParameter(Attribute.PASSWORD);
-            userService.updatePassword(password, login);
-        } catch (ServiceException e) {
-            LOGGER.warn(e.getMessage());
-        }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.REDIRECT_MAIN);
     }
 
     public CommandResult login(HttpServletRequest request) throws CommandException {

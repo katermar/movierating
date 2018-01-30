@@ -50,8 +50,8 @@
             <div class="col-xs-12 col-md-6">
                 <div class="well">
                     <div class="row">
-                        <div class="col-sm-6 col-md-4">
-                            <img src="${sessionScope.user.avatar}" alt="" class="img-rounded img-responsive"/>
+                        <div class="col-sm-6 col-md-4 avatar-img text-center">
+                            <img src="${sessionScope.user.avatar}" alt="" class="img-rounded img-responsive "/>
                         </div>
                         <div class="col-sm-6 col-md-8">
                             <h2>${sessionScope.user.login}</h2>
@@ -81,19 +81,22 @@
                 </div>
             </div>
             <div class="col-md-6 col-xs-12">
-                <form action="/controller" method="post">
+                <form action="/controller" method="post" class="avatar-form">
                     <div class="col-md-12 col-xs-12 well">
                         <input type="hidden" name="command" value="set-avatar">
                         <div class="input-group col-md-7 col-xs-7" style="float: inherit">
                             <div class="input-group-addon"><i
                                     class="glyphicon glyphicon-link center-block"></i></div>
-                            <input class="form-control" type="url" name="file" placeholder="max. 300x300"
+                            <input class="form-control avatar-url" type="url" name="file" placeholder="max. 300x300"
                                    pattern="^(https|http).+(jpg|svg|gif|png)$" required>
                         </div>
-                        <button class="col-md-4 col-xs-4 btn btn-success pull-right" type="submit">
+                        <button id="set-avatar-submit" class="col-md-4 col-xs-4 btn btn-success pull-right"
+                                type="button">
                             <i class="glyphicon glyphicon-user"></i>
                             <fmt:message key="profile.setAvatar"/>
                         </button>
+                        <hr>
+                        <div class="label label-danger" id="avatar-error"></div>
                     </div>
                 </form>
             </div>

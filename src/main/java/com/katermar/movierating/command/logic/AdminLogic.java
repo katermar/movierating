@@ -21,6 +21,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
+
 /**
  * Created by katermar on 1/9/2018.
  */
@@ -54,7 +56,7 @@ public class AdminLogic {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.USERS);
+        return new CommandResult(FORWARD, PagePath.USERS);
     }
 
     public CommandResult showAddPage(HttpServletRequest request) {
@@ -68,7 +70,7 @@ public class AdminLogic {
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.ADD);
+        return new CommandResult(FORWARD, PagePath.ADD);
     }
 
     public CommandResult addFilm(HttpServletRequest request) throws CommandException {
