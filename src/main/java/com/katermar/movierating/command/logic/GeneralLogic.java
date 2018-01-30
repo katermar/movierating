@@ -174,9 +174,9 @@ public class GeneralLogic {
     public CommandResult checkLogin(HttpServletRequest request) throws CommandException {
         try {
             if (new UserServiceImpl().getByLogin(request.getParameter(Attribute.USERNAME)).getLogin() != null) {
-                request.setAttribute("loginError", "username is busy");
+                request.setAttribute("loginError", "username is in use");
             } else {
-                request.setAttribute("loginSuccess", "username is free");
+                request.setAttribute("loginSuccess", "username isn't used");
             }
         } catch (ServiceException e) {
             throw new CommandException(e);

@@ -18,6 +18,7 @@ public enum CommandType {
     CHECK_LOGIN(new GeneralLogic()::checkLogin),
     SEARCH_FILMS(new GeneralLogic()::searchFilms),
     LOGIN(new UserLogic()::login),
+    FORGOT_PASSWORD(new UserLogic()::forgotPassword),
     LOGOUT(new UserLogic()::logout),
     EDIT_PROFILE(new UserLogic()::editProfile),
     LEAVE_REVIEW(new UserLogic()::leaveReview),

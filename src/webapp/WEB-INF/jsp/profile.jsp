@@ -279,12 +279,12 @@
                                    pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?">
                         </div>
                         <div class="form-group">
-                            <label><b>real name</b></label>
+                            <label><b><fmt:message key="realName"/></b></label>
                             <input class="form-control" type="text" placeholder="enter realname" name="realname"
                                    pattern="[a-zA-Z\s\p{IsCyrillic}]" value="${sessionScope.user.realName}">
                         </div>
                         <div class="form-group">
-                            <label><b>date of birth</b></label>
+                            <label><b><fmt:message key="main.birthday"/></b></label>
                             <input class="form-control" type="date" placeholder="enter date" name="birthday"
                                    value="${sessionScope.user.dateOfBirth}">
                         </div>

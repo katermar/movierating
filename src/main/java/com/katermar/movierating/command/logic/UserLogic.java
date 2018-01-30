@@ -44,12 +44,12 @@ public class UserLogic {
         textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
         UserService userService = new UserServiceImpl();
         try {
-            registerService.confirmEmail(userService.getByLogin(textEncryptor.decrypt(login)));
             HttpSession session = request.getSession(false);
             if (session != null) {
                 User currentUser = (User) session.getAttribute(Attribute.USER);
                 if (currentUser.getLogin().equals(textEncryptor.decrypt(login))) {
                     currentUser.setStatus(User.UserStatus.UNBANED);
+                    registerService.confirmEmail(userService.getByLogin(textEncryptor.decrypt(login)));
                 }
                 session.removeAttribute(Attribute.USER);
                 session.setAttribute(Attribute.USER, currentUser);
@@ -253,6 +253,22 @@ public class UserLogic {
         try {
             new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, currentUser.getEmail());
             userService.updatePassword(newPassword, currentUser.getLogin());
+        } catch (ServiceException e) {
+            throw new CommandException(e);
+        }
+        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+    }
+
+    public CommandResult forgotPassword(HttpServletRequest request) throws CommandException {
+        try {
+            String newPassword = RandomStringUtils.randomAscii(12);
+            UserService userService = new UserServiceImpl();
+            User user = userService.getByLogin(request.getParameter(Attribute.USERNAME));
+            if (user.getStatus().equals(User.UserStatus.UNCONFIRMED)) {
+                throw new CommandException("Users' e-mail is unconfirmed.");
+            }
+            new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, user.getEmail());
+            userService.updatePassword(newPassword, user.getLogin());
         } catch (ServiceException e) {
             throw new CommandException(e);
         }
