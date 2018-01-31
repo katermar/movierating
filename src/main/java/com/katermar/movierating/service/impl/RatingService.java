@@ -72,4 +72,5 @@ public class RatingService {
             throw new ServiceException(e);
         }
     }
+
 }

@@ -19,7 +19,7 @@ import static com.katermar.movierating.entity.User.UserStatus;
  */
 public class UserDaoImpl implements UserDao {
     private static final String USERS_SELECT_LOGIN_PASSWORD = "SELECT * FROM user WHERE login = ? AND password = ?";
-    private static final String USERS_SELECT_ALL = "SELECT * FROM user";
+    private static final String USERS_SELECT_ALL = "SELECT * FROM user ORDER BY iduser";
     private static final String USERS_SELECT_LOGIN = "SELECT * FROM user WHERE login = ?";
     private static final String USERS_SELECT_ID = "SELECT * FROM user WHERE iduser = ?";
     private static final String USERS_SELECT_EMAIL = "SELECT * FROM user WHERE email = ?";

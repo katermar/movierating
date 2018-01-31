@@ -15,6 +15,7 @@ import java.util.List;
  * Created by katermar on 1/9/2018.
  */
 public class ReviewDaoImpl implements GenericDao<Review> {
+    private static final String UPDATE_REVIEW_SET_IDFILM_WHERE_IDFILM = "UPDATE review SET idfilm = ? WHERE idfilm = ?";
     private static final String SELECT_WHERE_IDUSER = "SELECT * FROM review WHERE iduser = ?";
     private static final String SELECT_WHERE_IDFILM = "SELECT * FROM review WHERE idfilm = ?";
     private static final String INSERT_IDUSER_IDFILM_TEXT_VALUES = "INSERT INTO review (iduser, idfilm, text) VALUES (?, ?, ?)";
@@ -55,4 +56,5 @@ public class ReviewDaoImpl implements GenericDao<Review> {
         }
         return true;
     }
+
 }

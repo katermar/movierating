@@ -95,7 +95,10 @@ public class FilmService {
     public List<Film> searchFilms(Map<String, String[]> parametersMap, String pageNumber, String filmsPerPage) throws ServiceException {
         try {
             List.of("min-year", "max-year", "min-duration", "max-duration").forEach(param -> {
-                if (parametersMap.containsKey(param) && parametersMap.get(param)[0].isEmpty()) {
+                if (parametersMap.containsKey(param)
+                        && (parametersMap.get(param)[0].trim().isEmpty()
+                        || (!parametersMap.get(param)[0].trim().isEmpty()
+                        && Integer.parseInt(parametersMap.get(param)[0]) < 0))) {
                     parametersMap.remove(param);
                 }
             });

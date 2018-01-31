@@ -30,6 +30,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
+import static com.katermar.movierating.config.Parameter.EMAIL_REGEX;
+import static com.katermar.movierating.config.Parameter.USERNAME_REGEX;
+
 /**
  * Created by katermar on 12/31/2017.
  */
@@ -38,7 +42,6 @@ public class UserLogic {
 
     public CommandResult confirmEmail(HttpServletRequest request) throws CommandException {
         String login = request.getParameter(Attribute.USER).replace(" ", "+");
-        System.out.println(login);
         RegisterService registerService = new RegisterServiceImpl();
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
@@ -57,7 +60,7 @@ public class UserLogic {
         } catch (ServiceException e) {
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.PROFILE);
+        return new CommandResult(FORWARD, PagePath.PROFILE);
     }
 
     public CommandResult logout(HttpServletRequest request) {
@@ -88,7 +91,7 @@ public class UserLogic {
         } catch (ServiceException e) {
             throw new CommandException();
         }
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.MAIN);
+        return new CommandResult(FORWARD, PagePath.MAIN);
     }
 
     public CommandResult goToProfilePage(HttpServletRequest request) throws CommandException {
@@ -107,7 +110,7 @@ public class UserLogic {
             throw new CommandException(e);
         }
 
-        return new CommandResult(CommandResult.ResponseType.FORWARD, PagePath.PROFILE);
+        return new CommandResult(FORWARD, PagePath.PROFILE);
     }
 
     public CommandResult leaveReview(HttpServletRequest request) throws CommandException {
@@ -121,6 +124,9 @@ public class UserLogic {
         Review review = new Review();
         review.setUser(currentUser);
         review.setIduser(currentUser.getId());
+        if (request.getParameter("review").trim().isEmpty()) {
+            throw new CommandException("Review is empty!");
+        }
         review.setText(request.getParameter("review"));
         review.setIdfilm(Integer.parseInt(request.getParameter("id")));
         try {
@@ -223,6 +229,9 @@ public class UserLogic {
         try {
             UserService userService = new UserServiceImpl();
             String email = request.getParameter("email");
+            if (!email.matches(EMAIL_REGEX)) {
+                throw new CommandException("Bad request parameters!");
+            }
             if (!email.equals(currentUser.getEmail())) {
                 userService.updateStatus(User.UserStatus.UNCONFIRMED, currentUser.getLogin());
             }
@@ -261,6 +270,9 @@ public class UserLogic {
 
     public CommandResult forgotPassword(HttpServletRequest request) throws CommandException {
         try {
+            if (!request.getParameter(Attribute.USERNAME).matches(USERNAME_REGEX)) {
+                throw new CommandException("Bad request parameters!");
+            }
             String newPassword = RandomStringUtils.randomAscii(12);
             UserService userService = new UserServiceImpl();
             User user = userService.getByLogin(request.getParameter(Attribute.USERNAME));

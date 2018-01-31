@@ -15,7 +15,8 @@ import java.util.Map;
 public class FilmDaoImpl implements GenericDao<Film> {
     private static final String SELECT_ALL = "SELECT * FROM film ORDER BY idfilm";
     private static final String DELETE_FROM_FILM_WHERE_IDFILM = "DELETE FROM film WHERE idfilm = ?";
-    private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?) " +
+            "ON DUPLICATE KEY UPDATE name = values(name), release_year = values(release_year), duration = values(duration), poster = values(poster), iddirector = values(iddirector), description = values(description)";
     private static final String SELECT_FROM_FILM_WHERE_NAME = "SELECT * FROM film WHERE name = ?";
     private static final String SELECT_WHERE_RELEASE_YEAR = "SELECT * FROM film WHERE release_year = ?";
     private static final String SELECT_FROM_FILM_WHERE_IDDIRECTOR = "SELECT * FROM film WHERE iddirector = ?";
@@ -150,6 +151,7 @@ public class FilmDaoImpl implements GenericDao<Film> {
             query.append("FALSE ) AND ");
         }
         query.append("TRUE ORDER BY idfilm ");
+        System.out.println(query.toString());
         return query.toString();
     }
 }

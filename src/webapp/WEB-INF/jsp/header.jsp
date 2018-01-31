@@ -69,5 +69,5 @@
 </header>
 <c:import url="login.jsp"/>
 <c:import url="register.jsp"/>
-<script src="${pageContext.request.contextPath}/js/closemodal.js?kss"></script>
+<script src="${pageContext.request.contextPath}/js/closemodal.js"></script>
 

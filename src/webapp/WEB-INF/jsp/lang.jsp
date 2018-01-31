@@ -11,7 +11,8 @@
         <c:if test="${sessionScope.locale eq 'ru_RU'}">
             <!-- Single button -->
             <div class="btn-group">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                        style="float: none !important;">
                     <span class="lang-sm lang-lbl" lang="ru"></span><span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">

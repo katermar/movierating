@@ -9,8 +9,8 @@ import com.katermar.movierating.command.logic.UserLogic;
  */
 public enum CommandType {
     MAIN_PAGE(new GeneralLogic()::goToMainPage),
-    ERROR_PAGE(new GeneralLogic()::goToErrorPage),
-    RATING_PAGE(new GeneralLogic()::goToRatingPage),
+    ERROR_PAGE(new GeneralLogic()::showErrorPage),
+    RATING_PAGE(new GeneralLogic()::showRatingPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
     REGISTER(new GeneralLogic()::register),
@@ -18,6 +18,7 @@ public enum CommandType {
     CHECK_LOGIN(new GeneralLogic()::checkLogin),
     SEARCH_FILMS(new GeneralLogic()::searchFilms),
     LOGIN(new UserLogic()::login),
+
     FORGOT_PASSWORD(new UserLogic()::forgotPassword),
     LOGOUT(new UserLogic()::logout),
     EDIT_PROFILE(new UserLogic()::editProfile),
@@ -29,6 +30,7 @@ public enum CommandType {
     CONFIRM_EMAIL(new UserLogic()::confirmEmail),
     SEND_EMAIL(new UserLogic()::sendEmail),
     PROFILE_PAGE(new UserLogic()::goToProfilePage),
+
     USERS_PAGE(new AdminLogic()::showUsersPage),
     ADD_PAGE(new AdminLogic()::showAddPage),
     ADD_FILM(new AdminLogic()::addFilm),

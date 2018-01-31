@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.*;
+import static com.katermar.movierating.config.Parameter.*;
 
 /**
  * Created by katermar on 1/4/2018.
@@ -46,10 +47,18 @@ public class GeneralLogic {
     }
 
     public CommandResult register(HttpServletRequest request) throws CommandException {
+        String login = request.getParameter(Attribute.USERNAME).trim();
+        String email = request.getParameter(Attribute.EMAIL).trim();
+        String password = request.getParameter(Attribute.PASSWORD).trim();
+        if (login.isEmpty() || email.isEmpty() || password.isEmpty() ||
+                !login.matches(USERNAME_REGEX) || !email.matches(EMAIL_REGEX) || !password.matches(PASSWORD_REGEX)) {
+            throw new CommandException("Bad request parameters!");
+        }
+
         User user = new User();
-        user.setLogin(request.getParameter(Attribute.USERNAME));
-        user.setPassword(request.getParameter(Attribute.PASSWORD));
-        user.setEmail(request.getParameter(Attribute.EMAIL));
+        user.setLogin(login);
+        user.setPassword(password);
+        user.setEmail(email);
         user.setRealName(request.getParameter(Attribute.REALNAME));
         user.setDateOfBirth(Date.valueOf(LocalDate.parse(
                 request.getParameter(Attribute.BIRTHDAY), DateTimeFormatter.ISO_DATE)));
@@ -122,7 +131,7 @@ public class GeneralLogic {
         return new CommandResult(FORWARD, PagePath.FILM_INFO);
     }
 
-    public CommandResult goToErrorPage(HttpServletRequest request) {
+    public CommandResult showErrorPage(HttpServletRequest request) {
         return new CommandResult(ERROR, PagePath.ERROR);
     }
 
@@ -157,10 +166,10 @@ public class GeneralLogic {
         request.setAttribute("films", foundFilms);
         request.setAttribute("genres", searchGenres);
         request.setAttribute("directors", searchDirectors);
-        return new CommandResult(REDIRECT, PagePath.REDIRECT_FILMS);
+        return new CommandResult(FORWARD, PagePath.FILMS);
     }
 
-    public CommandResult goToRatingPage(HttpServletRequest request) throws CommandException {
+    public CommandResult showRatingPage(HttpServletRequest request) throws CommandException {
         FilmService filmService = new FilmService();
         try {
             request.setAttribute("filmsMap", filmService.getFilmRatingMapInDescOrder());

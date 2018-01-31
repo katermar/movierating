@@ -23,15 +23,15 @@
     <c:import url="header.jsp"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css?new"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/films.css?new"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/films.css"/>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
     <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'/>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
     <script src="${pageContext.request.contextPath}/js/jquery.twbsPagination.js"></script>
-    <script src="${pageContext.request.contextPath}/js/pagination.js?neww"></script>
+    <script src="${pageContext.request.contextPath}/js/pagination.js"></script>
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 </head>
 <body>
@@ -108,12 +108,12 @@
 
                             <div class="row text-center pull-down">
                                 <div class="delete-form col-md-6 col-sm-6 col-xs-6">
-                                    <button type="button" id="delete${films.idFilm}"
+                                    <button type="button"
                                             class="btn btn-info glyphicon glyphicon-pencil"
                                             data-toggle="modal" data-target="#modalFilm${films.idFilm}"></button>
                                 </div>
                                 <form action="/controller" method="post" class="edit-form col-md-6 col-sm-6 col-xs-6">
-                                    <input type="hidden" name="command" value="edit-film">
+                                    <input type="hidden" name="command" value="delete-film">
                                     <input type="hidden" name="id" value="${films.idFilm}">
                                     <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
                                 </form>
@@ -272,7 +272,5 @@
         </div>
     </div>
 </article>
-
-
 
 

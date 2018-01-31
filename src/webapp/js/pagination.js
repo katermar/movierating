@@ -124,5 +124,5 @@ $(document).on('click', '.glyphicon-pencil', function () {
 
         init();
     });
-
+    $('.selectpicker').selectpicker('refresh');
 });

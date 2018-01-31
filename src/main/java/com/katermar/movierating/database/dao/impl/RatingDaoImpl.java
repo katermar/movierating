@@ -16,6 +16,7 @@ import java.util.List;
  */
 public class RatingDaoImpl implements GenericDao<Rating> {
     private static final String SELECT_FROM_RATING_WHERE_IDUSER = "SELECT * FROM rating WHERE iduser = ? AND is_seen = '1'";
+    private static final String UPDATE_RATING_SET_IDFILM_WHERE_IDFILM = "UPDATE rating SET idfilm = ? WHERE idfilm = ?";
     private static final String SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM = "SELECT * FROM rating WHERE (iduser = ? AND idfilm = ?)";
     private static final String SELECT_FROM_RATING_WHERE_IDFILM = "SELECT * FROM rating WHERE idfilm = ?";
     private static final String SELECT_AVG_RATING_AMOUNT_WHERE_IDFILM = "SELECT AVG(rating_amount) FROM rating WHERE idfilm = ? AND is_seen = '1'";

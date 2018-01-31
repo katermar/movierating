@@ -52,4 +52,12 @@ public class GenreService {
             throw new ServiceException(e);
         }
     }
+
+    public void deleteByIdFilm(String idFilm) throws ServiceException {
+        try {
+            genreDao.deleteByIdFilm(idFilm);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
 }

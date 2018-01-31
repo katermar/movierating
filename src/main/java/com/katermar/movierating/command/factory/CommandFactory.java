@@ -17,7 +17,7 @@ public class CommandFactory {
         return identifiedCommand;
     }
 
-    private static String revertIntoConstantName(String commandName) {
+    public static String revertIntoConstantName(String commandName) {
         return commandName.replaceAll("-", "_").toUpperCase();
     }
 }

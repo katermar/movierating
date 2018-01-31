@@ -8,7 +8,7 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
 <c:import url="header.jsp"/>
-<script src="${pageContext.request.contextPath}/js/film_review.js?new"></script>
+<script src="${pageContext.request.contextPath}/js/film_review.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/film_info.css"/>
 
 <!-- internationalization -->

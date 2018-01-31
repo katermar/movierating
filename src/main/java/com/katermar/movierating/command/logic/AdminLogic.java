@@ -3,6 +3,7 @@ package com.katermar.movierating.command.logic;
 import com.katermar.movierating.command.CommandResult;
 import com.katermar.movierating.config.Attribute;
 import com.katermar.movierating.config.PagePath;
+import com.katermar.movierating.config.Parameter;
 import com.katermar.movierating.entity.Director;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.Genre;
@@ -37,6 +38,9 @@ public class AdminLogic {
         User currentUser = (User) session.getAttribute(Attribute.USER);
         LOGGER.warn(currentUser);
         String loginToBan = request.getParameter("login");
+        if (loginToBan == null || loginToBan.isEmpty() || !loginToBan.matches(Parameter.USERNAME_REGEX)) {
+            throw new CommandException("Bad request exception");
+        }
         AdminService adminService = new AdminService();
         if (currentUser.getRole() == User.UserRole.ADMIN) {
             try {
@@ -87,11 +91,13 @@ public class AdminLogic {
             film.setDescription(request.getParameter("desc"));
             film.setPoster(request.getParameter("poster"));
             FilmService filmService = new FilmService();
-            if (request.getParameter("mode") != null) {
-                filmService.deleteById(request.getParameter("id"));
-            }
-            filmService.addFilm(film);
             GenreService genreService = new GenreService();
+
+            if (request.getParameter("mode") != null) {
+                genreService.deleteByIdFilm(request.getParameter("id"));
+            }
+
+            filmService.addFilm(film);
             genreService.addGenresForFilm(genres, filmService.getFilmByName(film.getName()).getIdFilm());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
@@ -103,7 +109,11 @@ public class AdminLogic {
     public CommandResult addGenre(HttpServletRequest request) throws CommandException {
         try {
             GenreService genreService = new GenreService();
-            genreService.addGenre(new Genre(request.getParameter("name")));
+            String name = request.getParameter("name");
+            if (name == null || name.isEmpty()) {
+                throw new CommandException("Bad request parameters!");
+            }
+            genreService.addGenre(new Genre(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
@@ -114,7 +124,11 @@ public class AdminLogic {
     public CommandResult addDirector(HttpServletRequest request) throws CommandException {
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
-            directorService.addDirector(new Director(request.getParameter("name")));
+            String name = request.getParameter("name");
+            if (name == null || name.isEmpty()) {
+                throw new CommandException("Bad request parameters!");
+            }
+            directorService.addDirector(new Director(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
