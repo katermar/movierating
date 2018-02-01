@@ -2,6 +2,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <c:choose>
     <c:when test="${not empty sessionScope.locale}">
         <fmt:setLocale value="${sessionScope.locale}"/>
@@ -29,8 +31,10 @@
     <title><fmt:message key="header.profile"/> | Movierating</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
 </head>
+
+<mytags:header/>
+
 <body>
-<c:import url="header.jsp"/>
 <div class="centered">
     <div class="container">
         <div class="row">

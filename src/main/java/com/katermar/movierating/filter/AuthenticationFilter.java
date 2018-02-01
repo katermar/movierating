@@ -32,7 +32,7 @@ public class AuthenticationFilter implements Filter {
         if (grantCommands.contains(command) || loggedIn) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            response.sendError(400, "Bad request");
+            response.sendError(400, "Bad request parameters");
         }
 
     }

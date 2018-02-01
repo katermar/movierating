@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 
 <html>
 <!-- internationalization -->
@@ -13,7 +14,7 @@
     </c:otherwise>
 </c:choose>
 <fmt:setBundle basename="Locale"/>
-<c:import url="header.jsp"/>
+
 <head>
     <title><fmt:message key="header.add"/> | Movierating</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
@@ -23,8 +24,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 </head>
 
+<mytags:header/>
+
 <body>
-<!-- Button trigger modal -->
 <br/>
 <div class="well col-md-8 col-md-offset-2">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalGenre">

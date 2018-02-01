@@ -43,8 +43,7 @@ $(document).on('click', '#login-submit', function () {
             var jqObj = jQuery(data);
             var s = jqObj.find('#profile-ref');
             if (jqObj.find('#profile-ref').length != 0) {
-                $('.nav-custom').html(jqObj.find('.nav-custom').children());
-                login.style.display = "none";
+                window.location.reload();
             } else {
                 $('#error-msg').html(jqObj.find('#error-msg').html());
             }

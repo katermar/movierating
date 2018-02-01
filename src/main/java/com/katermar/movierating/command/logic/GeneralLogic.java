@@ -85,7 +85,7 @@ public class GeneralLogic {
         String currentLocale = (String) session.getAttribute(Attribute.LOCALE);
         String redirectPage = request.getHeader("Referer");
         if (redirectPage == null) {
-            redirectPage = PagePath.MAIN;
+            redirectPage = PagePath.REDIRECT_MAIN;
         }
 
         if (Parameter.RUSSIAN_LOCALE.equals(currentLocale)) {

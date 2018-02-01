@@ -1,5 +1,6 @@
 package com.katermar.movierating.command;
 
+import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,5 +10,5 @@ import javax.servlet.http.HttpServletRequest;
  */
 @FunctionalInterface
 public interface Command {
-    CommandResult executeAction(HttpServletRequest request) throws CommandException;
+    CommandResult executeAction(HttpServletRequest request) throws CommandException, BadRequestException;
 }

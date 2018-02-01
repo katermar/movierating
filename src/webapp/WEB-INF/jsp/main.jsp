@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <!-- internationalization -->
 <c:choose>
     <c:when test="${not empty sessionScope.locale}">
@@ -11,7 +13,6 @@
     </c:otherwise>
 </c:choose>
 <fmt:setBundle basename="Locale"/>
-<!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
 <head>
@@ -29,8 +30,7 @@
 </head>
 <body>
 
-<c:set var="sessionScope.lastPageURI" value="/controller?command=main-page"/>
-<c:import url="header.jsp"/>
+<mytags:header/>
 <c:import url="search.jsp"/>
 </body>
 </html>

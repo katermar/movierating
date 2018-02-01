@@ -6,6 +6,7 @@ import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.Review;
 import com.katermar.movierating.entity.User;
+import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
@@ -219,7 +220,7 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult editProfile(HttpServletRequest request) throws CommandException {
+    public CommandResult editProfile(HttpServletRequest request) throws CommandException, BadRequestException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session is over.");
@@ -230,7 +231,7 @@ public class UserLogic {
             UserService userService = new UserServiceImpl();
             String email = request.getParameter("email");
             if (!email.matches(EMAIL_REGEX)) {
-                throw new CommandException("Bad request parameters!");
+                throw new BadRequestException();
             }
             if (!email.equals(currentUser.getEmail())) {
                 userService.updateStatus(User.UserStatus.UNCONFIRMED, currentUser.getLogin());
@@ -268,10 +269,10 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult forgotPassword(HttpServletRequest request) throws CommandException {
+    public CommandResult forgotPassword(HttpServletRequest request) throws CommandException, BadRequestException {
         try {
             if (!request.getParameter(Attribute.USERNAME).matches(USERNAME_REGEX)) {
-                throw new CommandException("Bad request parameters!");
+                throw new BadRequestException();
             }
             String newPassword = RandomStringUtils.randomAscii(12);
             UserService userService = new UserServiceImpl();

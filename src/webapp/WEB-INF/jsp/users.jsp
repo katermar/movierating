@@ -1,6 +1,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
 
 <!-- internationalization -->
 <c:choose>
@@ -19,8 +20,10 @@
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/users.css"/>
 </head>
+
+<mytags:header/>
+
 <body>
-<c:import url="header.jsp"/>
 <div class="container">
     <div class="row">
         <div class="well">

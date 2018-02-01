@@ -1,4 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
@@ -62,12 +61,12 @@
                     </c:otherwise>
                 </c:choose>
 
-                <c:import url="lang.jsp"></c:import>
+                    <c:import url="../jsp/lang.jsp"></c:import>
             </nav>
         </nav>
     </div>
 </header>
-<c:import url="login.jsp"/>
-<c:import url="register.jsp"/>
+<c:import url="../jsp/login.jsp"/>
+<c:import url="../jsp/register.jsp"/>
 <script src="${pageContext.request.contextPath}/js/closemodal.js"></script>
 

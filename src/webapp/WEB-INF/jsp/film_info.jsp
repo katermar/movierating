@@ -1,15 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <%--@elvariable id="film" type="com.katermar.movierating.entity.Film"--%>
 <html>
 <head>
     <title>${film.name} | Movierating</title>
     <link rel="icon" href="${pageContext.request.contextPath}/img/icon.png"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/film_info.css"/>
 </head>
-<c:import url="header.jsp"/>
-<script src="${pageContext.request.contextPath}/js/film_review.js"></script>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/film_info.css"/>
+<mytags:header/>
 
 <!-- internationalization -->
 <c:choose>
@@ -180,3 +181,4 @@
 </div> <!-- /container -->
 </body>
 </html>
+<script src="${pageContext.request.contextPath}/js/film_review.js"></script>

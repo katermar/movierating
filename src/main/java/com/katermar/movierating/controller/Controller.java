@@ -3,6 +3,7 @@ package com.katermar.movierating.controller;
 import com.katermar.movierating.command.Command;
 import com.katermar.movierating.command.CommandResult;
 import com.katermar.movierating.command.factory.CommandFactory;
+import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +37,7 @@ public class Controller extends HttpServlet {
         processRequest(request, response);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Optional<String> requestCommand = Optional.ofNullable(request.getParameter("command"));
             Command command = CommandFactory.identifyCommand(requestCommand);
@@ -48,9 +49,12 @@ public class Controller extends HttpServlet {
                 RequestDispatcher requestDispatcher = request.getRequestDispatcher(page);
                 requestDispatcher.forward(request, response);
             } else {
-                response.sendError(505, "error");
+                response.sendError(commandResult.getErrorCode(), commandResult.getErrorMessage());
             }
-        } catch (ServletException | IOException | CommandException e) {
+        } catch (BadRequestException e) {
+            LOGGER.warn(e.getMessage());
+            response.sendError(400, "Bad request parameters");
+        } catch (IOException | CommandException e) {
             LOGGER.warn(e.getMessage());
             throw new ServletException(e);
         }

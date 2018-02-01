@@ -8,6 +8,7 @@ import com.katermar.movierating.entity.Director;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.Genre;
 import com.katermar.movierating.entity.User;
+import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.UserService;
@@ -22,7 +23,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
+import static com.katermar.movierating.command.CommandResult.ResponseType.*;
 
 /**
  * Created by katermar on 1/9/2018.
@@ -30,7 +31,7 @@ import static com.katermar.movierating.command.CommandResult.ResponseType.FORWAR
 public class AdminLogic {
     private static final Logger LOGGER = LogManager.getLogger(AdminLogic.class);
 
-    public CommandResult banUser(HttpServletRequest request) throws CommandException {
+    public CommandResult banUser(HttpServletRequest request) throws CommandException, BadRequestException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session isn't opened.");
@@ -39,17 +40,20 @@ public class AdminLogic {
         LOGGER.warn(currentUser);
         String loginToBan = request.getParameter("login");
         if (loginToBan == null || loginToBan.isEmpty() || !loginToBan.matches(Parameter.USERNAME_REGEX)) {
-            throw new CommandException("Bad request exception");
+            throw new BadRequestException();
         }
         AdminService adminService = new AdminService();
         if (currentUser.getRole() == User.UserRole.ADMIN) {
             try {
+                if (new UserServiceImpl().getByLogin(loginToBan).getRole() == User.UserRole.ADMIN) {
+                    return new CommandResult(ERROR, 400, "You are not allowed to ban Admin");
+                }
                 adminService.updateBan(loginToBan);
             } catch (ServiceException e) {
                 throw new CommandException(e);
             }
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult showUsersPage(HttpServletRequest request) throws CommandException {
@@ -103,37 +107,37 @@ public class AdminLogic {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult addGenre(HttpServletRequest request) throws CommandException {
+    public CommandResult addGenre(HttpServletRequest request) throws CommandException, BadRequestException {
         try {
             GenreService genreService = new GenreService();
             String name = request.getParameter("name");
             if (name == null || name.isEmpty()) {
-                throw new CommandException("Bad request parameters!");
+                throw new BadRequestException();
             }
             genreService.addGenre(new Genre(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult addDirector(HttpServletRequest request) throws CommandException {
+    public CommandResult addDirector(HttpServletRequest request) throws CommandException, BadRequestException {
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             String name = request.getParameter("name");
             if (name == null || name.isEmpty()) {
-                throw new CommandException("Bad request parameters!");
+                throw new BadRequestException();
             }
             directorService.addDirector(new Director(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult deleteFilm(HttpServletRequest request) throws CommandException {
@@ -144,10 +148,10 @@ public class AdminLogic {
             LOGGER.error(e.getMessage());
             throw new CommandException(e);
         }
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult editFilm(HttpServletRequest request) {
-        return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
+        return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 }

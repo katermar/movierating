@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <!-- internationalization -->
 <c:choose>
     <c:when test="${not empty sessionScope.locale}">
@@ -39,8 +41,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/rating.css"/>
 </head>
 
+<mytags:header/>
+
 <body>
-<c:import url="header.jsp"/>
 <div id="movie-card-rating-list">
     <c:forEach items="${filmsMap}" var="item">
     <!-- Card 1 -->

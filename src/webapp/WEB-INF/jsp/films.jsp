@@ -2,6 +2,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <!-- internationalization -->
 <c:choose>
     <c:when test="${not empty sessionScope.locale}">
@@ -12,7 +14,6 @@
     </c:otherwise>
 </c:choose>
 <fmt:setBundle basename="Locale"/>
-<!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
 <head>
@@ -20,7 +21,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Movierating | Films</title>
-    <c:import url="header.jsp"/>
+    <mytags:header/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/modal.css"/>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
@@ -34,6 +35,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 </head>
+
+
 <body>
 <article>
     <div>
@@ -272,5 +275,5 @@
         </div>
     </div>
 </article>
-
-
+</body>
+</html>

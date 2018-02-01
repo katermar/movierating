@@ -1,7 +1,9 @@
-
+<%@ page isErrorPage="true" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="mytags" tagdir="/WEB-INF/tags" %>
+
 <c:choose>
     <c:when test="${not empty sessionScope.locale}">
         <fmt:setLocale value="${sessionScope.locale}"/>
@@ -11,20 +13,21 @@
     </c:otherwise>
 </c:choose>
 <fmt:setBundle basename="Locale"/>
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-      integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
 <html>
 <head>
     <title><fmt:message key="error.title"/> | <fmt:message key="header.name"/></title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
 <body>
-<c:import url="header.jsp"/>
+<mytags:header/>
 <div class="container" style="padding-top: 30px">
     <div class="jumbotron">
         <div class="text-center"><i class="fa fa-5x fa-frown-o" style="color:#d9534f;"></i></div>
         <h1 class="text-center">
             <div class="error-mes-page">
-                ${pageContext.errorData.statusCode} ${pageContext.exception.message}
+                ${pageContext.errorData.statusCode} ${requestScope['javax.servlet.error.message']}
             </div>
 
             <p></p>
@@ -42,7 +45,7 @@
         </c:if>
         <p class="text-center"><fmt:message key="error.message.back"/></p>
         <p class="text-center"><a class="btn btn-primary" href="\controller?command=main-page"><i
-                class="fa fa-home"></i><fmt:message key="error.message.home"/></a></p>
+                class="fa fa-home"></i> <fmt:message key="error.message.home"/></a></p>
     </div>
 </div>
 </body>
