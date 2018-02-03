@@ -4,19 +4,19 @@ package com.katermar.movierating.entity;
  * Created by katermar on 12/31/2017.
  */
 public class Director {
-    private int iddirector;
+    private int id;
     private String name;
 
     public Director(String name) {
         this.name = name;
     }
 
-    public int getIddirector() {
-        return iddirector;
+    public int getId() {
+        return id;
     }
 
-    public void setIddirector(int iddirector) {
-        this.iddirector = iddirector;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -34,12 +34,12 @@ public class Director {
 
         Director director = (Director) o;
 
-        return iddirector == director.iddirector && (name != null ? name.equals(director.name) : director.name == null);
+        return id == director.id && (name != null ? name.equals(director.name) : director.name == null);
     }
 
     @Override
     public int hashCode() {
-        int result = iddirector;
+        int result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
     }

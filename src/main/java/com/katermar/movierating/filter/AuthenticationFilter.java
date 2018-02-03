@@ -13,6 +13,9 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Created by katermar on 2/2/2018.
+ */
 public class AuthenticationFilter implements Filter {
     Set<String> grantCommands = new HashSet<>();
 

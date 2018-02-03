@@ -1,7 +1,6 @@
 package com.katermar.movierating.command.logic;
 
 import com.katermar.movierating.command.CommandResult;
-import com.katermar.movierating.config.Attribute;
 import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.config.Parameter;
 import com.katermar.movierating.entity.Director;
@@ -36,13 +35,9 @@ public class AdminLogic {
         if (session == null) {
             throw new CommandException("Session isn't opened.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
-        LOGGER.warn(currentUser);
+        User currentUser = (User) session.getAttribute(Parameter.USER);
         String loginToBan = request.getParameter("login");
-        if (loginToBan == null || loginToBan.isEmpty() || !loginToBan.matches(Parameter.USERNAME_REGEX)) {
-            throw new BadRequestException();
-        }
-        AdminService adminService = new AdminService();
+        AdminServiceImpl adminService = new AdminServiceImpl();
         if (currentUser.getRole() == User.UserRole.ADMIN) {
             try {
                 if (new UserServiceImpl().getByLogin(loginToBan).getRole() == User.UserRole.ADMIN) {
@@ -50,7 +45,7 @@ public class AdminLogic {
                 }
                 adminService.updateBan(loginToBan);
             } catch (ServiceException e) {
-                throw new CommandException(e);
+                throw new CommandException(e.getMessage());
             }
         }
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
@@ -62,13 +57,13 @@ public class AdminLogic {
             request.setAttribute("users", userService.getUserRatingMap());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.USERS);
     }
 
     public CommandResult showAddPage(HttpServletRequest request) {
-        GenreService genreService = new GenreService();
+        GenreServiceImpl genreService = new GenreServiceImpl();
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             List<Genre> genres = genreService.getAll();
@@ -83,36 +78,36 @@ public class AdminLogic {
 
     public CommandResult addFilm(HttpServletRequest request) throws CommandException {
         try {
-            List<String> genres = request.getParameterValues("genre") == null ?
-                    new ArrayList<>() : List.of(request.getParameterValues("genre"));
+            List<String> genres = request.getParameterValues(Parameter.GENRE) == null ?
+                    new ArrayList<>() : List.of(request.getParameterValues(Parameter.GENRE));
             Film film = new Film();
-            film.setName(request.getParameter("name"));
-            film.setDuration(Double.parseDouble(request.getParameter("duration")));
-            film.setReleaseYear(Date.valueOf(LocalDate.now().withYear(Integer.parseInt(request.getParameter("year")))));
+            film.setName(request.getParameter(Parameter.NAME));
+            film.setDuration(Double.parseDouble(request.getParameter(Parameter.DURATION)));
+            film.setReleaseYear(Date.valueOf(LocalDate.now().withYear(Integer.parseInt(request.getParameter(Parameter.YEAR)))));
             DirectorServiceImpl directorService = new DirectorServiceImpl();
-            film.setDirector(directorService.getByName(request.getParameter("director")));
-            film.setIdDirector(film.getDirector().getIddirector());
-            film.setDescription(request.getParameter("desc"));
-            film.setPoster(request.getParameter("poster"));
-            FilmService filmService = new FilmService();
-            GenreService genreService = new GenreService();
+            film.setDirector(directorService.getByName(request.getParameter(Parameter.DIRECTOR)));
+            film.setIdDirector(film.getDirector().getId());
+            film.setDescription(request.getParameter(Parameter.DESCRIPTION));
+            film.setPoster(request.getParameter(Parameter.POSTER));
+            FilmServiceImpl filmService = new FilmServiceImpl();
+            GenreServiceImpl genreService = new GenreServiceImpl();
 
             if (request.getParameter("mode") != null) {
                 genreService.deleteByIdFilm(request.getParameter("id"));
             }
 
             filmService.addFilm(film);
-            genreService.addGenresForFilm(genres, filmService.getFilmByName(film.getName()).getIdFilm());
+            genreService.addGenresForFilm(genres, filmService.getFilmByName(film.getName()).getId());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult addGenre(HttpServletRequest request) throws CommandException, BadRequestException {
         try {
-            GenreService genreService = new GenreService();
+            GenreServiceImpl genreService = new GenreServiceImpl();
             String name = request.getParameter("name");
             if (name == null || name.isEmpty()) {
                 throw new BadRequestException();
@@ -120,7 +115,7 @@ public class AdminLogic {
             genreService.addGenre(new Genre(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
@@ -135,23 +130,19 @@ public class AdminLogic {
             directorService.addDirector(new Director(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult deleteFilm(HttpServletRequest request) throws CommandException {
-        FilmService filmService = new FilmService();
+        FilmServiceImpl filmService = new FilmServiceImpl();
         try {
             filmService.deleteById(request.getParameter("id"));
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
-        return new CommandResult(REDIRECT, request.getHeader("Referer"));
-    }
-
-    public CommandResult editFilm(HttpServletRequest request) {
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 }

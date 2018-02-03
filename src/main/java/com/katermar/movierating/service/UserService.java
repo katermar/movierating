@@ -14,6 +14,8 @@ public interface UserService {
 
     User getByLoginAndPassword(String login, String password) throws ServiceException;
 
+    User getById(long userId) throws ServiceException;
+
     User getByLogin(String login) throws ServiceException;
 
     void addUser(User user) throws ServiceException;

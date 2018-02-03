@@ -44,16 +44,14 @@
         </div>
 
         <div class="container-custom" style="background-color:#f1f1f1">
-            <div class="row">
-                <button type="button"
-                        onclick="document.getElementById('login').style.display='none'; document.getElementsByClassName('loginform')[0].reset();"
-                        class="cancelbtn">
-                    <fmt:message key="film.info.cancel"/>
-                </button>
-                <button type="button" data-toggle="modal" data-target="#modalPassword" class="forgot-button">
-                    <fmt:message key="main.forgot"/>
-                </button>
-            </div>
+            <button type="button"
+                    onclick="document.getElementById('login').style.display='none'; document.getElementsByClassName('loginform')[0].reset();"
+                    class="cancelbtn">
+                <fmt:message key="film.info.cancel"/>
+            </button>
+            <button type="button" data-toggle="modal" data-target="#modalPassword" class="forgot-button pull-right">
+                <fmt:message key="main.forgot"/>
+            </button>
         </div>
     </form>
 </div>

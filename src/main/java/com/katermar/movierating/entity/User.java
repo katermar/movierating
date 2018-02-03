@@ -16,43 +16,10 @@ public class User implements Serializable {
     private String avatar;
     private Timestamp dateOfRegistration;
     private Date dateOfBirth;
-    private Date banExpirationDate;
     private UserRole role;
     private UserStatus status;
     private int levelPoints;
     private UserLevel level;
-
-    public User() {
-    }
-
-    public User(int id, String login, String password, String email, String realName, Timestamp dateOfRegistration, Date dateOfBirth, Date banExpirationDate, UserRole role, UserStatus status) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.email = email;
-        this.realName = realName;
-        this.dateOfRegistration = dateOfRegistration;
-        this.dateOfBirth = dateOfBirth;
-        this.banExpirationDate = banExpirationDate;
-        this.role = role;
-        this.status = status;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", realName='" + realName + '\'' +
-                ", dateOfRegistration=" + dateOfRegistration +
-                ", dateOfBirth=" + dateOfBirth +
-                ", banExpirationDate=" + banExpirationDate +
-                ", role=" + role +
-                ", status=" + status +
-                '}';
-    }
 
     public int getId() {
         return id;
@@ -108,14 +75,6 @@ public class User implements Serializable {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public Date getBanExpirationDate() {
-        return banExpirationDate;
-    }
-
-    public void setBanExpirationDate(Date banExpirationDate) {
-        this.banExpirationDate = banExpirationDate;
     }
 
     public UserRole getRole() {

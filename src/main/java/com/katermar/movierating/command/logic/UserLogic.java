@@ -1,8 +1,8 @@
 package com.katermar.movierating.command.logic;
 
 import com.katermar.movierating.command.CommandResult;
-import com.katermar.movierating.config.Attribute;
 import com.katermar.movierating.config.PagePath;
+import com.katermar.movierating.config.Parameter;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.Review;
 import com.katermar.movierating.entity.User;
@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
-import static com.katermar.movierating.config.Parameter.EMAIL_REGEX;
-import static com.katermar.movierating.config.Parameter.USERNAME_REGEX;
+import static com.katermar.movierating.config.Property.EMAIL_REGEX;
+import static com.katermar.movierating.config.Property.USERNAME_REGEX;
 
 /**
  * Created by katermar on 12/31/2017.
@@ -42,7 +42,7 @@ public class UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogic.class);
 
     public CommandResult confirmEmail(HttpServletRequest request) throws CommandException {
-        String login = request.getParameter(Attribute.USER).replace(" ", "+");
+        String login = request.getParameter(Parameter.USER).replace(" ", "+");
         RegisterService registerService = new RegisterServiceImpl();
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
@@ -50,16 +50,16 @@ public class UserLogic {
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {
-                User currentUser = (User) session.getAttribute(Attribute.USER);
+                User currentUser = (User) session.getAttribute(Parameter.USER);
                 if (currentUser.getLogin().equals(textEncryptor.decrypt(login))) {
                     currentUser.setStatus(User.UserStatus.UNBANED);
                     registerService.confirmEmail(userService.getByLogin(textEncryptor.decrypt(login)));
                 }
-                session.removeAttribute(Attribute.USER);
-                session.setAttribute(Attribute.USER, currentUser);
+                session.removeAttribute(Parameter.USER);
+                session.setAttribute(Parameter.USER, currentUser);
             }
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.PROFILE);
     }
@@ -67,7 +67,7 @@ public class UserLogic {
     public CommandResult logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.removeAttribute(Attribute.USER);
+            session.removeAttribute(Parameter.USER);
             session.invalidate();
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.REDIRECT_MAIN);
@@ -76,17 +76,17 @@ public class UserLogic {
     public CommandResult login(HttpServletRequest request) throws CommandException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
 
-        String login = request.getParameter(Attribute.USERNAME);
-        String password = request.getParameter(Attribute.PASSWORD);
+        String login = request.getParameter(Parameter.USERNAME);
+        String password = request.getParameter(Parameter.PASSWORD);
 
         User user = null;
         try {
             user = authSecurityService.checkUserCredentials(login, password);
             if (user == null || user.isBaned()) {
-                request.setAttribute(Attribute.LOGIN_ERROR, "User credentials are invalid. Try again!");
+                request.setAttribute(Parameter.LOGIN_ERROR, "User credentials are invalid. Try again!");
             } else {
                 HttpSession session = request.getSession();
-                session.setAttribute(Attribute.USER, user);
+                session.setAttribute(Parameter.USER, user);
                 session.setMaxInactiveInterval(500);
             }
         } catch (ServiceException e) {
@@ -100,15 +100,15 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
-        RatingService ratingService = new RatingService();
+        User currentUser = (User) session.getAttribute(Parameter.USER);
+        RatingServiceImpl ratingService = new RatingServiceImpl();
         try {
             Map<String, Long> ratingMap = ratingService.getRatingMapByUser(currentUser.getId());
             request.setAttribute("total", ratingMap.values().stream().reduce(0L, Long::sum));
             request.setAttribute("ratings", ratingMap);
             request.setAttribute("userAverageRating", ratingService.getAverageRatingByUser(currentUser.getId()));
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
 
         return new CommandResult(FORWARD, PagePath.PROFILE);
@@ -119,21 +119,21 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
-        ReviewService reviewService = new ReviewService();
+        User currentUser = (User) session.getAttribute(Parameter.USER);
+        ReviewServiceImpl reviewService = new ReviewServiceImpl();
 
         Review review = new Review();
         review.setUser(currentUser);
-        review.setIduser(currentUser.getId());
+        review.setIdUser(currentUser.getId());
         if (request.getParameter("review").trim().isEmpty()) {
             throw new CommandException("Review is empty!");
         }
         review.setText(request.getParameter("review"));
-        review.setIdfilm(Integer.parseInt(request.getParameter("id")));
+        review.setIdFilm(Integer.parseInt(request.getParameter("id")));
         try {
             reviewService.addReview(review);
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
@@ -143,13 +143,13 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
+        User currentUser = (User) session.getAttribute(Parameter.USER);
         Rating rating = new Rating();
-        rating.setIdfilm(Integer.parseInt(request.getParameter("id")));
-        rating.setIduser(currentUser.getId());
+        rating.setIdFilm(Integer.parseInt(request.getParameter("id")));
+        rating.setIdUser(currentUser.getId());
         rating.setIsSeen(true);
         rating.setRatingAmount(Integer.parseInt(request.getParameter("rating")));
-        RatingService ratingService = new RatingService();
+        RatingServiceImpl ratingService = new RatingServiceImpl();
         UserService userService = new UserServiceImpl();
         try {
             ratingService.addRating(rating);
@@ -165,8 +165,8 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session isn't opened.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
-        RatingService ratingService = new RatingService();
+        User currentUser = (User) session.getAttribute(Parameter.USER);
+        RatingServiceImpl ratingService = new RatingServiceImpl();
         int filmId = Integer.parseInt(request.getParameter("id"));
         Rating rating;
         try {
@@ -196,7 +196,7 @@ public class UserLogic {
             userService.addUser(currentUser);
         } catch (IOException | ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
@@ -206,7 +206,7 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
+        User currentUser = (User) session.getAttribute(Parameter.USER);
         currentUser.setEmail(request.getParameter("email"));
         UserService userService = new UserServiceImpl();
         try {
@@ -215,7 +215,7 @@ public class UserLogic {
             emailSenderService.sendConfirmationMail(currentUser.getLogin(), currentUser.getEmail());
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
@@ -225,7 +225,7 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
+        User currentUser = (User) session.getAttribute(Parameter.USER);
 
         try {
             UserService userService = new UserServiceImpl();
@@ -244,7 +244,7 @@ public class UserLogic {
             currentUser.setRealName(request.getParameter("realname"));
             userService.addUser(currentUser);
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
@@ -254,7 +254,7 @@ public class UserLogic {
         if (session == null) {
             throw new CommandException("Session is over.");
         }
-        User currentUser = (User) session.getAttribute(Attribute.USER);
+        User currentUser = (User) session.getAttribute(Parameter.USER);
         if (currentUser.getStatus().equals(User.UserStatus.UNCONFIRMED)) {
             throw new CommandException("Users' e-mail is unconfirmed.");
         }
@@ -264,26 +264,26 @@ public class UserLogic {
             new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, currentUser.getEmail());
             userService.updatePassword(newPassword, currentUser.getLogin());
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
     public CommandResult forgotPassword(HttpServletRequest request) throws CommandException, BadRequestException {
         try {
-            if (!request.getParameter(Attribute.USERNAME).matches(USERNAME_REGEX)) {
+            if (!request.getParameter(Parameter.USERNAME).matches(USERNAME_REGEX)) {
                 throw new BadRequestException();
             }
             String newPassword = RandomStringUtils.randomAscii(12);
             UserService userService = new UserServiceImpl();
-            User user = userService.getByLogin(request.getParameter(Attribute.USERNAME));
+            User user = userService.getByLogin(request.getParameter(Parameter.USERNAME));
             if (user.getStatus().equals(User.UserStatus.UNCONFIRMED)) {
                 throw new CommandException("Users' e-mail is unconfirmed.");
             }
             new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, user.getEmail());
             userService.updatePassword(newPassword, user.getLogin());
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }

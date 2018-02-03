@@ -41,7 +41,6 @@ $(document).on('click', '#login-submit', function () {
         url: '/controller',
         success: function (data) {
             var jqObj = jQuery(data);
-            var s = jqObj.find('#profile-ref');
             if (jqObj.find('#profile-ref').length != 0) {
                 window.location.reload();
             } else {
@@ -94,6 +93,19 @@ $(document).on('click', '#set-avatar-submit', function () {
             $('.avatar-url').val('');
         }
     })
+});
+
+$(document).on('click', '.register', function () {
+    $('.regform')[0].reset();
+    $('#validate-status').html("");
+    $('.loginError').empty();
+    $('.loginSuccess').empty();
+});
+
+$(document).on('click', '.login', function () {
+    $('.loginform')[0].reset();
+    $('#validate-status').html("");
+    $('#error-msg').empty();
 });
 
 

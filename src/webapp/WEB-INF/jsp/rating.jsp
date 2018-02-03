@@ -62,7 +62,7 @@
             </div>
             <div class="movie-content">
                 <div class="movie-header">
-                    <a href="/controller?command=film-info&id=${item.key.idFilm}"><h1
+                    <a href="/controller?command=film-info&id=${item.key.id}"><h1
                             class="movie-title">${item.key.name}</h1></a>
                     <h4 class="movie-info">(${item.key.releaseYear})</h4>
                 </div>

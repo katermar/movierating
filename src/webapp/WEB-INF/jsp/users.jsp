@@ -27,7 +27,6 @@
 <div class="container">
     <div class="row">
         <div class="well">
-            <h1 class="text-center">Vote for your favorite</h1>
             <div class="list-group">
                 <%--@elvariable id="user" type="com.katermar.movierating.entity.User"--%>
                 <%--@elvariable id="users" type="java.util.Map"--%>
@@ -54,7 +53,7 @@
                                 <input type="hidden" name="command" value="ban-user">
                                 <input type="hidden" name="login" value="${user.key.login}">
                                 <c:choose>
-                                    <c:when test="${user.key.status eq 'UNBANED'}">
+                                    <c:when test="${user.key.status ne 'BANED'}">
                                         <button type="submit" class="btn btn-danger btn-lg btn-block"><fmt:message
                                                 key="users.ban"/></button>
                                     </c:when>

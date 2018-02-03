@@ -9,6 +9,9 @@ import java.util.Optional;
  * Created by katermar on 12/30/2017.
  */
 public class CommandFactory {
+    private CommandFactory() {
+    }
+
     public static Command identifyCommand(Optional<String> commandType) {
         Command identifiedCommand;
         identifiedCommand = commandType

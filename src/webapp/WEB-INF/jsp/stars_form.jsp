@@ -2,7 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <form>
     <input type="hidden" name="command" value="add-rating">
-    <input type="hidden" name="id" value="${film.idFilm}">
+    <input type="hidden" name="id" value="${film.id}">
     <fieldset class="starRating">
         <!--HTML5 Custom Data Attributes (data-*)-->
         <c:choose>

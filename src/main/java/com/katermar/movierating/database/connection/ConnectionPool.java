@@ -26,7 +26,6 @@ public class ConnectionPool {
     private ConnectionPool() {
         connections = new ArrayBlockingQueue<>(MAX_CAPACITY);
         databaseManager = DatabaseManager.getInstance();
-//        initializeConnections();
     }
 
     public static ConnectionPool getInstance() {
@@ -365,5 +364,4 @@ public class ConnectionPool {
             return connection.isWrapperFor(iface);
         }
     }
-
 }

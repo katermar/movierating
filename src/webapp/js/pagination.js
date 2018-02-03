@@ -1,12 +1,12 @@
 function changePage(page, recordsPerPage) {
     var pnumber = page || 1;
-    var recordsPerPage = $('#filmsPerPage').val();
+    var recordPerPage = $('#filmsPerPage').val();
 
     var command = $('#commandPart').val() === "" ?
         'controller?command=films-page' : $('#commandPart').val();
     $.ajax({
         type: 'GET',
-        url: command + '&page=' + pnumber + '&filmsPerPage=' + recordsPerPage,
+        url: command + '&page=' + pnumber + '&filmsPerPage=' + recordPerPage,
         success: function (data) {
             var jqObj = jQuery(data);
             var films = jqObj.find("#viewport").children();

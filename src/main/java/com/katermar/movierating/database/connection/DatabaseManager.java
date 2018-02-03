@@ -44,7 +44,7 @@ class DatabaseManager {
         try {
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            LOGGER.warn(e.getMessage()); // todo
+            LOGGER.warn(e.getMessage());
         }
         return connection;
     }

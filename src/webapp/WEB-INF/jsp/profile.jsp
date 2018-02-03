@@ -90,7 +90,8 @@
                         <input type="hidden" name="command" value="set-avatar">
                         <div class="input-group col-md-7 col-xs-7" style="float: inherit">
                             <div class="input-group-addon"><i
-                                    class="glyphicon glyphicon-link center-block"></i></div>
+                                    class="glyphicon glyphicon-link center-block"
+                                    style="margin-bottom: 0px !important;"></i></div>
                             <input class="form-control avatar-url" type="url" name="file" placeholder="max. 300x300"
                                    pattern="^(https|http).+(jpg|svg|gif|png)$" required>
                         </div>

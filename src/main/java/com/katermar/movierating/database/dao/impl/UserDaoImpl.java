@@ -42,7 +42,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(6, user.getAvatar());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return true;
     }
@@ -78,10 +78,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public void deleteById(String id) {
-    }
-
-    @Override
     public User getByLoginAndPassword(String login, String password) throws DAOException {
         User user = null;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
@@ -95,7 +91,7 @@ public class UserDaoImpl implements UserDao {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return user;
     }
@@ -105,7 +101,7 @@ public class UserDaoImpl implements UserDao {
         try {
             return getByParameter(USERS_SELECT_LOGIN, login).get(0);
         } catch (IndexOutOfBoundsException e) {
-            throw new DAOException(e);
+            return new User();
         }
     }
 
@@ -126,7 +122,7 @@ public class UserDaoImpl implements UserDao {
             selectUsersStatement.setLong(2, userId);
             selectUsersStatement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return true;
     }
@@ -149,7 +145,6 @@ public class UserDaoImpl implements UserDao {
         user.setLevelPoints(resultSet.getInt("level_points"));
         User.UserLevel level = User.UserLevel.getLevel(user.getLevelPoints());
         user.setLevel(level);
-        user.setBanExpirationDate(resultSet.getDate("ban_expiration_date"));
         return user;
     }
 }

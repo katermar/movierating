@@ -7,7 +7,7 @@ import java.util.List;
  * Created by katermar on 1/8/2018.
  */
 public class Film {
-    private int idFilm;
+    private int id;
     private String name;
     private double duration;
     private Date releaseYear;
@@ -17,12 +17,12 @@ public class Film {
     private Director director;
     private List<Genre> genres;
 
-    public int getIdFilm() {
-        return idFilm;
+    public int getId() {
+        return id;
     }
 
-    public void setIdFilm(int idFilm) {
-        this.idFilm = idFilm;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -80,7 +80,7 @@ public class Film {
 
         Film film = (Film) o;
 
-        if (idFilm != film.idFilm) return false;
+        if (id != film.id) return false;
         if (Double.compare(film.duration, duration) != 0) return false;
         if (idDirector != film.idDirector) return false;
         if (name != null ? !name.equals(film.name) : film.name != null) return false;
@@ -92,7 +92,7 @@ public class Film {
     public int hashCode() {
         int result;
         long temp;
-        result = idFilm;
+        result = id;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         temp = Double.doubleToLongBits(duration);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
@@ -114,7 +114,7 @@ public class Film {
     @Override
     public String toString() {
         return "Film{" +
-                "idFilm=" + idFilm +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", duration=" + duration +
                 ", releaseYear=" + releaseYear +

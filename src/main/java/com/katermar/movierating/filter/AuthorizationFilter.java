@@ -13,12 +13,15 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Created by katermar on 2/2/2018.
+ */
 public class AuthorizationFilter implements Filter {
     Set<String> adminCommands = new HashSet<>();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        EnumSet<CommandType> commandTypes = EnumSet.range(CommandType.USERS_PAGE, CommandType.EDIT_FILM);
+        EnumSet<CommandType> commandTypes = EnumSet.range(CommandType.USERS_PAGE, CommandType.DELETE_FILM);
         commandTypes.forEach(commandType -> adminCommands.add(commandType.name()));
     }
 

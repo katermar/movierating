@@ -17,9 +17,9 @@ public enum CommandType {
     SWITCH_LANGUAGE(new GeneralLogic()::switchLanguage),
     CHECK_LOGIN(new GeneralLogic()::checkLogin),
     SEARCH_FILMS(new GeneralLogic()::searchFilms),
+    FORGOT_PASSWORD(new UserLogic()::forgotPassword),
     LOGIN(new UserLogic()::login),
 
-    FORGOT_PASSWORD(new UserLogic()::forgotPassword),
     LOGOUT(new UserLogic()::logout),
     EDIT_PROFILE(new UserLogic()::editProfile),
     LEAVE_REVIEW(new UserLogic()::leaveReview),
@@ -37,8 +37,7 @@ public enum CommandType {
     ADD_GENRE(new AdminLogic()::addGenre),
     ADD_DIRECTOR(new AdminLogic()::addDirector),
     BAN_USER(new AdminLogic()::banUser),
-    DELETE_FILM(new AdminLogic()::deleteFilm),
-    EDIT_FILM(new AdminLogic()::editFilm),;
+    DELETE_FILM(new AdminLogic()::deleteFilm);
 
     private final Command command;
 

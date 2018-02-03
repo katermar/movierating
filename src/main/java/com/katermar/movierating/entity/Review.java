@@ -6,36 +6,36 @@ import java.sql.Timestamp;
  * Created by katermar on 12/31/2017.
  */
 public class Review {
-    private int idreview;
-    private int iduser;
-    private int idfilm;
+    private int id;
+    private int idUser;
+    private int idFilm;
     private String text;
     private Timestamp date;
     private User user;
     private Rating rating;
 
-    public int getIdreview() {
-        return idreview;
+    public int getId() {
+        return id;
     }
 
-    public void setIdreview(int idreview) {
-        this.idreview = idreview;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getIduser() {
-        return iduser;
+    public int getIdUser() {
+        return idUser;
     }
 
-    public void setIduser(int iduser) {
-        this.iduser = iduser;
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
-    public int getIdfilm() {
-        return idfilm;
+    public int getIdFilm() {
+        return idFilm;
     }
 
-    public void setIdfilm(int idfilm) {
-        this.idfilm = idfilm;
+    public void setIdFilm(int idFilm) {
+        this.idFilm = idFilm;
     }
 
     public String getText() {
@@ -69,17 +69,17 @@ public class Review {
 
         Review review = (Review) o;
 
-        if (idreview != review.idreview) return false;
-        if (iduser != review.iduser) return false;
-        if (idfilm != review.idfilm) return false;
+        if (id != review.id) return false;
+        if (idUser != review.idUser) return false;
+        if (idFilm != review.idFilm) return false;
         return (text != null ? text.equals(review.text) : review.text == null) && (date != null ? date.equals(review.date) : review.date == null);
     }
 
     @Override
     public int hashCode() {
-        int result = idreview;
-        result = 31 * result + iduser;
-        result = 31 * result + idfilm;
+        int result = id;
+        result = 31 * result + idUser;
+        result = 31 * result + idFilm;
         result = 31 * result + (text != null ? text.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;

@@ -40,7 +40,7 @@
 <body>
 <article>
     <div>
-        <div id="wrapper" class="container">
+        <div id="wrapper" class="container" style="width: auto !important;">
             <div style="display:flex;">
                 <c:if test="${genre ne null}">
                     <div class="mx-1">
@@ -91,7 +91,7 @@
                     <div class="item container">
                         <div class="row col-custom">
                             <div class="content-box text-center">
-                                <a href="/controller?command=film-info&id=${films.idFilm}">
+                                <a href="/controller?command=film-info&id=${films.id}">
                                     <img src="${films.poster}" alt="About">
                                     <span class="content-link text-uppercase">
                                         <fmt:message key="films.info"/>
@@ -113,17 +113,17 @@
                                 <div class="delete-form col-md-6 col-sm-6 col-xs-6">
                                     <button type="button"
                                             class="btn btn-info glyphicon glyphicon-pencil"
-                                            data-toggle="modal" data-target="#modalFilm${films.idFilm}"></button>
+                                            data-toggle="modal" data-target="#modalFilm${films.id}"></button>
                                 </div>
                                 <form action="/controller" method="post" class="edit-form col-md-6 col-sm-6 col-xs-6">
                                     <input type="hidden" name="command" value="delete-film">
-                                    <input type="hidden" name="id" value="${films.idFilm}">
+                                    <input type="hidden" name="id" value="${films.id}">
                                     <button type="button" class="btn btn-danger glyphicon glyphicon-trash"></button>
                                 </form>
                             </div>
 
                             <%--modal--%>
-                            <div class="modal fade" id="modalFilm${films.idFilm}" tabindex="-1" role="dialog"
+                            <div class="modal fade" id="modalFilm${films.id}" tabindex="-1" role="dialog"
                                  aria-labelledby="exampleModalLongTitle"
                                  aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -148,36 +148,36 @@
                                             <div class="modal-body">
                                                 <div class="container-fluid">
                                                     <div class="form-group">
-                                                        <label for="filmName${films.idFilm}"><fmt:message
+                                                        <label for="filmName${films.id}"><fmt:message
                                                                 key="add.film.name"/></label>
                                                         <input class="form-control" type="text" placeholder="name"
-                                                               id="filmName${films.idFilm}" name="name"
+                                                               id="filmName${films.id}" name="name"
                                                                value="${films.name}"
                                                                required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="year${films.idFilm}"><fmt:message
+                                                        <label for="year${films.id}"><fmt:message
                                                                 key="add.film.releaseYear"/></label>
                                                         <input class="form-control" type="number"
-                                                               placeholder="release year" id="year${films.idFilm}"
+                                                               placeholder="release year" id="year${films.id}"
                                                                name="year"
                                                                max="2018" min="1900" value="${films.releaseYear}"
                                                                required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="duration${films.idFilm}"><fmt:message
+                                                        <label for="duration${films.id}"><fmt:message
                                                                 key="add.film.duration"/></label>
                                                         <input class="form-control" type="number" placeholder="duration"
-                                                               id="duration${films.idFilm}"
+                                                               id="duration${films.id}"
                                                                name="duration"
                                                                min="1" value="${films.duration}"
                                                                required>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="poster${films.idFilm}"><fmt:message
+                                                        <label for="poster${films.id}"><fmt:message
                                                                 key="add.film.poster"/></label>
                                                         <input class="form-control" type="url" name="poster"
-                                                               id="poster${films.idFilm}"
+                                                               id="poster${films.id}"
                                                                placeholder="poster" value="${films.poster}"
                                                                pattern="^(https|http).+(jpg|svg|gif|png)$">
                                                     </div>
@@ -216,18 +216,18 @@
                                                         <%--@elvariable id="directors" type="java.util.List"--%>
                                                         <%--@elvariable id="directorModal" type="com.katermar.movierating.entity.Director"--%>
                                                     <div class="form-group">
-                                                        <label for="directorsSelect${films.idFilm}"><fmt:message
+                                                        <label for="directorsSelect${films.id}"><fmt:message
                                                                 key="add.director"/></label>
                                                         <c:if test="${directorsModal ne null}">
                                                             <select class="form-control selectpicker show-tick"
-                                                                    id="directorsSelect${films.idFilm}" name="director"
+                                                                    id="directorsSelect${films.id}" name="director"
                                                                     data-style="btn-info">
                                                                 <c:forEach items="${directorsModal}"
                                                                            var="directorModal">
-                                                                    <c:if test="${films.director.iddirector eq directorModal.iddirector}">
+                                                                    <c:if test="${films.director.id eq directorModal.id}">
                                                                         <option selected>${directorModal.name}</option>
                                                                     </c:if>
-                                                                    <c:if test="${films.director.iddirector ne directorModal.iddirector}">
+                                                                    <c:if test="${films.director.id ne directorModal.id}">
                                                                         <option>${directorModal.name}</option>
                                                                     </c:if>
                                                                 </c:forEach>
@@ -236,9 +236,9 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <label for="desc${films.idFilm}"><fmt:message
+                                                            <label for="desc${films.id}"><fmt:message
                                                                     key="add.film.desc"/></label>
-                                                            <textarea class="form-control" id="desc${films.idFilm}"
+                                                            <textarea class="form-control" id="desc${films.id}"
                                                                       name="desc"
                                                                       rows="3" required>${films.description}</textarea>
                                                         </div>
@@ -250,7 +250,7 @@
                                                     <fmt:message key="add.common.close"/>
                                                 </button>
                                                 <input type="hidden" name="mode" value="edit">
-                                                <input type="hidden" name="id" value="${films.idFilm}">
+                                                <input type="hidden" name="id" value="${films.id}">
                                                 <button type="submit" class="btn btn-primary">
                                                     <fmt:message key="header.add"/>
                                                 </button>

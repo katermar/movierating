@@ -56,7 +56,7 @@ public class Controller extends HttpServlet {
             response.sendError(400, "Bad request parameters");
         } catch (IOException | CommandException e) {
             LOGGER.warn(e.getMessage());
-            throw new ServletException(e);
+            throw new ServletException(e.getMessage());
         }
     }
 }

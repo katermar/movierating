@@ -9,61 +9,62 @@ import com.katermar.movierating.exception.ServiceException;
 import com.katermar.movierating.service.AuthSecurityService;
 import com.katermar.movierating.service.UserService;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
  * Created by katermar on 1/1/2018.
  */
 public class UserServiceImpl implements UserService {
-    private static final UserDao userDAO = new UserDaoImpl();
-    private static final RatingService RATING_SERVICE = new RatingService();
+    private static final UserDao USER_DAO = new UserDaoImpl();
+    private static final RatingServiceImpl RATING_SERVICE = new RatingServiceImpl();
 
     @Override
     public Map<User, Double> getUserRatingMap() throws ServiceException {
         try {
-            Map<User, Double> userRatingMap = new HashMap<>();
-            for (User user : userDAO.getAll()) {
+            Map<User, Double> userRatingMap = new LinkedHashMap<>();
+            for (User user : USER_DAO.getAll()) {
                 userRatingMap.put(user, RATING_SERVICE.getAverageRatingByUser(user.getId()));
             }
             return userRatingMap;
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
     public User getByLoginAndPassword(String login, String password) throws ServiceException {
         try {
-            return userDAO.getByLoginAndPassword(login, password);
+            return USER_DAO.getByLoginAndPassword(login, password);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public User getById(long userId) throws ServiceException {
         try {
-            return userDAO.getById(userId);
+            return USER_DAO.getById(userId);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
     public User getByLogin(String login) throws ServiceException {
         try {
-            return userDAO.getByLogin(login);
+            return USER_DAO.getByLogin(login);
         } catch (DAOException e) {
-            return new User();
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
     public void addUser(User user) throws ServiceException {
         try {
-            userDAO.create(user);
+            USER_DAO.create(user);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -72,9 +73,9 @@ public class UserServiceImpl implements UserService {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
         User user = getByLogin(login);
         try {
-            userDAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
+            USER_DAO.updatePassword(authSecurityService.hashPassword(password), user.getId());
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -83,16 +84,16 @@ public class UserServiceImpl implements UserService {
         User user = getByLogin(login);
         boolean executed;
         try {
-            executed = userDAO.updateStatus(status.toString().toLowerCase(), user.getId());
+            executed = USER_DAO.updateStatus(status.toString().toLowerCase(), user.getId());
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
         return executed;
     }
 
     @Override
     public void updateLevel(User user, Rating userRating) throws ServiceException {
-        Double averageRating = RATING_SERVICE.getAverageRatingByFilm(userRating.getIdfilm());
+        Double averageRating = RATING_SERVICE.getAverageRatingByFilm(userRating.getIdFilm());
         Double ratingDifference = Math.abs(averageRating - userRating.getRatingAmount());
         if (ratingDifference == 0) {
             user.incrementLevelPoints(2);
@@ -105,9 +106,9 @@ public class UserServiceImpl implements UserService {
         }
         user.setLevel(User.UserLevel.getLevel(user.getLevelPoints()));
         try {
-            userDAO.updatePoints(user);
+            USER_DAO.updatePoints(user);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 }

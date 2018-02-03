@@ -15,8 +15,6 @@ import java.util.List;
  */
 public interface GenericDao<T> {
 
-    void deleteById(String id) throws DAOException;
-
     boolean create(T user) throws DAOException;
 
     default List<T> getAll(String selectAll) throws DAOException {
@@ -30,7 +28,7 @@ public interface GenericDao<T> {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return userList;
     }
@@ -51,7 +49,7 @@ public interface GenericDao<T> {
                 }
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return ratings;
     }

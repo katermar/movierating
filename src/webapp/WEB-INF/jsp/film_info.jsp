@@ -84,7 +84,7 @@
                     <c:import url="stars_form.jsp"/>
                     <form action="/controller" method="post">
                         <input type="hidden" name="command" value="watch">
-                        <input type="hidden" name="id" value="${film.idFilm}">
+                        <input type="hidden" name="id" value="${film.id}">
                         <button type="submit" class="btn btn-info btn-lg">
                             <span class="glyphicon glyphicon-eye-close"></span>
                         </button>
@@ -112,7 +112,7 @@
                                 <form accept-charset="UTF-8" action="${pageContext.request.contextPath}/controller"
                                       method="post">
                                     <input type="hidden" name="command" value="leave-review">
-                                    <input type="hidden" name="id" value="${film.idFilm}">
+                                    <input type="hidden" name="id" value="${film.id}">
                                     <textarea class="form-control animated" cols="50" id="new-review" name="review"
                                               placeholder="Enter your review here..." rows="5"></textarea>
 

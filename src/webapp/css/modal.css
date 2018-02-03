@@ -32,8 +32,11 @@ button:hover {
 /* Extra styles for the cancel button */
 .container-custom .cancelbtn {
     width: auto;
-    padding: 10px 18px;
     background-color: #f44336;
+}
+
+.forgot-button {
+    width: auto !important;
 }
 
 /* Center the image and position the close-custom button */

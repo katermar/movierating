@@ -10,54 +10,60 @@ import java.util.List;
 /**
  * Created by katermar on 1/14/2018.
  */
-public class GenreService {
-    private static final GenreDaoImpl genreDao = new GenreDaoImpl();
+public class GenreServiceImpl implements com.katermar.movierating.service.GenreService {
+    private static final GenreDaoImpl GENRE_DAO = new GenreDaoImpl();
 
+    @Override
     public void addGenresForFilm(List<String> genres, int filmId) throws ServiceException {
         try {
-            genreDao.addGenresForFilm(genres, filmId);
+            GENRE_DAO.addGenresForFilm(genres, filmId);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public List<Genre> getByFilm(long id) throws ServiceException {
         try {
-            return genreDao.getGenresByFilmId(id);
+            return GENRE_DAO.getGenresByFilmId(id);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public List<Genre> getAll() throws ServiceException {
         try {
-            return genreDao.getAll();
+            return GENRE_DAO.getAll();
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public Genre getByName(String genreName) throws ServiceException {
         try {
-            return genreDao.getByName(genreName);
+            return GENRE_DAO.getByName(genreName);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public void addGenre(Genre genre) throws ServiceException {
         try {
-            genreDao.create(genre);
+            GENRE_DAO.create(genre);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 
+    @Override
     public void deleteByIdFilm(String idFilm) throws ServiceException {
         try {
-            genreDao.deleteByIdFilm(idFilm);
+            GENRE_DAO.deleteByIdFilm(idFilm);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            throw new ServiceException(e.getMessage());
         }
     }
 }

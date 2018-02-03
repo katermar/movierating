@@ -10,11 +10,11 @@ import org.mindrot.jbcrypt.BCrypt;
  * Created by katermar on 1/6/2018.
  */
 public class AuthSecurityServiceImpl implements AuthSecurityService {
-    private static final UserService userService = new UserServiceImpl();
+    private static final UserService USER_SERVICE = new UserServiceImpl();
 
     @Override
     public User checkUserCredentials(String login, String password) throws ServiceException {
-        User user = userService.getByLogin(login);
+        User user = USER_SERVICE.getByLogin(login);
         if (user.getLogin() != null && BCrypt.checkpw(password, user.getPassword())) {
             return user;
         }

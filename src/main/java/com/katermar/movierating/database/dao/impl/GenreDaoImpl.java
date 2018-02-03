@@ -1,7 +1,6 @@
 package com.katermar.movierating.database.dao.impl;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
-import com.katermar.movierating.database.dao.GenericDao;
 import com.katermar.movierating.entity.Genre;
 import com.katermar.movierating.exception.DAOException;
 
@@ -14,7 +13,7 @@ import java.util.List;
 /**
  * Created by katermar on 1/14/2018.
  */
-public class GenreDaoImpl implements GenericDao<Genre> {
+public class GenreDaoImpl implements com.katermar.movierating.database.dao.GenreDao {
     private static final String SELECT_GENRE_BY_FILM_ID = "SELECT * FROM genre WHERE name IN (SELECT genrename FROM film_genre WHERE idfilm = ?)";
     private static final String SELECT_ALL = "SELECT * FROM genre";
     private static final String DELETE_FROM_FILM_GENRE_WHERE_IDFILM = "DELETE FROM film_genre WHERE idfilm = ?";
@@ -22,12 +21,9 @@ public class GenreDaoImpl implements GenericDao<Genre> {
     private static final String INSERT_INTO_GENRE_NAME_VALUES = "INSERT INTO genre (name) VALUES (?)";
     private static final String INSERT_INTO_FILM_GENRE_VALUES_IDFILM_GENRENAME = "INSERT INTO film_genre (idfilm, genrename) VALUES (?, ?)";
 
+    @Override
     public List<Genre> getGenresByFilmId(long id) throws DAOException {
         return getByParameter(SELECT_GENRE_BY_FILM_ID, String.valueOf(id));
-    }
-
-    @Override
-    public void deleteById(String id) {
     }
 
     @Override
@@ -37,7 +33,7 @@ public class GenreDaoImpl implements GenericDao<Genre> {
             statement.setString(1, genre.getName());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
         return true;
     }
@@ -47,14 +43,17 @@ public class GenreDaoImpl implements GenericDao<Genre> {
         return new Genre(selected.getString("name"));
     }
 
+    @Override
     public List<Genre> getAll() throws DAOException {
         return getAll(SELECT_ALL);
     }
 
+    @Override
     public Genre getByName(String genreName) throws DAOException {
         return getByParameter(SELECT_FROM_GENRE_WHERE_NAME, genreName).get(0);
     }
 
+    @Override
     public void addGenresForFilm(List<String> genres, int filmId) throws DAOException {
         try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connectionFromPool.prepareStatement(INSERT_INTO_FILM_GENRE_VALUES_IDFILM_GENRENAME)) {
@@ -64,17 +63,18 @@ public class GenreDaoImpl implements GenericDao<Genre> {
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
     }
 
+    @Override
     public void deleteByIdFilm(String idFilm) throws DAOException {
         try (Connection connectionFromPool = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connectionFromPool.prepareStatement(DELETE_FROM_FILM_GENRE_WHERE_IDFILM)) {
             statement.setInt(1, Integer.parseInt(idFilm));
             statement.execute();
         } catch (SQLException e) {
-            throw new DAOException(e);
+            throw new DAOException(e.getMessage());
         }
     }
 }

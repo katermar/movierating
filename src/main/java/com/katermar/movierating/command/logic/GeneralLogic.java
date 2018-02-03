@@ -1,9 +1,9 @@
 package com.katermar.movierating.command.logic;
 
 import com.katermar.movierating.command.CommandResult;
-import com.katermar.movierating.config.Attribute;
 import com.katermar.movierating.config.PagePath;
 import com.katermar.movierating.config.Parameter;
+import com.katermar.movierating.config.Property;
 import com.katermar.movierating.entity.Director;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.Genre;
@@ -24,7 +24,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.*;
-import static com.katermar.movierating.config.Parameter.*;
 
 /**
  * Created by katermar on 1/4/2018.
@@ -33,7 +32,7 @@ public class GeneralLogic {
     private static final Logger LOGGER = LogManager.getLogger(GeneralLogic.class);
 
     public CommandResult goToMainPage(HttpServletRequest request) {
-        GenreService genreService = new GenreService();
+        GenreServiceImpl genreService = new GenreServiceImpl();
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             List<Genre> genres = genreService.getAll();
@@ -47,29 +46,25 @@ public class GeneralLogic {
     }
 
     public CommandResult register(HttpServletRequest request) throws CommandException {
-        String login = request.getParameter(Attribute.USERNAME).trim();
-        String email = request.getParameter(Attribute.EMAIL).trim();
-        String password = request.getParameter(Attribute.PASSWORD).trim();
-        if (login.isEmpty() || email.isEmpty() || password.isEmpty() ||
-                !login.matches(USERNAME_REGEX) || !email.matches(EMAIL_REGEX) || !password.matches(PASSWORD_REGEX)) {
-            throw new CommandException("Bad request parameters!");
-        }
+        String login = request.getParameter(Parameter.USERNAME).trim();
+        String email = request.getParameter(Parameter.EMAIL).trim();
+        String password = request.getParameter(Parameter.PASSWORD).trim();
 
         User user = new User();
         user.setLogin(login);
         user.setPassword(password);
         user.setEmail(email);
-        user.setRealName(request.getParameter(Attribute.REALNAME));
+        user.setRealName(request.getParameter(Parameter.REALNAME));
         user.setDateOfBirth(Date.valueOf(LocalDate.parse(
-                request.getParameter(Attribute.BIRTHDAY), DateTimeFormatter.ISO_DATE)));
+                request.getParameter(Parameter.BIRTHDAY), DateTimeFormatter.ISO_DATE)));
 
         UserService userService = new UserServiceImpl();
         RegisterService registerService = new RegisterServiceImpl();
         try {
-            if (userService.getByLogin(user.getLogin()) == null) {
+            if (userService.getByLogin(user.getLogin()).getLogin() == null) {
                 registerService.register(user);
                 HttpSession session = request.getSession();
-                session.setAttribute(Attribute.USER, user);
+                session.setAttribute(Parameter.USER, userService.getByLogin(login));
             } else {
                 LOGGER.error("Error occurred while adding user.");
                 throw new CommandException("Error occurred while adding user.");
@@ -82,23 +77,23 @@ public class GeneralLogic {
 
     public CommandResult switchLanguage(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        String currentLocale = (String) session.getAttribute(Attribute.LOCALE);
+        String currentLocale = (String) session.getAttribute(Parameter.LOCALE);
         String redirectPage = request.getHeader("Referer");
         if (redirectPage == null) {
             redirectPage = PagePath.REDIRECT_MAIN;
         }
 
-        if (Parameter.RUSSIAN_LOCALE.equals(currentLocale)) {
-            session.setAttribute(Attribute.LOCALE, Parameter.ENGLISH_LOCALE);
+        if (Property.RUSSIAN_LOCALE.equals(currentLocale)) {
+            session.setAttribute(Parameter.LOCALE, Property.ENGLISH_LOCALE);
         } else {
-            session.setAttribute(Attribute.LOCALE, Parameter.RUSSIAN_LOCALE);
+            session.setAttribute(Parameter.LOCALE, Property.RUSSIAN_LOCALE);
         }
         return new CommandResult(REDIRECT, redirectPage);
     }
 
     public CommandResult showFilmsPage(HttpServletRequest request) throws CommandException {
-        FilmService filmService = new FilmService();
-        GenreService genreService = new GenreService();
+        FilmServiceImpl filmService = new FilmServiceImpl();
+        GenreServiceImpl genreService = new GenreServiceImpl();
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
@@ -108,23 +103,23 @@ public class GeneralLogic {
             request.setAttribute("films", filmService.getAllFilms(pageNumber, filmsPerPage));
             request.setAttribute("filmsCount", filmService.getFilmsAmount());
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.FILMS);
     }
 
     public CommandResult showFilmInfoPage(HttpServletRequest request) {
-        FilmService filmService = new FilmService();
-        RatingService ratingService = new RatingService();
-        ReviewService reviewService = new ReviewService();
-        GenreService genreService = new GenreService();
+        FilmServiceImpl filmService = new FilmServiceImpl();
+        RatingServiceImpl ratingService = new RatingServiceImpl();
+        ReviewServiceImpl reviewService = new ReviewServiceImpl();
+        GenreServiceImpl genreService = new GenreServiceImpl();
         int filmId = Integer.parseInt(request.getParameter("id"));
         try {
             Film film = filmService.getFilmById(filmId);
             request.setAttribute("film", film);
-            request.setAttribute("genre", genreService.getByFilm(film.getIdFilm()));
-            request.setAttribute("review", reviewService.getByFilm(film.getIdFilm()));
-            request.setAttribute("avgRate", ratingService.getAverageRatingByFilm(film.getIdFilm()));
+            request.setAttribute("genre", genreService.getByFilm(film.getId()));
+            request.setAttribute("review", reviewService.getByFilm(film.getId()));
+            request.setAttribute("avgRate", ratingService.getAverageRatingByFilm(film.getId()));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
         }
@@ -137,19 +132,19 @@ public class GeneralLogic {
 
     public CommandResult searchFilms(HttpServletRequest request) throws CommandException {
         List<Film> foundFilms;
-        Map<String, String[]> parametersMap = new HashMap<>();
-        parametersMap.putAll(request.getParameterMap());
+        Map<String, String[]> requestParameters = new HashMap<>();
+        requestParameters.putAll(request.getParameterMap());
         String pageNumber = Optional.ofNullable(request.getParameter("page")).orElse("1");
         String filmsPerPage = Optional.ofNullable(request.getParameter("filmsPerPage")).orElse("4");
         try {
-            FilmService filmService = new FilmService();
-            foundFilms = filmService.searchFilms(parametersMap, pageNumber, filmsPerPage);
-            request.setAttribute("filmsCount", filmService.getSearchFilmsAmount(parametersMap));
-            request.setAttribute("genresModal", new GenreService().getAll());
+            FilmServiceImpl filmService = new FilmServiceImpl();
+            foundFilms = filmService.searchFilms(requestParameters, pageNumber, filmsPerPage);
+            request.setAttribute("filmsCount", filmService.getSearchFilmsAmount(requestParameters));
+            request.setAttribute("genresModal", new GenreServiceImpl().getAll());
             request.setAttribute("directorsModal", new DirectorServiceImpl().getAll());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         List<String> searchDirectors = request.getParameterValues("director") == null ?
                 new ArrayList<>() : List.of(request.getParameterValues("director"));
@@ -170,25 +165,25 @@ public class GeneralLogic {
     }
 
     public CommandResult showRatingPage(HttpServletRequest request) throws CommandException {
-        FilmService filmService = new FilmService();
+        FilmServiceImpl filmService = new FilmServiceImpl();
         try {
             request.setAttribute("filmsMap", filmService.getFilmRatingMapInDescOrder());
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.RATING);
     }
 
     public CommandResult checkLogin(HttpServletRequest request) throws CommandException {
         try {
-            if (new UserServiceImpl().getByLogin(request.getParameter(Attribute.USERNAME)).getLogin() != null) {
+            if (new UserServiceImpl().getByLogin(request.getParameter(Parameter.USERNAME)).getLogin() != null) {
                 request.setAttribute("loginError", "username is in use");
             } else {
                 request.setAttribute("loginSuccess", "username isn't used");
             }
         } catch (ServiceException e) {
-            throw new CommandException(e);
+            throw new CommandException(e.getMessage());
         }
         return new CommandResult(FORWARD, PagePath.MAIN);
     }
