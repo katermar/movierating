@@ -16,16 +16,24 @@ import java.util.Set;
 
 /**
  * Created by katermar on 2/2/2018.
+ *
+ * Filter to validate parameters
  */
 @WebFilter(filterName = "ValidationFilter", urlPatterns = "/controller")
 public class ValidationFilter implements Filter {
-    Set<String> filmValidateCommands = new HashSet<>();
-    Set<String> userValidateCommands = new HashSet<>();
+    private Set<String> filmValidateCommands = new HashSet<>();
+    private Set<String> userValidateCommands = new HashSet<>();
 
+    /**
+     * Creates sets of commands which have to be validated.
+     *
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         filmValidateCommands = Set.of(CommandType.ADD_DIRECTOR.name(), CommandType.ADD_FILM.name(), CommandType.ADD_GENRE.name());
-        userValidateCommands = Set.of(CommandType.REGISTER.name());
+        userValidateCommands = Set.of(CommandType.REGISTER.name(), CommandType.EDIT_PROFILE.name(), CommandType.SEND_NEW_PASSWORD.name());
     }
 
     @Override
@@ -43,6 +51,13 @@ public class ValidationFilter implements Filter {
         }
     }
 
+    /**
+     * If command have to be validated, uses util validator class to validate request parameters.
+     *
+     * @param request
+     * @return result of validation
+     * @throws ServiceException
+     */
     private boolean validate(HttpServletRequest request) throws ServiceException {
         String command = CommandFactory.revertIntoConstantName(request.getParameter("command"));
         HashMap<String, String[]> parametersMap = new HashMap<>(request.getParameterMap());

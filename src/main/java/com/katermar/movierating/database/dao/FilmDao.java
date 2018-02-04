@@ -40,6 +40,12 @@ public interface FilmDao extends GenericDao<Film> {
 
     int searchFilmsAmount(Map<String, String[]> parametersMap) throws DAOException;
 
+    /**
+     * Constructs search query with the map of request parameters
+     *
+     * @param parameters - map of request parameters
+     * @return constructed query
+     */
     default String constructSearchQuery(Map<String, String[]> parameters) {
         StringBuilder query = new StringBuilder("SELECT * FROM film WHERE ");
         if (parameters.containsKey("min-duration")) {

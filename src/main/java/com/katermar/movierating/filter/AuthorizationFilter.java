@@ -15,18 +15,28 @@ import java.util.Set;
 
 /**
  * Created by katermar on 2/2/2018.
+ * <p>
+ * Filter to give access to some commands only to admin.
  */
 public class AuthorizationFilter implements Filter {
-    Set<String> adminCommands = new HashSet<>();
+    private Set<String> adminCommands = new HashSet<>();
 
+    /**
+     * Adds admin commands as string names from the enum set.
+     *
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         EnumSet<CommandType> commandTypes = EnumSet.range(CommandType.USERS_PAGE, CommandType.DELETE_FILM);
         commandTypes.forEach(commandType -> adminCommands.add(commandType.name()));
     }
 
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession currentSession = request.getSession(false);
         if (currentSession == null || currentSession.getAttribute("user") == null) {
@@ -36,7 +46,8 @@ public class AuthorizationFilter implements Filter {
         }
     }
 
-    private void authorize(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    private void authorize(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         User currentUser = (User) request.getSession().getAttribute("user");

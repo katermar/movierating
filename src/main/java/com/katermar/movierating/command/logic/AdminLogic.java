@@ -7,9 +7,9 @@ import com.katermar.movierating.entity.Director;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.entity.Genre;
 import com.katermar.movierating.entity.User;
-import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
+import com.katermar.movierating.filter.ValidationFilter;
 import com.katermar.movierating.service.UserService;
 import com.katermar.movierating.service.impl.*;
 import org.apache.logging.log4j.LogManager;
@@ -26,11 +26,20 @@ import static com.katermar.movierating.command.CommandResult.ResponseType.*;
 
 /**
  * Created by katermar on 1/9/2018.
+ * <p>
+ * The class with a bunch of Admin commands. These commands can be executed only if current users role is ADMIN
  */
 public class AdminLogic {
     private static final Logger LOGGER = LogManager.getLogger(AdminLogic.class);
 
-    public CommandResult banUser(HttpServletRequest request) throws CommandException, BadRequestException {
+    /**
+     * Method to ban user. Doesn't allow to ban Admin
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
+    public CommandResult banUser(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session isn't opened.");
@@ -51,6 +60,13 @@ public class AdminLogic {
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
+    /**
+     * Method to show users page. Sets map of user as a key and his rating as a value attribute
+     *
+     * @param request
+     * @return an instance of the CommandResult to forward on the users page
+     * @throws CommandException
+     */
     public CommandResult showUsersPage(HttpServletRequest request) throws CommandException {
         UserService userService = new UserServiceImpl();
         try {
@@ -62,6 +78,10 @@ public class AdminLogic {
         return new CommandResult(FORWARD, PagePath.USERS);
     }
 
+    /**
+     * @param request
+     * @return
+     */
     public CommandResult showAddPage(HttpServletRequest request) {
         GenreServiceImpl genreService = new GenreServiceImpl();
         DirectorServiceImpl directorService = new DirectorServiceImpl();
@@ -76,6 +96,16 @@ public class AdminLogic {
         return new CommandResult(FORWARD, PagePath.ADD);
     }
 
+    /**
+     * Method to add a film with values tha come from the request
+     * Also is used to edit film in dependence of mode request parameter
+     * Values are considered to be valid after validation in filter
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     * @see ValidationFilter
+     */
     public CommandResult addFilm(HttpServletRequest request) throws CommandException {
         try {
             List<String> genres = request.getParameterValues(Parameter.GENRE) == null ?
@@ -105,13 +135,19 @@ public class AdminLogic {
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult addGenre(HttpServletRequest request) throws CommandException, BadRequestException {
+    /**
+     * Method to add genre from the request parameters
+     * Values are considered to be valid after validation in filter
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     * @see ValidationFilter
+     */
+    public CommandResult addGenre(HttpServletRequest request) throws CommandException {
         try {
             GenreServiceImpl genreService = new GenreServiceImpl();
             String name = request.getParameter("name");
-            if (name == null || name.isEmpty()) {
-                throw new BadRequestException();
-            }
             genreService.addGenre(new Genre(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
@@ -120,13 +156,19 @@ public class AdminLogic {
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult addDirector(HttpServletRequest request) throws CommandException, BadRequestException {
+    /**
+     * Method to add director from the request parameters
+     * Values are considered to be valid after validation in filter
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     * @see ValidationFilter
+     */
+    public CommandResult addDirector(HttpServletRequest request) throws CommandException {
         DirectorServiceImpl directorService = new DirectorServiceImpl();
         try {
             String name = request.getParameter("name");
-            if (name == null || name.isEmpty()) {
-                throw new BadRequestException();
-            }
             directorService.addDirector(new Director(name));
         } catch (ServiceException e) {
             LOGGER.warn(e.getMessage());
@@ -135,6 +177,13 @@ public class AdminLogic {
         return new CommandResult(REDIRECT, request.getHeader("Referer"));
     }
 
+    /**
+     * Method to delete film by id which comes as a request parameter
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
     public CommandResult deleteFilm(HttpServletRequest request) throws CommandException {
         FilmServiceImpl filmService = new FilmServiceImpl();
         try {

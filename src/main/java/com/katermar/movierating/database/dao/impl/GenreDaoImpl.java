@@ -1,6 +1,7 @@
 package com.katermar.movierating.database.dao.impl;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
+import com.katermar.movierating.database.dao.GenreDao;
 import com.katermar.movierating.entity.Genre;
 import com.katermar.movierating.exception.DAOException;
 
@@ -12,9 +13,12 @@ import java.util.List;
 
 /**
  * Created by katermar on 1/14/2018.
+ * <p>
+ * Implementation of the interface, which is used to work with 'genre' table.
  */
-public class GenreDaoImpl implements com.katermar.movierating.database.dao.GenreDao {
-    private static final String SELECT_GENRE_BY_FILM_ID = "SELECT * FROM genre WHERE name IN (SELECT genrename FROM film_genre WHERE idfilm = ?)";
+public class GenreDaoImpl implements GenreDao {
+    private static final String SELECT_GENRE_BY_FILM_ID = "SELECT * FROM genre WHERE name IN (SELECT genrename FROM " +
+            "film_genre WHERE idfilm = ?)";
     private static final String SELECT_ALL = "SELECT * FROM genre";
     private static final String DELETE_FROM_FILM_GENRE_WHERE_IDFILM = "DELETE FROM film_genre WHERE idfilm = ?";
     private static final String SELECT_FROM_GENRE_WHERE_NAME = "SELECT * FROM genre WHERE name = ?";

@@ -40,6 +40,12 @@ public class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Takes connection from the queue, if there still are connections.
+     * In other case database manager creates it.
+     *
+     * @return wrapped autocloseable connection
+     */
     public ConnectionFromPool getConnection() {
         Connection connection = null;
         try {
@@ -62,6 +68,11 @@ public class ConnectionPool {
         }
     }
 
+    /**
+     * Unwraps connection, if it is wrapped and then closes it.
+     *
+     * @param connection - connection to be closed
+     */
     private void closeConnection(Connection connection) {
         if (connection != null) {
             try {
@@ -79,6 +90,10 @@ public class ConnectionPool {
         connections.forEach(this::closeConnection);
     }
 
+    /**
+     * Wrapper class to use custom connection as a normal connection.
+     * Implements AutoCloseable interface to close connection in try/catch block
+     */
     public class ConnectionFromPool implements AutoCloseable, Connection {
         private final Connection connection;
 
@@ -86,6 +101,9 @@ public class ConnectionPool {
             this.connection = connection;
         }
 
+        /**
+         * Removes connection from the queue if it is closed. In other case releases it
+         */
         @Override
         public void close() {
             try {

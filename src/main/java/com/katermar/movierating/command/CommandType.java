@@ -1,15 +1,23 @@
 package com.katermar.movierating.command;
 
+import com.katermar.movierating.command.factory.CommandFactory;
 import com.katermar.movierating.command.logic.AdminLogic;
 import com.katermar.movierating.command.logic.GeneralLogic;
 import com.katermar.movierating.command.logic.UserLogic;
 
 /**
  * Created by katermar on 12/30/2017.
+ * <p>
+ * An Enum of commands which are identified with the
+ *
+ * @see CommandFactory class
+ * Commands are split into groups to use in filters
+ * Each command holds an instance of functional interface Command
+ * @see Command
  */
 public enum CommandType {
-    MAIN_PAGE(new GeneralLogic()::goToMainPage),
-    ERROR_PAGE(new GeneralLogic()::showErrorPage),
+    // Common Commands
+    MAIN_PAGE(new GeneralLogic()::showMainPage),
     RATING_PAGE(new GeneralLogic()::showRatingPage),
     FILMS_PAGE(new GeneralLogic()::showFilmsPage),
     FILM_INFO(new GeneralLogic()::showFilmInfoPage),
@@ -20,6 +28,7 @@ public enum CommandType {
     FORGOT_PASSWORD(new UserLogic()::forgotPassword),
     LOGIN(new UserLogic()::login),
 
+    // Authorized user commands
     LOGOUT(new UserLogic()::logout),
     EDIT_PROFILE(new UserLogic()::editProfile),
     LEAVE_REVIEW(new UserLogic()::leaveReview),
@@ -29,8 +38,9 @@ public enum CommandType {
     SEND_NEW_PASSWORD(new UserLogic()::sendNewPassword),
     CONFIRM_EMAIL(new UserLogic()::confirmEmail),
     SEND_EMAIL(new UserLogic()::sendEmail),
-    PROFILE_PAGE(new UserLogic()::goToProfilePage),
+    PROFILE_PAGE(new UserLogic()::showProfilePage),
 
+    // Admin commands
     USERS_PAGE(new AdminLogic()::showUsersPage),
     ADD_PAGE(new AdminLogic()::showAddPage),
     ADD_FILM(new AdminLogic()::addFilm),

@@ -2,11 +2,15 @@ package com.katermar.movierating.config;
 
 /**
  * Created by katermar on 1/6/2018.
+ * <p>
+ * Class of common properties
  */
 public class Property {
+    // Locales
     public static final String RUSSIAN_LOCALE = "ru_RU";
     public static final String ENGLISH_LOCALE = "en_US";
 
+    // Email bundle properties
     public static final String EMAIL_SERVER = "email.server";
     public static final String EMAIL_PASSWORD = "email.password";
     public static final String EMAIL_USERNAME = "email.username";
@@ -16,6 +20,7 @@ public class Property {
     public static final String EMAIL_PASSWORD_MESSAGE = "email.password.message";
     public static final String EMAIL_PASSWORD_SUBJECT = "email.password.subject";
 
+    // Validation regex
     public static final String NUMBER_REGEX = "\\d+";
     public static final String WORD_REGEX = "\\w+";
     public static final String USERNAME_REGEX = "^[a-zA-Z]([a-zA-Z0-9_]+){4,}";

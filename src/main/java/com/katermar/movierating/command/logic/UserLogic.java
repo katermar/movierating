@@ -6,13 +6,9 @@ import com.katermar.movierating.config.Parameter;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.entity.Review;
 import com.katermar.movierating.entity.User;
-import com.katermar.movierating.exception.BadRequestException;
 import com.katermar.movierating.exception.CommandException;
 import com.katermar.movierating.exception.ServiceException;
-import com.katermar.movierating.service.AuthSecurityService;
-import com.katermar.movierating.service.EmailSenderService;
-import com.katermar.movierating.service.RegisterService;
-import com.katermar.movierating.service.UserService;
+import com.katermar.movierating.service.*;
 import com.katermar.movierating.service.impl.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -32,21 +28,33 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import static com.katermar.movierating.command.CommandResult.ResponseType.FORWARD;
-import static com.katermar.movierating.config.Property.EMAIL_REGEX;
-import static com.katermar.movierating.config.Property.USERNAME_REGEX;
 
 /**
  * Created by katermar on 12/31/2017.
+ * <p>
+ * The class with a bunch of User commands.
+ * These commands can be executed only if session is opened and user is present in this session
  */
 public class UserLogic {
     private static final Logger LOGGER = LogManager.getLogger(UserLogic.class);
+    private RegisterService registerService = new RegisterServiceImpl();
+    private UserService userService = new UserServiceImpl();
+    private RatingService ratingService = new RatingServiceImpl();
+    private ReviewService reviewService = new ReviewServiceImpl();
+    private EmailSenderService emailSenderService = new EmailSenderServiceImpl();
 
+    /**
+     * Method to confirm user profile by email, decrypts username taken from the url
+     * Puts new user in the current session
+     *
+     * @param request
+     * @return an instance of the CommandResult to forward on the profile page
+     * @throws CommandException
+     */
     public CommandResult confirmEmail(HttpServletRequest request) throws CommandException {
         String login = request.getParameter(Parameter.USER).replace(" ", "+");
-        RegisterService registerService = new RegisterServiceImpl();
         BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
         textEncryptor.setPassword(ResourceBundle.getBundle("project").getString("encryption.password"));
-        UserService userService = new UserServiceImpl();
         try {
             HttpSession session = request.getSession(false);
             if (session != null) {
@@ -64,6 +72,12 @@ public class UserLogic {
         return new CommandResult(FORWARD, PagePath.PROFILE);
     }
 
+    /**
+     * Method to logout. Removes user from the session attributes and invalidates current session.
+     *
+     * @param request
+     * @return an instance of the CommandResult to redirect on the main page
+     */
     public CommandResult logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -73,6 +87,14 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, PagePath.REDIRECT_MAIN);
     }
 
+    /**
+     * Method to log in by parameters taken from the request.
+     * If user with the login is present opens ne session and puts him as an attribute
+     *
+     * @param request
+     * @return an instance of the CommandResult to forward on the main page
+     * @throws CommandException
+     */
     public CommandResult login(HttpServletRequest request) throws CommandException {
         AuthSecurityService authSecurityService = new AuthSecurityServiceImpl();
 
@@ -95,13 +117,12 @@ public class UserLogic {
         return new CommandResult(FORWARD, PagePath.MAIN);
     }
 
-    public CommandResult goToProfilePage(HttpServletRequest request) throws CommandException {
+    public CommandResult showProfilePage(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session is over.");
         }
         User currentUser = (User) session.getAttribute(Parameter.USER);
-        RatingServiceImpl ratingService = new RatingServiceImpl();
         try {
             Map<String, Long> ratingMap = ratingService.getRatingMapByUser(currentUser.getId());
             request.setAttribute("total", ratingMap.values().stream().reduce(0L, Long::sum));
@@ -114,13 +135,19 @@ public class UserLogic {
         return new CommandResult(FORWARD, PagePath.PROFILE);
     }
 
+    /**
+     * Method to leave a review
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
     public CommandResult leaveReview(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session is over.");
         }
         User currentUser = (User) session.getAttribute(Parameter.USER);
-        ReviewServiceImpl reviewService = new ReviewServiceImpl();
 
         Review review = new Review();
         review.setUser(currentUser);
@@ -149,8 +176,6 @@ public class UserLogic {
         rating.setIdUser(currentUser.getId());
         rating.setIsSeen(true);
         rating.setRatingAmount(Integer.parseInt(request.getParameter("rating")));
-        RatingServiceImpl ratingService = new RatingServiceImpl();
-        UserService userService = new UserServiceImpl();
         try {
             ratingService.addRating(rating);
             userService.updateLevel(currentUser, rating);
@@ -166,7 +191,6 @@ public class UserLogic {
             throw new CommandException("Session isn't opened.");
         }
         User currentUser = (User) session.getAttribute(Parameter.USER);
-        RatingServiceImpl ratingService = new RatingServiceImpl();
         int filmId = Integer.parseInt(request.getParameter("id"));
         Rating rating;
         try {
@@ -179,6 +203,14 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
+    /**
+     * Method to set an avatar. User can set every avatar
+     * which is less than 300x300 px or in .svg format
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
     public CommandResult setAvatar(HttpServletRequest request) throws CommandException {
         try {
             String imageURL = request.getParameter("file");
@@ -190,7 +222,6 @@ public class UserLogic {
                     throw new CommandException("Invalid image size! Try again please!");
                 }
             }
-            UserService userService = new UserServiceImpl();
             User currentUser = (User) request.getSession(false).getAttribute("user");
             currentUser.setAvatar(imageURL);
             userService.addUser(currentUser);
@@ -201,6 +232,13 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
+    /**
+     * Method to send confirmation mail.
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
     public CommandResult sendEmail(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -208,10 +246,8 @@ public class UserLogic {
         }
         User currentUser = (User) session.getAttribute(Parameter.USER);
         currentUser.setEmail(request.getParameter("email"));
-        UserService userService = new UserServiceImpl();
         try {
             userService.addUser(currentUser);
-            EmailSenderService emailSenderService = new EmailSenderServiceImpl();
             emailSenderService.sendConfirmationMail(currentUser.getLogin(), currentUser.getEmail());
         } catch (ServiceException e) {
             LOGGER.error(e.getMessage());
@@ -220,7 +256,15 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult editProfile(HttpServletRequest request) throws CommandException, BadRequestException {
+    /**
+     * Method to edit users' profile with ability to change email, birthday and real name.
+     * If email is new it needs to be confirmed.
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
+    public CommandResult editProfile(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
             throw new CommandException("Session is over.");
@@ -228,27 +272,30 @@ public class UserLogic {
         User currentUser = (User) session.getAttribute(Parameter.USER);
 
         try {
-            UserService userService = new UserServiceImpl();
             String email = request.getParameter("email");
-            if (!email.matches(EMAIL_REGEX)) {
-                throw new BadRequestException();
-            }
             if (!email.equals(currentUser.getEmail())) {
                 userService.updateStatus(User.UserStatus.UNCONFIRMED, currentUser.getLogin());
             }
             currentUser.setEmail(email);
-            String birthday = request.getParameter("birthday").trim();
-            if (!birthday.isEmpty()) {
-                currentUser.setDateOfBirth(Date.valueOf(LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE)));
-            }
+            String birthday = request.getParameter("birthday");
+            currentUser.setDateOfBirth(Date.valueOf(LocalDate.parse(birthday, DateTimeFormatter.ISO_DATE)));
             currentUser.setRealName(request.getParameter("realname"));
             userService.addUser(currentUser);
+            session.removeAttribute(Parameter.USER);
+            session.setAttribute(Parameter.USER, currentUser);
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage());
         }
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
+    /**
+     * Method to send new generated password on the users email to change it.
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
     public CommandResult sendNewPassword(HttpServletRequest request) throws CommandException {
         HttpSession session = request.getSession(false);
         if (session == null) {
@@ -259,9 +306,8 @@ public class UserLogic {
             throw new CommandException("Users' e-mail is unconfirmed.");
         }
         String newPassword = RandomStringUtils.randomAscii(12);
-        UserService userService = new UserServiceImpl();
         try {
-            new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, currentUser.getEmail());
+            emailSenderService.sendNewPasswordMail(newPassword, currentUser.getEmail());
             userService.updatePassword(newPassword, currentUser.getLogin());
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage());
@@ -269,18 +315,21 @@ public class UserLogic {
         return new CommandResult(CommandResult.ResponseType.REDIRECT, request.getHeader("Referer"));
     }
 
-    public CommandResult forgotPassword(HttpServletRequest request) throws CommandException, BadRequestException {
+    /**
+     * Method to send new password if user has forgotten it
+     *
+     * @param request
+     * @return an instance of the CommandResult class to redirect on the referrer got from header
+     * @throws CommandException
+     */
+    public CommandResult forgotPassword(HttpServletRequest request) throws CommandException {
         try {
-            if (!request.getParameter(Parameter.USERNAME).matches(USERNAME_REGEX)) {
-                throw new BadRequestException();
-            }
             String newPassword = RandomStringUtils.randomAscii(12);
-            UserService userService = new UserServiceImpl();
             User user = userService.getByLogin(request.getParameter(Parameter.USERNAME));
             if (user.getStatus().equals(User.UserStatus.UNCONFIRMED)) {
                 throw new CommandException("Users' e-mail is unconfirmed.");
             }
-            new EmailSenderServiceImpl().sendNewPasswordMail(newPassword, user.getEmail());
+            emailSenderService.sendNewPasswordMail(newPassword, user.getEmail());
             userService.updatePassword(newPassword, user.getLogin());
         } catch (ServiceException e) {
             throw new CommandException(e.getMessage());

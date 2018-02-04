@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 
 /**
  * Created by katermar on 1/4/2018.
+ *
+ * Class, which manages database and takes new connections from it.
  */
 class DatabaseManager {
     private static final Logger LOGGER = LogManager.getLogger(DatabaseManager.class);

@@ -12,8 +12,18 @@ import java.util.Map;
 
 /**
  * Created by katermar on 2/2/2018.
+ *
+ * Class to validate parameters.
  */
 public class ParametersValidator {
+    /**
+     * Validation of user parameters.
+     * Uses special regexes to validate parameters
+     *
+     * @param requestParameters map of parameters, which have to be validated
+     * @return result of validation
+     * @throws ServiceException
+     */
     public static boolean validateUserParameters(Map<String, String[]> requestParameters) throws ServiceException {
         boolean isValid = true;
         UserService userService = new UserServiceImpl();
@@ -43,6 +53,14 @@ public class ParametersValidator {
         return isValid;
     }
 
+    /**
+     * Validation of film parameters.
+     * Uses special regexes to validate parameters
+     *
+     * @param requestParameters - map of parameters, which have to be validated
+     * @return result of validation
+     * @throws ServiceException
+     */
     public static boolean validateFilmParameters(Map<String, String[]> requestParameters) throws ServiceException {
         boolean isValid = true;
         List<String> parameterList = List.of(Parameter.NAME, Parameter.DURATION, Parameter.YEAR,

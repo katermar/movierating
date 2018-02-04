@@ -1,6 +1,7 @@
 package com.katermar.movierating.database.dao.impl;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
+import com.katermar.movierating.database.dao.FilmDao;
 import com.katermar.movierating.entity.Film;
 import com.katermar.movierating.exception.DAOException;
 
@@ -10,8 +11,10 @@ import java.util.Map;
 
 /**
  * Created by katermar on 1/9/2018.
+ *
+ * Implementation of the interface, which is used to work with 'film' table.
  */
-public class FilmDaoImpl implements com.katermar.movierating.database.dao.FilmDao {
+public class FilmDaoImpl implements FilmDao {
     private static final String SELECT_ALL = "SELECT * FROM film ORDER BY idfilm";
     private static final String DELETE_FROM_FILM_WHERE_IDFILM = "DELETE FROM film WHERE idfilm = ?";
     private static final String INSERT_NAME_RELEASE_YEAR_DURATION_POSTER_IDDIRECTOR_DESCRIPTION = "INSERT INTO film (name, release_year, duration, poster, iddirector, description) VALUES (?, ?, ?, ?, ?, ?) " +

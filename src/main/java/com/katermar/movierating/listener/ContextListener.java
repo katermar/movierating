@@ -7,6 +7,8 @@ import javax.servlet.ServletContextListener;
 
 /**
  * Created by katermar on 1/12/2018.
+ *
+ * Listener which instantiates pool and closes it after destroy.
  */
 public class ContextListener implements ServletContextListener {
     @Override

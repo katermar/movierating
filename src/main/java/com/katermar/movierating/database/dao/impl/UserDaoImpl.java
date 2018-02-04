@@ -16,6 +16,8 @@ import static com.katermar.movierating.entity.User.UserStatus;
 
 /**
  * Created by katermar on 1/1/2018.
+ *
+ * Implementation of the interface, which is used to work with 'user' table.
  */
 public class UserDaoImpl implements UserDao {
     private static final String USERS_SELECT_LOGIN_PASSWORD = "SELECT * FROM user WHERE login = ? AND password = ?";
@@ -58,13 +60,8 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean updatePassword(String password, long userId) throws DAOException {
-        return updateParameter(password, userId, USERS_UPDATE_PASSWORD);
-    }
-
-    @Override
-    public boolean updateEmail(String status, long userId) throws DAOException {
-        return updateParameter(status, userId, USERS_UPDATE_EMAIL);
+    public void updatePassword(String password, long userId) throws DAOException {
+        updateParameter(password, userId, USERS_UPDATE_PASSWORD);
     }
 
     @Override
@@ -103,11 +100,6 @@ public class UserDaoImpl implements UserDao {
         } catch (IndexOutOfBoundsException e) {
             return new User();
         }
-    }
-
-    @Override
-    public User getByEmail(String email) throws DAOException {
-        return getByParameter(USERS_SELECT_EMAIL, email).get(0);
     }
 
     @Override

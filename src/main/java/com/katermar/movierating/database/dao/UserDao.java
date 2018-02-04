@@ -15,9 +15,7 @@ public interface UserDao extends GenericDao<User> {
 
     List<User> getAll() throws DAOException;
 
-    boolean updatePassword(String password, long userId) throws DAOException;
-
-    boolean updateEmail(String status, long userId) throws DAOException;
+    void updatePassword(String password, long userId) throws DAOException;
 
     boolean updateStatus(String status, long userId) throws DAOException;
 
@@ -26,8 +24,6 @@ public interface UserDao extends GenericDao<User> {
     User getByLoginAndPassword(String login, String password) throws DAOException;
 
     User getByLogin(String login) throws DAOException;
-
-    User getByEmail(String email) throws DAOException;
 
     void updatePoints(User user) throws DAOException;
 }

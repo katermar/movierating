@@ -1,6 +1,7 @@
 package com.katermar.movierating.database.dao.impl;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
+import com.katermar.movierating.database.dao.RatingDao;
 import com.katermar.movierating.entity.Rating;
 import com.katermar.movierating.exception.DAOException;
 
@@ -12,8 +13,10 @@ import java.util.List;
 
 /**
  * Created by katermar on 1/9/2018.
+ *
+ * Implementation of the interface, which is used to work with 'rating' table.
  */
-public class RatingDaoImpl implements com.katermar.movierating.database.dao.RatingDao {
+public class RatingDaoImpl implements RatingDao {
     private static final String SELECT_FROM_RATING_WHERE_IDUSER = "SELECT * FROM rating WHERE iduser = ? AND is_seen = '1'";
     private static final String SELECT_FROM_RATING_WHERE_IDUSER_AND_IDFILM = "SELECT * FROM rating WHERE (iduser = ? AND idfilm = ?)";
     private static final String SELECT_AVG_RATING_AMOUNT_WHERE_IDFILM = "SELECT AVG(rating_amount) FROM rating WHERE idfilm = ? AND is_seen = '1'";

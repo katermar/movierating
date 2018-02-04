@@ -15,16 +15,34 @@ import java.util.Set;
 
 /**
  * Created by katermar on 2/2/2018.
+ *
+ * Filter to give access to some commands only to authenticated users.
  */
 public class AuthenticationFilter implements Filter {
-    Set<String> grantCommands = new HashSet<>();
+    private Set<String> grantCommands = new HashSet<>();
 
+    /**
+     * Adds granted commands as string names from the enum set.
+     *
+     * @param filterConfig
+     * @throws ServletException
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         EnumSet<CommandType> commandTypes = EnumSet.range(CommandType.MAIN_PAGE, CommandType.LOGIN);
         commandTypes.forEach(commandType -> grantCommands.add(commandType.name()));
     }
 
+    /**
+     * Filters request and response, if user is logged in
+     * or if granted commands contain command from the request.
+     *
+     * @param servletRequest
+     * @param servletResponse
+     * @param filterChain
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;

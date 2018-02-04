@@ -2,6 +2,9 @@ package com.katermar.movierating.command;
 
 /**
  * Created by katermar on 12/31/2017.
+ * <p>
+ * Class used to hold the path to go and transfer method: forward or redirect.
+ * Also it can hold error code and error message, if response type is ERROR.
  */
 public class CommandResult {
     private ResponseType responseType;

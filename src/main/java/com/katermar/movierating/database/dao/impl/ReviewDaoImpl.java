@@ -1,6 +1,7 @@
 package com.katermar.movierating.database.dao.impl;
 
 import com.katermar.movierating.database.connection.ConnectionPool;
+import com.katermar.movierating.database.dao.ReviewDao;
 import com.katermar.movierating.entity.Review;
 import com.katermar.movierating.exception.DAOException;
 
@@ -12,8 +13,10 @@ import java.util.List;
 
 /**
  * Created by katermar on 1/9/2018.
+ *
+ * Implementation of the interface, which is used to work with 'review' table.
  */
-public class ReviewDaoImpl implements com.katermar.movierating.database.dao.ReviewDao {
+public class ReviewDaoImpl implements ReviewDao {
     private static final String SELECT_WHERE_IDUSER = "SELECT * FROM review WHERE iduser = ?";
     private static final String SELECT_WHERE_IDFILM = "SELECT * FROM review WHERE idfilm = ?";
     private static final String INSERT_IDUSER_IDFILM_TEXT_VALUES = "INSERT INTO review (iduser, idfilm, text) VALUES (?, ?, ?)";

@@ -2,6 +2,8 @@ package com.katermar.movierating.config;
 
 /**
  * Created by katermar on 12/31/2017.
+ * <p>
+ * Class of request parameters which are validated in a request
  */
 public class Parameter {
     public static final String USERNAME = "uname";
